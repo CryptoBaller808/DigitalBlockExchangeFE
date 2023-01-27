@@ -32,7 +32,7 @@ const CollectionNft = () => {
   const [category_id,setcategory_id] = useState('')
   const [description,setdescription] = useState('')
   const [categories,setcategories] = useState([])
-  const [loading,setloading] = useState([])
+  const [loading,setloading] = useState(false)
   const [selectioncategory,setselectioncategory] = useState("")
   const api_getcatogories = async ()  => {
     const res = await axios.get(`${process.env.REACT_APP_API_URL}/category/getCategories`)

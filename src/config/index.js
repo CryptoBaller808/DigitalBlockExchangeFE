@@ -22,6 +22,6 @@ export const BASE_URL = envData(
 export const LOCAL_SOCKET_SERVER = envData(
   ENV_TYPE,
   "https://api.digitalblock.exchange",
-  "https://api.digitalblock.exchange:4000/",
+  "https://api.digitalblock.exchange:3000/",
   "https://api.digitalblock.exchange",
 );

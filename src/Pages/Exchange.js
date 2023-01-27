@@ -21,35 +21,31 @@ const Exchange = () => {
   const dispatch = useDispatch();
   const [dropVal, setDropVal] = useState(0);
 
-  const connectModalVisible = useSelector(
-    (state) => state.authReducer.isModalOpen
-  );
+  const connectModalVisible = useSelector(state => state.authReducer.isModalOpen);
 
-  const isWalletConnected = useSelector(
-    (state) => state.authReducer.isWalletConnected
-  );
+  const isWalletConnected = useSelector(state => state.authReducer.isWalletConnected);
 
-  const accountInfo = useSelector((state) => state?.signInData?.balance);
+  const accountInfo = useSelector(state => state?.signInData?.balance);
 
   const accountNumber = accountInfo?.account;
 
   useEffect(() => {
     if (isWalletConnected) {
       getUserCurrencies(accountNumber)
-        .then((res) => {
+        .then(res => {
           if (res.status === "success") {
             // console.log("accountInfo", accountInfo);
             dispatch(
               balanceAction.setBalance({
                 ...accountInfo,
                 currencies: res.result.lines,
-              })
+              }),
             );
           } else {
             dispatch(balanceAction.setBalance(accountInfo));
           }
         })
-        .catch((err) => console.log("err", err));
+        .catch(err => console.log("err", err));
     } else {
       dispatch(balanceAction.setBalanceEmpty());
     }
@@ -64,13 +60,13 @@ const Exchange = () => {
     });
   }
 
-  const getData = (data) => {
+  const getData = data => {
     setCurrencyData({
       ...currencyData,
       info: data,
     });
   };
-  socket.on("drops-val", (args) => {
+  socket.on("drops-val", args => {
     const drops = Number(args);
     // console.log("dropssssssss :: ", drops);
     setDropVal(drops);
@@ -84,12 +80,7 @@ const Exchange = () => {
           {/* TOP PANNEL START */}
           <div className="content-block flex">
             {/* LEFT START */}
-            <ExchangeRatesComponent
-              getData={getData}
-              currencyData2={currencyData}
-              dropVal={dropVal}
-              setDropVal={setDropVal}
-            />
+            <ExchangeRatesComponent getData={getData} currencyData2={currencyData} dropVal={dropVal} setDropVal={setDropVal} />
 
             {/* LEFT END */}
 
@@ -117,22 +108,13 @@ const Exchange = () => {
             {/* CENTER END */}
 
             {/* RIGHT START */}
-            <BookOffersTable
-              tokenTabSelected={tokenTabSelected}
-              currencyData={currencyData}
-              dropVal={dropVal}
-              setDropVal={setDropVal}
-            />
+            <BookOffersTable tokenTabSelected={tokenTabSelected} currencyData={currencyData} dropVal={dropVal} setDropVal={setDropVal} />
             {/* RIGHT END */}
           </div>
           {/* TOP PANNEL END */}
 
           {/* BOTTOM TABLE START */}
-          <AccountOffersTable
-            currencyData2={currencyData}
-            dropVal={dropVal}
-            setDropVal={setDropVal}
-          />
+          <AccountOffersTable currencyData2={currencyData} dropVal={dropVal} setDropVal={setDropVal} />
           {/* BOTTOM TABLE END */}
         </div>
       </div>
