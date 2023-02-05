@@ -22,9 +22,7 @@ jobs:
           node-version: 16
       - run: npm i -f
       - run: npm run build
-      - run: cd _deploy
-      - run: cp -r ../build ./
-      - run: zip -rq ../deploy.zip .
+      - run: cd _deploy && cp -r ../build ./ && zip -rq ../deploy.zip .
 
       - name: Deploy to EBS
         uses: einaregilsson/beanstalk-deploy@v21
