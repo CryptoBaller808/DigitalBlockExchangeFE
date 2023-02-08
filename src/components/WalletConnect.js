@@ -10,6 +10,7 @@ import * as QRCodeAction from "../redux/xummQRCode/action";
 import { SocketContext } from "../context/soket";
 import XummLogo from "../Images/XummLogo.png";
 import LegerLogo from "../Images/XRPLLogo.png";
+import setAuthToken from '../redux/actions/setHeaderToken'
 const WalletConnect = ({ open, setOpen }) => {
   const socket = useContext(SocketContext);
   const dispatch = useDispatch();
@@ -86,15 +87,16 @@ const WalletConnect = ({ open, setOpen }) => {
       }
       let data = res?.data;
 
-      // if(res){
-      //   setAuthToken(data.access_token)
-      // }
+      if(res){
+        setAuthToken(data.access_token)
+      }
       // let data = {
       //   id: 124,
       //   wallet_address: "rK5adqWCSJs7chADSbBpc42RSFd8isMo3x",
       //   access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3YWxsZXRfYWRkcmVzcyI6InJLNWFkcVdDU0pzN2NoQURTYkJwYzQyUlNGZDhpc01vM3giLCJpYXQiOjE2NTk4OTQ1NTksImV4cCI6MTY1OTk4MDk1OX0.pJ7Bq-E99jc_ince4sT0MaGZ5iZeRg_jYacaAaWIXts",
       //   request_token : "fe1e3903-63b0-4382-a567-92d5b5d7d2ee"
       // }
+      localStorage.setItem("nft_login",JSON.stringify(data))
       const res2 = await axios.get(`${process.env.REACT_APP_API_URL}/profiles/getuserProfile/${data.id}`);
       // console.log("res22", res2);
       if (res2?.data) {

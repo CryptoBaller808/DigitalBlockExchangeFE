@@ -64,7 +64,7 @@ const CreateNewItem = ({}) => {
         fix_price: Number(fixedprice),
         put_on_marketplace: put_on_marketplace,
         t_auction_start_date: starttime,
-        t_auction_end_date:  "2022-11-11T16:54",
+        t_auction_end_date:  endtime,
         t_auction_minimum_bid:  Number(minimumbid),
         t_auction_reserve_price:  Number(reserve_price)
         })
@@ -77,7 +77,7 @@ const CreateNewItem = ({}) => {
           fix_price: Number(fixedprice),
           put_on_marketplace: put_on_marketplace,
           t_auction_start_date: starttime,
-          t_auction_end_date:  "2022-11-11T16:54",
+          t_auction_end_date:  endtime,
           t_auction_minimum_bid:  Number(minimumbid),
           t_auction_reserve_price:  Number(reserve_price)
       })
@@ -90,6 +90,7 @@ const CreateNewItem = ({}) => {
       }
     } catch (error) {
       console.log('error',error?.response)
+      console.log('error',error)
       if(error?.response?.data) {
         toast.error(error?.response?.data)
         setloading(false)
