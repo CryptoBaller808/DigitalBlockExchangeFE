@@ -12,12 +12,8 @@ import * as tradesAction from "../../redux/tradesData/action";
 import moment from "moment";
 const dateFormat = "YYYY/MM/DD";
 
-const ExchangeRatesComponent = ({
-  getData,
-  currencyData2,
-  dropVal,
-  setDropVal,
-}) => {
+const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal }) => {
+  console.log("currencyData2", currencyData2);
   const [tokenTabSelected, setTokenTabSelected] = useState("XRP");
   const [currencyData, setCurrencyData] = useState([]);
   const [rowData, setRowData] = useState(null);
@@ -27,8 +23,8 @@ const ExchangeRatesComponent = ({
   const dispatch = useDispatch();
   const [decimalVal, setDecimalVal] = useState(7);
 
-  const tradesData = useSelector((state) => state.trades?.trades);
-  const tradesDataProcessing = useSelector((state) => state.trades?.processing);
+  const tradesData = useSelector(state => state.trades?.trades);
+  const tradesDataProcessing = useSelector(state => state.trades?.processing);
 
   const [tradeLoading, setTradeLoading] = useState(true);
   const [tradesList, setTradeList] = useState(tradesData);
@@ -36,12 +32,10 @@ const ExchangeRatesComponent = ({
 
   //get all currency data list
   const getAllCurrencyData = async () => {
-    const selectedCurrency = currency.find(
-      (obj) => obj.currency === tokenTabSelected
-    );
+    const selectedCurrency = currency.find(obj => obj.currency === tokenTabSelected);
     const currencyDataPromise = currency
-      .filter((val) => selectedCurrency.currency !== val.currency)
-      .map((obj) => {
+      .filter(val => selectedCurrency.currency !== val.currency)
+      .map(obj => {
         const exchangeData = {
           curA: tokenTabSelected,
           issuerA: selectedCurrency.issuer,
@@ -52,7 +46,7 @@ const ExchangeRatesComponent = ({
       });
     const price = await Promise.all(currencyDataPromise);
     let titleData = currency
-      .filter((val) => selectedCurrency.currency !== val.currency)
+      .filter(val => selectedCurrency.currency !== val.currency)
       .map((obj, indx) => {
         const data = {
           id: indx,
@@ -82,7 +76,7 @@ const ExchangeRatesComponent = ({
       setLoadingData(false);
       setCurrencyDataLoaded(true);
     } else {
-      getAllCurrencyData().then((val) => {
+      getAllCurrencyData().then(val => {
         setCurrencyData(val);
       });
     }
@@ -90,7 +84,7 @@ const ExchangeRatesComponent = ({
 
   useEffect(() => {
     setLoadingData(true);
-    getAllCurrencyData().then((val) => {
+    getAllCurrencyData().then(val => {
       console.log("local 22222 :: ", val);
       setCurrencyData(val);
       // setTrade
@@ -98,14 +92,14 @@ const ExchangeRatesComponent = ({
     setLoadingData(false);
   }, [tokenTabSelected]);
   // console.log("currencyData", currencyData);
-  const handleRow = (data) => {
+  const handleRow = data => {
     // console.log("data", data);
     setRowData(data);
     getData(data);
   };
   //FOR TRADES DATA
   useEffect(() => {
-    socket.on("drops-val", (args) => {
+    socket.on("drops-val", args => {
       const drops = Number(args);
       setDropVal(drops);
     });
@@ -145,7 +139,7 @@ const ExchangeRatesComponent = ({
           issuerB: currencyData2?.info?.issuerB,
         };
         await getTradesData(acc)
-          .then((res) => {
+          .then(res => {
             if (res.data.success) {
               // console.log("FROM SERVER CHART DATA ----------->", res.data.data);
               // setTradeLoading(true);
@@ -160,7 +154,7 @@ const ExchangeRatesComponent = ({
               dispatch(tradesAction.setStopTradesProcessing());
             }
           })
-          .catch((err) => console.log("CHART DATA", err));
+          .catch(err => console.log("CHART DATA", err));
       }
     }
     fetchData();
@@ -196,25 +190,17 @@ const ExchangeRatesComponent = ({
           <div className="icon">
             <SearchIcon />
           </div>
-          <input
-            type="text"
-            className="txt cleanbtn w-full"
-            placeholder="Search"
-          />
+          <input type="text" className="txt cleanbtn w-full" placeholder="Search" />
         </div>
         <div className="token_tabs flex">
-          <div
-            className={`item ${tokenTabSelected === "DBX" ? "active" : ""}`}
-            onClick={(e) => setTokenTabSelected("DBX")}
-          >
+          <div className={`item ${tokenTabSelected === "DBX" ? "active" : ""}`} onClick={e => setTokenTabSelected("DBX")}>
             DBX
           </div>
           <div
             className={`item ${tokenTabSelected === "XRP" ? "active" : ""}`}
-            onClick={(e) => {
+            onClick={e => {
               setTokenTabSelected("XRP");
-            }}
-          >
+            }}>
             XRP
           </div>
           {/* <div className={`item ${tokenTabSelected === "USDC" ? "active" : ""}`} onClick={e => setTokenTabSelected("USDC")}>
@@ -240,23 +226,13 @@ const ExchangeRatesComponent = ({
               <Loader />
             ) : (
               currencyData.map((item, i) => (
-                <div
-                  className="tbl-row flex"
-                  key={i}
-                  onClick={() => handleRow(item)}
-                >
+                <div className="tbl-row flex" key={i} onClick={() => handleRow(item)}>
                   <div className="row-item flex items-center">
                     <span className="name1">{item.title}</span>
                     {/* /<span className="name2">{tokenTabSelected}</span> */}
                   </div>
                   <div className="row-item">{item.price}</div>
-                  <div
-                    className={`row-item flex items-center justify-end ${
-                      item.stat < 0 ? "red" : "green"
-                    }`}
-                  >
-                    {item.stat}
-                  </div>
+                  <div className={`row-item flex items-center justify-end ${item.stat < 0 ? "red" : "green"}`}>{item.stat}</div>
                 </div>
               ))
             )}
@@ -281,21 +257,15 @@ const ExchangeRatesComponent = ({
               dataSource.map((item, i) => {
                 return (
                   <div className="tbl-row flex" key={i}>
-                    <div className="row-item flex items-center">
-                      {item.price}
-                    </div>
+                    <div className="row-item flex items-center">{item.price}</div>
                     <div className="row-item">{item.vol}</div>
                     {/* ${item.type === "red" ? "red" : "green"} */}
-                    <div className={`row-item flex items-center justify-end `}>
-                      {item.time}
-                    </div>
+                    <div className={`row-item flex items-center justify-end `}>{item.time}</div>
                   </div>
                 );
               })
             ) : (
-              <div className="flex items-center justify-center no-result">
-                No result found
-              </div>
+              <div className="flex items-center justify-center no-result">No result found</div>
             )}
           </div>
         </div>

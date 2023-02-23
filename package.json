@@ -22,6 +22,7 @@
     "react": "^18.0.0",
     "react-app-rewired": "^2.2.1",
     "react-bootstrap": "^2.1.2",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-data-table-component": "^7.5.2",
     "react-dom": "^18.0.0",
     "react-icons": "^4.3.1",

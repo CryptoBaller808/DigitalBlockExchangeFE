@@ -1,21 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import {
-  ArrowBackIcon,
-  CollectiblesIcon,
-  DropDownIcon,
-  SearchIcon,
-} from "../Icons";
+import { ArrowBackIcon, CollectiblesIcon, DropDownIcon, SearchIcon } from "../Icons";
 import Toggle from "../components/Toggle";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 const CollectionNft = () => {
   const [img, setImg] = useState();
   const [featImg, setFeatImg] = useState();
   const [bannerImg, setBannerImg] = useState();
   const [royalties, setRoyalties] = useState();
-  const {user} = useSelector((state) => state.generalReducers)
+  const { user } = useSelector(state => state.generalReducers);
   const [hide, setHide] = useState(false);
   const [hide2, setHide2] = useState(false);
   const [statusData, setStatusData] = useState([
@@ -24,80 +19,80 @@ const CollectionNft = () => {
     { id: 3, title: "3 days" },
   ]);
   const [selectedcompany, setselectedcompany] = useState();
-  const [discord_url,setdiscord_url] = useState('')
-  const [insta_url,setinsta_url] = useState('')
-  const [fb_url,setfb_url] = useState('')
-  const [twitter_url,settwitter_url] = useState('')
-  const [name,setname] = useState('')
-  const [category_id,setcategory_id] = useState('')
-  const [description,setdescription] = useState('')
-  const [categories,setcategories] = useState([])
-  const [loading,setloading] = useState(false)
-  const [selectioncategory,setselectioncategory] = useState("")
-  const api_getcatogories = async ()  => {
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/category/getCategories`)
-    setcategories(res?.data)
-  }
-  const create_collectionnft = async ()  => {
-      let thedata = {
-        //profile_image,
-        //cover_image,
-        fb_url,
-        discord_url : discord_url,
-        insta_url : insta_url,
-        twitter_url : twitter_url,
-        user_id : user.id,
-        name : "adasd",
-        category_id : selectioncategory?.id
-      }
-      console.log("thedata",thedata)
-      let formData = new FormData();
-      formData.append("profile_image", img);
-      formData.append("cover_image", bannerImg);
-      // formData.append('files[]', img, "profile_image")
-      // formData.append('files[]', bannerImg, "cover_image")
-      formData.append("fb_url", thedata.fb_url);
-      formData.append("discord_url", thedata.discord_url);
-      formData.append("insta_url", thedata.insta_url);
-      formData.append("twitter_url", thedata.twitter_url);
-      formData.append("user_id", thedata.user_id);
-      formData.append("category_id", thedata.category_id);
-      formData.append("name", "Asdsa");
-      console.log("formData",formData)
-      setloading(true)
-      //toast.info("Please accept request from your app")
+  const [discord_url, setdiscord_url] = useState("");
+  const [insta_url, setinsta_url] = useState("");
+  const [fb_url, setfb_url] = useState("");
+  const [twitter_url, settwitter_url] = useState("");
+  const [name, setname] = useState("");
+  const [category_id, setcategory_id] = useState("");
+  const [description, setdescription] = useState("");
+  const [categories, setcategories] = useState([]);
+  const [loading, setloading] = useState(false);
+  const [selectioncategory, setselectioncategory] = useState("");
+  const api_getcatogories = async () => {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/category/getCategories`);
+    setcategories(res?.data);
+  };
+  const create_collectionnft = async () => {
+    let thedata = {
+      //profile_image,
+      //cover_image,
+      fb_url,
+      discord_url: discord_url,
+      insta_url: insta_url,
+      twitter_url: twitter_url,
+      user_id: user.id,
+      name: "adasd",
+      category_id: selectioncategory?.id,
+    };
+    console.log("thedata", thedata);
+    let formData = new FormData();
+    formData.append("profile_image", img);
+    formData.append("cover_image", bannerImg);
+    // formData.append('files[]', img, "profile_image")
+    // formData.append('files[]', bannerImg, "cover_image")
+    formData.append("fb_url", thedata.fb_url);
+    formData.append("discord_url", thedata.discord_url);
+    formData.append("insta_url", thedata.insta_url);
+    formData.append("twitter_url", thedata.twitter_url);
+    formData.append("user_id", thedata.user_id);
+    formData.append("category_id", thedata.category_id);
+    formData.append("name", name);
+    console.log("formData", formData);
+    setloading(true);
+    //toast.info("Please accept request from your app")
     try {
-      console.log('reached')
+      console.log("reached");
       const res = await axios({
         method: "post",
         url: `${process.env.REACT_APP_API_URL}/collection/createCollection`,
         data: formData,
         headers: { "Content-Type": "multipart/form-data" },
-      })
+      });
       //window.location.href = "./nft";
       //const res = await axios.post(`${process.env.REACT_APP_API_URL}/collection/createCollection`,formData)
-      setdiscord_url("")
-      setinsta_url("")
-      setfb_url("")
-      settwitter_url("")
-      setname("")
-      setcategory_id("")
-      setdescription("")
-      toast("Collection added successfully")
-      console.log('res',res)
-      if(res?.data){
-        console.log('res',res)
-        window.location.href = "./nft";
-      }  
-    } catch (error) {
-      console.log('error',error.response)
-      if(error?.response?.data){
-        toast.success(`${error?.response?.data}`) 
+      setdiscord_url("");
+      setinsta_url("");
+      setfb_url("");
+      settwitter_url("");
+      setname("");
+      setcategory_id("");
+      setdescription("");
+      toast("Collection added successfully");
+      console.log("res", res);
+      if (res?.data) {
+        console.log("res", res);
+        // window.location.href = "./nft";
       }
-    }  
-  }
+    } catch (error) {
+      console.log("error", error.response);
+      if (error?.response?.data) {
+        toast.success(`${error?.response?.data}`);
+      }
+    }
+  };
   useEffect(() => {
-    api_getcatogories()
+    api_getcatogories();
     document.addEventListener("click", () => {
       setHide(false);
       setHide2(false);
@@ -125,18 +120,12 @@ const CollectionNft = () => {
                   Logo Image
                   <spna className="star">*</spna>
                 </div>
-                <div className="lbl-2">
-                  This image will also be used for navigation. 350 x 350
-                  recommended.
-                </div>
+                <div className="lbl-2">This image will also be used for navigation. 350 x 350 recommended.</div>
               </div>
               <div className="select-img flex aic jc">
                 <div
-                  className={`img-box flex flex-col aic jc round ${
-                    img ? "" : "bdr"
-                  }`}
-                  onClick={() => document.getElementById("upload_img").click()}
-                >
+                  className={`img-box flex flex-col aic jc round ${img ? "" : "bdr"}`}
+                  onClick={() => document.getElementById("upload_img").click()}>
                   {img ? (
                     <img src={URL.createObjectURL(img)} className="img round" />
                   ) : (
@@ -150,7 +139,7 @@ const CollectionNft = () => {
                     title=""
                     id="upload_img"
                     className="select-file cleanbtn"
-                    onChange={(e) => {
+                    onChange={e => {
                       let file = e.target.files[0];
                       //setImg(e.target.files[0]);
                       setImg(file);
@@ -166,18 +155,14 @@ const CollectionNft = () => {
                   <spna className="star"></spna>
                 </div>
                 <div className="lbl-2">
-                  This image will be used for featuring your collection on the
-                  homepage, category pages, or other promotional areas of
+                  This image will be used for featuring your collection on the homepage, category pages, or other promotional areas of
                   Digital Block Exchange NFT Marketplace. 600 x 400 recommended.
                 </div>
               </div>
               <div className="select-img flex aic jc">
                 <div
-                  className={`img-box flex flex-col aic jc ${
-                    featImg ? "" : "bdr"
-                  }`}
-                  onClick={() => document.getElementById("feature_img").click()}
-                >
+                  className={`img-box flex flex-col aic jc ${featImg ? "" : "bdr"}`}
+                  onClick={() => document.getElementById("feature_img").click()}>
                   {featImg ? (
                     <img src={URL.createObjectURL(featImg)} className="img" />
                   ) : (
@@ -191,7 +176,7 @@ const CollectionNft = () => {
                     title=""
                     id="feature_img"
                     className="select-file cleanbtn"
-                    onChange={(e) => {
+                    onChange={e => {
                       let file = e.target.files[0];
                       setFeatImg(file);
                     }}
@@ -206,24 +191,16 @@ const CollectionNft = () => {
                   <spna className="star"></spna>
                 </div>
                 <div className="lbl-2">
-                  This image will appear at the top of your collection page.
-                  Avoid including too much text in this banner image, as the
-                  dimensions change on different devices. 1400 x 400
-                  recommended.
+                  This image will appear at the top of your collection page. Avoid including too much text in this banner image, as the
+                  dimensions change on different devices. 1400 x 400 recommended.
                 </div>
               </div>
               <div className="select-img flex aic jc">
                 <div
-                  className={`img-box flex flex-col aic jc img-box-c ${
-                    bannerImg ? "" : "bdr"
-                  }`}
-                  onClick={() => document.getElementById("banner_img").click()}
-                >
+                  className={`img-box flex flex-col aic jc img-box-c ${bannerImg ? "" : "bdr"}`}
+                  onClick={() => document.getElementById("banner_img").click()}>
                   {bannerImg ? (
-                    <img
-                      src={URL.createObjectURL(bannerImg)}
-                      className="img "
-                    />
+                    <img src={URL.createObjectURL(bannerImg)} className="img " />
                   ) : (
                     <>
                       <img src="./images/upload-icon.svg" className="icon" />
@@ -235,7 +212,7 @@ const CollectionNft = () => {
                     title=""
                     id="banner_img"
                     className="select-file cleanbtn"
-                    onChange={(e) => {
+                    onChange={e => {
                       let file = e.target.files[0];
                       setBannerImg(file);
                     }}
@@ -255,20 +232,15 @@ const CollectionNft = () => {
                 className="txt cleanbtn"
                 placeholder="Ex: The Best of the Sea"
                 value={name}
-                onChange={(e) => setname(e.target.value)}
+                onChange={e => setname(e.target.value)}
               />
             </div>
             <div className="row flex flex-col">
               <div className="r-lbl flex flex-col">
                 <div className="lbl-1">URL</div>
-                <div className="lbl-2">
-                  Customize your URL on Digital Block Exchange NFT Marketplace
-                </div>
+                <div className="lbl-2">Customize your URL on Digital Block Exchange NFT Marketplace</div>
               </div>
-              <input 
-              value={fb_url}
-              onChange={(e) => setfb_url(e.target.value)}
-              type="text" className="txt cleanbtn" placeholder="URL" />
+              <input value={fb_url} onChange={e => setfb_url(e.target.value)} type="text" className="txt cleanbtn" placeholder="URL" />
             </div>
             <div className="row flex flex-col">
               <div className="r-lbl flex flex-col">
@@ -283,7 +255,7 @@ const CollectionNft = () => {
                 className="txt cleanbtn h100"
                 placeholder="Description..."
                 value={description}
-                onChange={(e) => setdescription(e.target.value)}
+                onChange={e => setdescription(e.target.value)}
               />
             </div>
             {/* <div className="row flex flex-col">
@@ -312,28 +284,21 @@ const CollectionNft = () => {
               <div className="r-lbl flex flex-col">
                 <div className="lbl-1">Collection</div>
                 <div className="lbl-2">
-                  Select the category. Adding a category will make the item
-                  discoverable on Digital Block Exchange NFT Marketplace.
+                  Select the category. Adding a category will make the item discoverable on Digital Block Exchange NFT Marketplace.
                 </div>
               </div>
               <div className="dropDown flex aic jc flex-col rel">
                 <div className="category flex aic">
                   <div
                     className="cbox cleanbtn flex aic rel"
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation();
                       setHide2(!hide2);
-                    }}
-                  >
+                    }}>
                     <div className="slt flex aic">
                       <div className="unit-name flex aic font s14 b4">
-                        <span
-                          className="unit-eng flex aic font s14 b4"
-                          placeholder="Select collection"
-                        >
-                          {selectioncategory
-                            ? ` ${selectioncategory.category_name} - ${selectioncategory.id}`
-                            : "Select category"}
+                        <span className="unit-eng flex aic font s14 b4" placeholder="Select collection">
+                          {selectioncategory ? ` ${selectioncategory.category_name} - ${selectioncategory.id}` : "Select category"}
                         </span>
                       </div>
                     </div>
@@ -349,11 +314,10 @@ const CollectionNft = () => {
                       <div
                         key={index}
                         className="slt flex aic"
-                        onClick={(e) => {
+                        onClick={e => {
                           setHide2(!hide2);
                           setselectioncategory(item);
-                        }}
-                      >
+                        }}>
                         <div className="unit-name flex aic font s14 b4">
                           <span className="unit-eng flex aic font s14 b4">
                             {item.category_name} - {item.id}
@@ -369,8 +333,7 @@ const CollectionNft = () => {
               <div className="r-lbl flex flex-col">
                 <div className="lbl-1">Royalties</div>
                 <div className="lbl-2">
-                  Collect a fee when a user re-sells an item you originally
-                  created. This is deducted from the final sale price and paid
+                  Collect a fee when a user re-sells an item you originally created. This is deducted from the final sale price and paid
                   monthly to a payout address of your choosing.
                 </div>
               </div>
@@ -379,7 +342,7 @@ const CollectionNft = () => {
                 className="txt cleanbtn w-1/5"
                 placeholder="e.g. 10%"
                 value={royalties}
-                onChange={(e) => setRoyalties(e.target.value)}
+                onChange={e => setRoyalties(e.target.value)}
               />
             </div>
             {royalties && (
@@ -390,39 +353,26 @@ const CollectionNft = () => {
                     <spna className="star">*</spna>
                   </div>
                 </div>
-                <input
-                  type="text"
-                  className="txt cleanbtn w-1/2"
-                  placeholder=" Your payout wallet address"
-                />
+                <input type="text" className="txt cleanbtn w-1/2" placeholder=" Your payout wallet address" />
               </div>
             )}
             <div className="row flex flex-col">
               <div className="r-lbl flex flex-col">
                 <div className="lbl-1">Blockchain</div>
-                <div className="lbl-2">
-                  Select the blockchain where you would like new items added to
-                  this collection.
-                </div>
+                <div className="lbl-2">Select the blockchain where you would like new items added to this collection.</div>
               </div>
               <div className="dropDown flex aic jc flex-col rel">
                 <div className="category flex aic">
                   <div
                     className="cbox cleanbtn flex aic rel"
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation();
                       setHide(!hide);
-                    }}
-                  >
+                    }}>
                     <div className="slt flex aic">
                       <div className="unit-name flex aic font s14 b4">
-                        <span
-                          className="unit-eng flex aic font s14 b4"
-                          placeholder="Select collection"
-                        >
-                          {selectedcompany
-                            ? selectedcompany.title
-                            : "Select collection"}
+                        <span className="unit-eng flex aic font s14 b4" placeholder="Select collection">
+                          {selectedcompany ? selectedcompany.title : "Select collection"}
                         </span>
                       </div>
                     </div>
@@ -438,15 +388,12 @@ const CollectionNft = () => {
                       <div
                         key={index}
                         className="slt flex aic"
-                        onClick={(e) => {
+                        onClick={e => {
                           setHide(!hide);
                           setselectedcompany(item);
-                        }}
-                      >
+                        }}>
                         <div className="unit-name flex aic font s14 b4">
-                          <span className="unit-eng flex aic font s14 b4">
-                            {item.title}
-                          </span>
+                          <span className="unit-eng flex aic font s14 b4">{item.title}</span>
                         </div>
                       </div>
                     ))}
@@ -457,9 +404,7 @@ const CollectionNft = () => {
             <div className="row flex aic">
               <div className="left flex flex-col">
                 <div className="lbl1">Explicit and sensitive content</div>
-                <div className="lbl2">
-                  Set this collection as explicit and sensitive content
-                </div>
+                <div className="lbl2">Set this collection as explicit and sensitive content</div>
               </div>
               <div className="right flex aic">
                 {" "}
@@ -468,12 +413,12 @@ const CollectionNft = () => {
             </div>
           </div>
           <div
-          onClick={() => {
-            create_collectionnft()
-          }}
-          className="action flex aic jc">
-            <div className="btn button">{loading ? "Loading..." :"Create NFT Collection"}</div>
-          </div> 
+            onClick={() => {
+              create_collectionnft();
+            }}
+            className="action flex aic jc">
+            <div className="btn button">{loading ? "Loading..." : "Create NFT Collection"}</div>
+          </div>
         </div>
       </div>
     </div>
