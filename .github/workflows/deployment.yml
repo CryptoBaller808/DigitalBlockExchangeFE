@@ -13,10 +13,10 @@ jobs:
       DISABLE_ESLINT_PLUGIN: true
 
     steps:
-      - name: Checkout repository
+      - name: Checkout the repository
         uses: actions/checkout@v3
 
-      - name: Setup Node
+      - name: Setup Node 16
         uses: actions/setup-node@v3
         with:
           node-version: 16
@@ -31,6 +31,6 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: ${{ vars.APP_NAME }}
           environment_name: ${{ vars.ENV_NAME }}
-          version_label: "version-${{ steps.version.outputs.builddate }}"
+          version_label: "version-${{github.run_number}}"
           region: us-east-1
           deployment_package: deploy.zip
