@@ -45,12 +45,10 @@ const CollectionNft = () => {
       name: "adasd",
       category_id: selectioncategory?.id,
     };
-    console.log("thedata", thedata);
+
     let formData = new FormData();
     formData.append("profile_image", img);
     formData.append("cover_image", bannerImg);
-    // formData.append('files[]', img, "profile_image")
-    // formData.append('files[]', bannerImg, "cover_image")
     formData.append("fb_url", thedata.fb_url);
     formData.append("discord_url", thedata.discord_url);
     formData.append("insta_url", thedata.insta_url);
@@ -58,7 +56,7 @@ const CollectionNft = () => {
     formData.append("user_id", thedata.user_id);
     formData.append("category_id", thedata.category_id);
     formData.append("name", name);
-    console.log("formData", formData);
+
     setloading(true);
     //toast.info("Please accept request from your app")
     try {
@@ -82,7 +80,7 @@ const CollectionNft = () => {
       console.log("res", res);
       if (res?.data) {
         console.log("res", res);
-        // window.location.href = "./nft";
+        window.location.href = "./nft";
       }
     } catch (error) {
       console.log("error", error.response);
@@ -148,7 +146,7 @@ const CollectionNft = () => {
                 </div>
               </div>
             </div>
-            <div className="row flex flex-col">
+            {/* <div className="row flex flex-col">
               <div className="r-lbl flex flex-col">
                 <div className="lbl-1">
                   Featured Image
@@ -183,7 +181,7 @@ const CollectionNft = () => {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="row flex flex-col">
               <div className="r-lbl flex flex-col">
                 <div className="lbl-1">
