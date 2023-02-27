@@ -4,7 +4,7 @@ import { ArrowBackIcon, DropDownIcon, PlusIcon } from "../Icons";
 import Toggle from "../components/Toggle";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const SingleNft = ({}) => {
@@ -12,11 +12,11 @@ const SingleNft = ({}) => {
   const [unlockable_content, setunlockable_content] = useState("");
   const [is_explicit_content, setis_explicit_content] = useState(false);
   const [explicit_content, setexplicit_content] = useState("");
-  const {user} = useSelector((state) => state.generalReducers)
+  const { user } = useSelector(state => state.generalReducers);
   const [title, settitle] = useState("");
   const [description, setdescription] = useState("");
   const [img, setImg] = useState();
-  console.log('img',img)
+  console.log("img", img);
   const [hide, setHide] = useState(false);
   const [hide2, setHide2] = useState(false);
   const [statusData, setStatusData] = useState([
@@ -25,57 +25,53 @@ const SingleNft = ({}) => {
     // { id: 3, title: "3 days" },
   ]);
   let navigate = useNavigate();
-  const [addProp, setAddProp] = useState([{ key: "", value: ""}]);
-  const [nftdata,setnftdata] = useState({
+  const [addProp, setAddProp] = useState([{ key: "", value: "" }]);
+  const [nftdata, setnftdata] = useState({
     // name : '',
-    description : description,
-    collection : '',
-    properties : '',
-    collection_id : '',
-    user_id : user?.id,
-    nft_property :addProp,
-    nftimage : '',
-    is_unlockable_content : '',
-    unlockable_content : '',
-    is_explicit_content : '',
-    explicit_content : '',
+    description: description,
+    collection: "",
+    properties: "",
+    collection_id: "",
+    user_id: user?.id,
+    nft_property: addProp,
+    nftimage: "",
+    is_unlockable_content: "",
+    unlockable_content: "",
+    is_explicit_content: "",
+    explicit_content: "",
     title,
-    description : '',
-    external_link : ''
-  })
-  const getCollections = async ()  => {
-  try {
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/collection/getCollectionbyUserId/${user.id}`)
-    console.log('resp1',res)
-    if(res?.data){
-      setStatusData(res?.data)
+    description: "",
+    external_link: "",
+  });
+  const getCollections = async () => {
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/collection/getCollectionbyUserId/${user.id}`);
+      console.log("resp1", res);
+      if (res?.data) {
+        setStatusData(res?.data);
+      }
+    } catch (error) {
+      console.log("error", error);
     }
-  } catch (error) {
-    console.log('error',error)
-  }
-  
-  
-}
-useEffect(() => {
-  if(user) {
-    getCollections()
-  }
-},[user])
-const [api_loading,setapi_loading] = useState(false)
-  const create_singlenft = async ()  => {
+  };
+  useEffect(() => {
+    if (user) {
+      getCollections();
+    }
+  }, [user]);
+  const [api_loading, setapi_loading] = useState(false);
+  const create_singlenft = async () => {
     let formData = new FormData();
-    let nft_property = {}
-    addProp.map((item) => {
-      nft_property[item.key] = item.value
-    })
-    if(!title || !description) {
-      return toast.error("Please input title and description")
-    }
-    else if(!img) {
-      return toast.error("Please select an image")
-    }
-    else if(!selectioncollection) {
-      return toast.error("Please select a collection")
+    let nft_property = {};
+    addProp.map(item => {
+      nft_property[item.key] = item.value;
+    });
+    if (!title || !description) {
+      return toast.error("Please input title and description");
+    } else if (!img) {
+      return toast.error("Please select an image");
+    } else if (!selectioncollection) {
+      return toast.error("Please select a collection");
     }
     formData.append("description", description);
     formData.append("collection_id", selectioncollection?.id);
@@ -88,43 +84,42 @@ const [api_loading,setapi_loading] = useState(false)
     //formData.append("explicit_content", explicit_content);
     formData.append("title", title);
     formData.append("explicit_content", "asd");
-    console.log("formData",formData)
-    toast.info("Please accept request from your app")
-  try {
-    console.log('reached')
-    setapi_loading(true)
-    const res = await axios({
-      method: "post",
-      url: `${process.env.REACT_APP_API_URL}/mint/mintNFT`,
-      data: formData,
-      headers: { "Content-Type": "multipart/form-data" },
-    })
-    //window.location.href = "./nft";
-    //const res = await axios.post(`${process.env.REACT_APP_API_URL}/collection/createCollection`,formData)
-    console.log('create_singlenft_res',res)
-    setis_unlockable_content("")
-    setunlockable_content("")
-    setis_explicit_content("")
-    setexplicit_content("")
-    settitle("")
-    setdescription("")
-    setImg("")
-    toast("Nft added successfully")
-    if(res?.data){
-      console.log('res',res)
-      setapi_loading(false)
-      navigate(`/create-item?item_id=${res?.data?.id}`)
-      
-    }  
-  } catch (error) {
-    console.log('error',error)
-    console.log('error',error.response)
-    setapi_loading(false)
-    if(error?.response?.data){
-      toast.success(`${error?.response?.data}`) 
+    console.log("formData", formData);
+    toast.info("Please accept request from your app");
+    try {
+      console.log("reached");
+      setapi_loading(true);
+      const res = await axios({
+        method: "post",
+        url: `${process.env.REACT_APP_API_URL}/mint/mintNFT`,
+        data: formData,
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      //window.location.href = "./nft";
+      //const res = await axios.post(`${process.env.REACT_APP_API_URL}/collection/createCollection`,formData)
+      console.log("create_singlenft_res", res);
+      setis_unlockable_content("");
+      setunlockable_content("");
+      setis_explicit_content("");
+      setexplicit_content("");
+      settitle("");
+      setdescription("");
+      setImg("");
+      toast("Nft added successfully");
+      if (res?.data) {
+        console.log("res", res);
+        setapi_loading(false);
+        navigate(`/create-item?item_id=${res?.data?.id}`);
+      }
+    } catch (error) {
+      console.log("error", error);
+      console.log("error", error.response);
+      setapi_loading(false);
+      if (error?.response?.data) {
+        toast.success(`${error?.response?.data}`);
+      }
     }
-  }      
-  }
+  };
   const [selectioncollection, setselectioncollection] = useState();
   const [xrp, setxrp] = useState();
   useEffect(() => {
@@ -152,19 +147,14 @@ const [api_loading,setapi_loading] = useState(false)
             <div className="row flex flex-col">
               <div className="r-lbl flex flex-col">
                 <div className="lbl-1">
-                  Image, Video, Audio or 3D Model{" "}
-                  <spna className="star">*</spna>
+                  Image, Video, Audio or 3D Model <spna className="star">*</spna>
                 </div>
-                <div className="lbl-2">
-                  File types supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV,
-                  OGG, GLB, GLTF. Max size: 100 MB
-                </div>
+                <div className="lbl-2">File types supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB, GLTF. Max size: 100 MB</div>
               </div>
               <div className="select-img flex aic jc">
                 <div
                   className={`img-box flex flex-col aic jc ${img ? "" : "bdr"}`}
-                  onClick={() => document.getElementById("upload_img").click()}
-                >
+                  onClick={() => document.getElementById("upload_img").click()}>
                   {img ? (
                     <img src={URL.createObjectURL(img)} className="img" />
                   ) : (
@@ -178,7 +168,7 @@ const [api_loading,setapi_loading] = useState(false)
                     title=""
                     id="upload_img"
                     className="select-file cleanbtn"
-                    onChange={(e) => {
+                    onChange={e => {
                       let file = e.target.files[0];
                       //setImg(e.target.files[0]);
                       setImg(file);
@@ -199,8 +189,8 @@ const [api_loading,setapi_loading] = useState(false)
                 className="txt cleanbtn"
                 placeholder="Item name"
                 value={title}
-                onChange={(e) => {
-                  settitle(e.target.value)
+                onChange={e => {
+                  settitle(e.target.value);
                 }}
               />
             </div>
@@ -210,46 +200,35 @@ const [api_loading,setapi_loading] = useState(false)
                   Description
                   <spna className="star"></spna>
                 </div>
-                <div className="lbl-2">
-                  The description will be underneath the image on the item's
-                  detail page.
-                </div>
+                <div className="lbl-2">The description will be underneath the image on the item's detail page.</div>
               </div>
               <textarea
                 type="text"
                 className="txt cleanbtn h100"
                 placeholder="Description..."
                 value={description}
-                onChange={(e) => {
-                  setdescription(e.target.value)
+                onChange={e => {
+                  setdescription(e.target.value);
                 }}
               />
             </div>
             <div className="row flex flex-col">
               <div className="r-lbl flex flex-col">
                 <div className="lbl-1">Collection</div>
-                <div className="lbl-2">
-                  Select the Collection where this item will appear.
-                </div>
+                <div className="lbl-2">Select the Collection where this item will appear.</div>
               </div>
               <div className="dropDown flex aic jc flex-col rel">
                 <div className="category flex aic">
                   <div
                     className="cbox cleanbtn flex aic rel"
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation();
                       setHide(!hide);
-                    }}
-                  >
+                    }}>
                     <div className="slt flex aic">
                       <div className="unit-name flex aic font s14 b4">
-                        <span
-                          className="unit-eng flex aic font s14 b4"
-                          placeholder="Select collection"
-                        >
-                          {selectioncollection
-                            ? ` ${selectioncollection.name} - ${selectioncollection.id}`
-                            : "Select collection"}
+                        <span className="unit-eng flex aic font s14 b4" placeholder="Select collection">
+                          {selectioncollection ? ` ${selectioncollection.name} - ${selectioncollection.id}` : "Select collection"}
                         </span>
                       </div>
                     </div>
@@ -265,11 +244,10 @@ const [api_loading,setapi_loading] = useState(false)
                       <div
                         key={index}
                         className="slt flex aic"
-                        onClick={(e) => {
+                        onClick={e => {
                           setHide(!hide);
                           setselectioncollection(item);
-                        }}
-                      >
+                        }}>
                         <div className="unit-name flex aic font s14 b4">
                           <span className="unit-eng flex aic font s14 b4">
                             {item.name} - {item.id}
@@ -287,12 +265,7 @@ const [api_loading,setapi_loading] = useState(false)
               </div>
               <div className="add-more flex">
                 <div className="btn button flex aic jc">
-                  <div
-                    className="btn-lbl"
-                    onClick={(e) =>
-                      setAddProp([...addProp, { key: "",value : ""  }])
-                    }
-                  >
+                  <div className="btn-lbl" onClick={e => setAddProp([...addProp, { key: "", value: "" }])}>
                     <PlusIcon />
                   </div>
                 </div>
@@ -304,18 +277,18 @@ const [api_loading,setapi_loading] = useState(false)
                       type="text"
                       className="txt"
                       placeholder="e.g background"
-                      onChange={(e) => {
-                        addProp[index]["key"] = e.target.value
-                        setAddProp([...addProp])
+                      onChange={e => {
+                        addProp[index]["key"] = e.target.value;
+                        setAddProp([...addProp]);
                       }}
                     />
                     <input
                       type="text"
                       className="txt"
                       placeholder="e.g solid"
-                      onChange={(e) => {
-                        addProp[index]["value"] = e.target.value
-                        setAddProp([...addProp])
+                      onChange={e => {
+                        addProp[index]["value"] = e.target.value;
+                        setAddProp([...addProp]);
                       }}
                     />
                   </>
@@ -325,15 +298,15 @@ const [api_loading,setapi_loading] = useState(false)
             <div className="row flex aic">
               <div className="left flex flex-col">
                 <div className="lbl1">Unlockable Content</div>
-                <div className="lbl2">
-                  Include unlockable content that can only be accessed by the
-                  owner of the item.
-                </div>
-                {is_unlockable_content && <textarea 
-                onChange={(e) => {
-                  setunlockable_content(e.target.value)
-                }}
-                className="txt-area cleanbtn" />}
+                <div className="lbl2">Include unlockable content that can only be accessed by the owner of the item.</div>
+                {is_unlockable_content && (
+                  <textarea
+                    onChange={e => {
+                      setunlockable_content(e.target.value);
+                    }}
+                    className="txt-area cleanbtn"
+                  />
+                )}
               </div>
               <div className="right flex aic">
                 <Toggle setToggle={setis_unlockable_content} />
@@ -342,9 +315,7 @@ const [api_loading,setapi_loading] = useState(false)
             <div className="row flex aic">
               <div className="left flex flex-col">
                 <div className="lbl1">Explicit and sensitive content</div>
-                <div className="lbl2">
-                  Set this collection as explicit and sensitive content
-                </div>
+                <div className="lbl2">Set this collection as explicit and sensitive content</div>
               </div>
               <div className="right flex aic">
                 <Toggle setToggle={setis_explicit_content} />
@@ -353,16 +324,9 @@ const [api_loading,setapi_loading] = useState(false)
             <div className="row flex flex-col">
               <div className="r-lbl flex flex-col">
                 <div className="lbl-1">Supply</div>
-                <div className="lbl-2">
-                  The number of items that can be minted. No gas cost to you.
-                </div>
+                <div className="lbl-2">The number of items that can be minted. ".00001 XRP"</div>
               </div>
-              <input
-                disabled
-                type="text"
-                className="txt cleanbtn w-1/2"
-                placeholder="1"
-              />
+              <input disabled type="text" className="txt cleanbtn w-1/2" placeholder="1" />
             </div>
             {/* <div className="row flex flex-col">
               <div className="r-lbl flex flex-col">
@@ -421,10 +385,10 @@ const [api_loading,setapi_loading] = useState(false)
             </div> */}
           </div>
           <div
-          onClick={() => {
-            create_singlenft()
-          }}
-          className="action flex aic jc">
+            onClick={() => {
+              create_singlenft();
+            }}
+            className="action flex aic jc">
             <div className="btn button">{api_loading ? "Loading..." : "Create NFT"}</div>
           </div>
         </div>

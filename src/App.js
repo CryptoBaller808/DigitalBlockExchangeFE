@@ -87,7 +87,7 @@ function App() {
           <Route path="/collection-create" element={<CollectionNft />} exact />
           <Route path="/nft-explore" element={<ExplorePage />} exact />
           <Route path="/profile" element={<Profile />} exact />
-          <Route path="/MyNftDetail" element={<MyNftDetail />} exact />
+          <Route path="/nft-detail/:name" element={<MyNftDetail />} exact />
           <Route path="/create-item" element={<CreateNewItem />} exact />
         </Routes>
         <Footer />

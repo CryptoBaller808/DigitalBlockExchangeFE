@@ -444,13 +444,13 @@ const Profile = () => {
 
                       <div className="row-item flex">Image</div>
                       <div className="row-item flex">Collection Id</div>
-                      <div className="row-item flex">FB url</div>
+                      <div className="row-item flex">URL</div>
                       <div className="row-item flex">Description</div>
                       {/* <div className="row-item flex">To</div>
                   <div className="row-item flex">Time</div> */}
                     </div>
                     {createdCollections.map((item, index) => (
-                      <Link to={`/MyNftDetail?id=${item.id}`} className="card flex flex-col pointer">
+                      <Link to={`/nft-detail/${item.name}?id=${item.id}`} className="card flex flex-col pointer">
                         <div style={{ cursor: "pointer" }} className="row flex aic">
                           <div className="row-item flex">{item.id}</div>
                           <div className="row-item flex aic">
