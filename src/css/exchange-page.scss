@@ -203,7 +203,7 @@
         }
       }
       .center {
-        flex: 1;
+        flex: 1.6;
         height: 840px;
         margin: 0 10px;
         @include media(">=phone", "<=480px") {
@@ -475,12 +475,7 @@
                   font-weight: 600;
                   font-size: 18px;
                   color: #ffffff;
-                  background: linear-gradient(
-                    48.98deg,
-                    rgba(167, 214, 63, 0.9) -34.08%,
-                    #39b54a 44.93%,
-                    #9fd340 126.52%
-                  );
+                  background: linear-gradient(48.98deg, rgba(167, 214, 63, 0.9) -34.08%, #39b54a 44.93%, #9fd340 126.52%);
                   border-radius: 8px;
                 }
               }
@@ -589,12 +584,7 @@
                   font-weight: 600;
                   font-size: 18px;
                   color: #ffffff;
-                  background: linear-gradient(
-                    48.98deg,
-                    rgba(167, 214, 63, 0.9) -34.08%,
-                    #39b54a 44.93%,
-                    #9fd340 126.52%
-                  );
+                  background: linear-gradient(48.98deg, rgba(167, 214, 63, 0.9) -34.08%, #39b54a 44.93%, #9fd340 126.52%);
                   border-radius: 8px;
                 }
               }

@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { TokenIcon, DropDownIcon, ExchangeIcon, ExchangeArrowIcon } from "../Icons";
 import Modal from "../components/Modal";
 import WalletConnect from "../components/WalletConnect";
 import Select from "react-select";
 import currency from "../helper/currencies";
+import { SocketContext } from "../context/soket";
+import { setModalOpen, connectWallet } from "../redux/actions";
+import * as balanceAction from "../redux/xummBalance/action";
+import * as QRCodeAction from "../redux/xummQRCode/action";
 
 const Swap = () => {
+  const socket = useContext(SocketContext);
   const [open, setOpen] = useState(false);
   const [state, setState] = useState(null);
   const options = [
@@ -16,8 +21,17 @@ const Swap = () => {
   // handleChange = selectedOption => {
   //   setState(selectedOption);
   // };
+
   const [selectedOption, setSelectedOption] = useState(null);
-  console.log("currency", currency);
+  // console.log("currency", currency);
+  const handleFromAmount = e => {
+    setSelectedOption(e.currency);
+    socket.emit("get-available-swap-path");
+
+    socket.on("available-path", args => {
+      console.log("payment-response", args);
+    });
+  };
   return (
     <div className="swap-page flex">
       <div className="wrap wrapWidth flex aic flex-col">
@@ -37,7 +51,7 @@ const Swap = () => {
                       <div className="lbl">Swap From :</div>
                       <Select
                         defaultValue={selectedOption}
-                        onChange={setSelectedOption}
+                        onChange={handleFromAmount}
                         getOptionLabel={option => option.currency}
                         getOptionValue={option => option.currency}
                         options={currency}

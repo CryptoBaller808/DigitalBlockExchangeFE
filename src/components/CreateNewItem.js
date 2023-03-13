@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import {
-  ArrowBackIcon,
-  DropDownIcon,
-  UnlimitedIcon,
-  TimeIcon,
-  FixedPriceIcon,
-  RoundCrossIcon,
-} from "../Icons";
+import { ArrowBackIcon, DropDownIcon, UnlimitedIcon, TimeIcon, FixedPriceIcon, RoundCrossIcon } from "../Icons";
 import Toggle from "./Toggle";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,88 +10,86 @@ import { useNavigate } from "react-router-dom";
 const CreateNewItem = ({}) => {
   const [tab, setTab] = useState("fixed");
   const [showDate, setShowDate] = useState(false);
-  const {user} = useSelector((state) => state.generalReducers)
+  const { user } = useSelector(state => state.generalReducers);
   const [hide, setHide] = useState(false);
   const [hide2, setHide2] = useState(false);
   const [hide3, setHide3] = useState(false);
   const [hide4, setHide4] = useState(false);
   const [statusData, setStatusData] = useState([
-    { id: 1, title: "1 XRP" },
+    { id: 1, title: "XRP" },
     // { id: 2, title: "2 XRP" },
     // { id: 3, title: "3 XRP" },
   ]);
   const [selectedcompany, setselectedcompany] = useState();
   const [selectedcompany2, setselectedcompany2] = useState();
-  const [starttime,setstarttime] = useState()
-  const [endtime,setendtime] = useState()
+  const [starttime, setstarttime] = useState();
+  const [endtime, setendtime] = useState();
   let navigate = useNavigate();
-  const [put_on_marketplace,setput_on_marketplace] = useState(true)
-  const [fixedprice,setfixedprice] = useState()
-  const [minimumbid,setminimumbid] = useState()
-  const [reserve_price,setreserve_price] = useState()
+  const [put_on_marketplace, setput_on_marketplace] = useState(true);
+  const [fixedprice, setfixedprice] = useState();
+  const [minimumbid, setminimumbid] = useState();
+  const [reserve_price, setreserve_price] = useState();
   const query = new URLSearchParams(window.location.search);
-  const [loading,setloading] = useState(false)
-  const item_id = query.get('item_id')
-  console.log("item_id",item_id)
-  const sellNFT = async ()  => {
-    if(tab == "time" && (!minimumbid || !reserve_price || !starttime || !endtime)) {
-      return toast.error("Please fill all fields")
-    }else if(tab == "fixed" && !fixedprice) {
-      return toast.error("Please fill all fields")
-    }else if(tab == "unlimited" && (!minimumbid || !reserve_price || !starttime)) {
-      return toast.error("Please fill all fields")
+  const [loading, setloading] = useState(false);
+  const item_id = query.get("item_id");
+  console.log("item_id", item_id);
+  const sellNFT = async () => {
+    if (tab == "time" && (!minimumbid || !reserve_price || !starttime || !endtime)) {
+      return toast.error("Please fill all fields");
+    } else if (tab == "fixed" && !fixedprice) {
+      return toast.error("Please fill all fields");
+    } else if (tab == "unlimited" && (!minimumbid || !reserve_price || !starttime)) {
+      return toast.error("Please fill all fields");
     }
-    let sale_type = 0
-    if(tab == "time") {
-      sale_type = 2
-    }else if(tab == "fixed") {
-      sale_type = 1
-    }else if(tab == "unlimited") {
-      sale_type = 3
+    let sale_type = 0;
+    if (tab == "time") {
+      sale_type = 2;
+    } else if (tab == "fixed") {
+      sale_type = 1;
+    } else if (tab == "unlimited") {
+      sale_type = 3;
     }
     try {
-      console.log("obj",{
+      console.log("obj", {
         item_id: item_id,
         user_id: user?.id,
         sale_type: sale_type,
         fix_price: Number(fixedprice),
         put_on_marketplace: put_on_marketplace,
         t_auction_start_date: starttime,
-        t_auction_end_date:  endtime,
-        t_auction_minimum_bid:  Number(minimumbid),
-        t_auction_reserve_price:  Number(reserve_price)
-        })
-      toast.info("Please accept request from your app")
-      setloading(true)
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/sale/sell/sellNFT`,{
-          item_id: item_id,
-          user_id: user?.id,
-          sale_type: sale_type,
-          fix_price: Number(fixedprice),
-          put_on_marketplace: put_on_marketplace,
-          t_auction_start_date: starttime,
-          t_auction_end_date:  endtime,
-          t_auction_minimum_bid:  Number(minimumbid),
-          t_auction_reserve_price:  Number(reserve_price)
-      })
-      console.log('resp1',res)
-      if(res?.data){
+        t_auction_end_date: endtime,
+        t_auction_minimum_bid: Number(minimumbid),
+        t_auction_reserve_price: Number(reserve_price),
+      });
+      toast.info("Please accept request from your app");
+      setloading(true);
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/sale/sell/sellNFT`, {
+        item_id: item_id,
+        user_id: user?.id,
+        sale_type: sale_type,
+        fix_price: Number(fixedprice),
+        put_on_marketplace: put_on_marketplace,
+        t_auction_start_date: starttime,
+        t_auction_end_date: endtime,
+        t_auction_minimum_bid: Number(minimumbid),
+        t_auction_reserve_price: Number(reserve_price),
+      });
+      console.log("resp1", res);
+      if (res?.data) {
         //setStatusData(res?.data)
-        toast.success(res?.data)
-        setloading(false)
-        navigate(`/`)
+        toast.success(res?.data);
+        setloading(false);
+        navigate(`/`);
       }
     } catch (error) {
-      console.log('error',error?.response)
-      console.log('error',error)
-      if(error?.response?.data) {
-        toast.error(error?.response?.data)
-        setloading(false)
+      console.log("error", error?.response);
+      console.log("error", error);
+      if (error?.response?.data) {
+        toast.error(error?.response?.data);
+        setloading(false);
       }
     }
-    
-    
-  }
+  };
   useEffect(() => {
     document.addEventListener("click", () => {
       setHide(false);
@@ -117,7 +108,7 @@ const CreateNewItem = ({}) => {
           <div className="pg-tag">Create New Item</div>
           <div className="meta flex flex-col">
             <div className="nft-img flex aic jc">
-              <img src="./images/nft2.png" className="img" />
+              <img src="./image 158.png" className="img" />
             </div>
             <div className="req-nft-info flex aic">
               <div className="left flex">
@@ -125,13 +116,10 @@ const CreateNewItem = ({}) => {
                   <div className="left-tag">Select your sell method</div>
                   <div className="boxs">
                     <div
-                      className={`le-card flex flex-col ${
-                        tab === "fixed" ? "active" : ""
-                      }`}
-                      onClick={(e) => {
+                      className={`le-card flex flex-col ${tab === "fixed" ? "active" : ""}`}
+                      onClick={e => {
                         setTab("fixed");
-                      }}
-                    >
+                      }}>
                       <div className="icon flex aic jc">
                         <FixedPriceIcon />
                       </div>
@@ -141,13 +129,10 @@ const CreateNewItem = ({}) => {
                       </div>
                     </div>
                     <div
-                      className={`le-card flex flex-col ${
-                        tab === "time" ? "active" : ""
-                      }`}
-                      onClick={(e) => {
+                      className={`le-card flex flex-col ${tab === "time" ? "active" : ""}`}
+                      onClick={e => {
                         setTab("time");
-                      }}
-                    >
+                      }}>
                       <div className="icon flex aic jc">
                         <TimeIcon />
                       </div>
@@ -157,13 +142,10 @@ const CreateNewItem = ({}) => {
                       </div>
                     </div>
                     <div
-                      className={`le-card flex flex-col ${
-                        tab === "unlimited" ? "active" : ""
-                      }`}
-                      onClick={(e) => {
+                      className={`le-card flex flex-col ${tab === "unlimited" ? "active" : ""}`}
+                      onClick={e => {
                         setTab("unlimited");
-                      }}
-                    >
+                      }}>
                       <div className="icon flex aic jc">
                         <UnlimitedIcon />
                       </div>
@@ -183,9 +165,9 @@ const CreateNewItem = ({}) => {
                           type="datetime-local"
                           id="meeting-time"
                           name="meeting-time"
-                          onChange={(e) => {
-                            console.log("e",e.target.value)
-                            setstarttime(e.target.value)
+                          onChange={e => {
+                            console.log("e", e.target.value);
+                            setstarttime(e.target.value);
                           }}
                           //   value="2018-06-12T19:30"
                           //min="2018-06-07T00:00"
@@ -199,9 +181,9 @@ const CreateNewItem = ({}) => {
                           type="datetime-local"
                           id="meeting-time"
                           name="meeting-time"
-                          onChange={(e) => {
-                            console.log("e",e.value)
-                            setendtime(e.target.value)
+                          onChange={e => {
+                            console.log("e", e.value);
+                            setendtime(e.target.value);
                           }}
                           //   value="2018-06-12T19:30"
                           //min="2018-06-07T00:00"
@@ -222,9 +204,9 @@ const CreateNewItem = ({}) => {
                           //   value="2018-06-12T19:30"
                           // min="2018-06-07T00:00"
                           // max="3018-06-14T00:00"
-                          onChange={(e) => {
-                            console.log("e",e.target.value)
-                            setstarttime(e.target.value)
+                          onChange={e => {
+                            console.log("e", e.target.value);
+                            setstarttime(e.target.value);
                           }}
                         />
                       </div>
@@ -238,10 +220,7 @@ const CreateNewItem = ({}) => {
                     <div className="row flex aic">
                       <div className="row-left flex flex-col">
                         <div className="lbl1">Schedule for future time</div>
-                        <div className="lbl2">
-                          You can schedule this listing to start at a future
-                          date.
-                        </div>
+                        <div className="lbl2">You can schedule this listing to start at a future date.</div>
                       </div>
                       <div className="row-right flex aic jc">
                         <Toggle setShowDate={setShowDate} />
@@ -256,9 +235,9 @@ const CreateNewItem = ({}) => {
                           id="meeting-time"
                           name="meeting-time"
                           //   value="2018-06-12T19:30"
-                          onChange={(e) => {
-                            console.log("e",e.target.value)
-                            setstarttime(e.target.value)
+                          onChange={e => {
+                            console.log("e", e.target.value);
+                            setstarttime(e.target.value);
                           }}
                         />
                       </div>
@@ -266,12 +245,10 @@ const CreateNewItem = ({}) => {
                     <div className="row flex aic">
                       <div className="row-left flex flex-col">
                         <div className="lbl1">Put on marketplace</div>
-                        <div className="lbl2">
-                          Allow users to instantly purchase your NFT
-                        </div>
+                        <div className="lbl2">Allow users to instantly purchase your NFT</div>
                       </div>
                       <div className="row-right flex aic jc">
-                        <Toggle setToggle={setput_on_marketplace} initial_value={put_on_marketplace}/>
+                        <Toggle setToggle={setput_on_marketplace} initial_value={put_on_marketplace} />
                       </div>
                     </div>
                     <div className="row flex aic">
@@ -279,9 +256,7 @@ const CreateNewItem = ({}) => {
                         <div className="lbl1">Fees</div>
                       </div>
                       <div className="row-right flex items-end jc flex-col">
-                        <div className="lbl2">
-                          To Digital Block Exchange NFT 2.5%
-                        </div>
+                        <div className="lbl2">To Digital Block Exchange NFT 2.5%</div>
                         <div className="lbl2">To EXPLODED 10%</div>
                       </div>
                     </div>
@@ -292,23 +267,17 @@ const CreateNewItem = ({}) => {
                           <div className="category flex aic">
                             <div
                               className="cbox cleanbtn flex aic rel"
-                              onClick={(e) => {
+                              onClick={e => {
                                 e.stopPropagation();
                                 setHide(!hide);
-                              }}
-                            >
+                              }}>
                               <div className="slt flex aic">
                                 <div className="unit-name flex aic font s14 b4">
                                   <span className="icon">
                                     <img src="./images/XRPL_Logo1.svg" />
                                   </span>
-                                  <span
-                                    className="unit-eng flex aic font s14 b4"
-                                    placeholder="XRP"
-                                  >
-                                    {selectedcompany
-                                      ? selectedcompany.title
-                                      : "XRP"}
+                                  <span className="unit-eng flex aic font s14 b4" placeholder="XRP">
+                                    {selectedcompany ? selectedcompany.title : "XRP"}
                                   </span>
                                 </div>
                               </div>
@@ -318,39 +287,28 @@ const CreateNewItem = ({}) => {
                               </div>
                             </div>
                           </div>
-                          <div
-                            className={`block flex aic abs ${
-                              hide ? "show" : ""
-                            }`}
-                          >
+                          <div className={`block flex aic abs ${hide ? "show" : ""}`}>
                             <div className="manue flex aic col anim">
                               {statusData.map((item, index) => (
                                 <div
                                   key={index}
                                   className="slt flex aic"
-                                  onClick={(e) => {
+                                  onClick={e => {
                                     setHide(!hide);
                                     setselectedcompany(item);
-                                  }}
-                                >
+                                  }}>
                                   <div className="unit-name flex aic font s14 b4">
-                                    <span className="unit-eng flex aic font s14 b4">
-                                      {item.title}
-                                    </span>
+                                    <span className="unit-eng flex aic font s14 b4">{item.title}</span>
                                   </div>
                                 </div>
                               ))}
                             </div>
                           </div>
                         </div>
-                        <input 
-                        value={fixedprice}
-                        onChange={(e) => setfixedprice(e.target.value)}
-                        type="text" className="txt cleanbtn" />
+                        <input value={fixedprice} onChange={e => setfixedprice(e.target.value)} type="text" className="txt cleanbtn" />
                       </div>
                       <div className="desc flex">
-                        You will receive{" "}
-                        <span className="des-numb">26.285 XRP</span> $25.15
+                        You will receive <span className="des-numb">26.285 XRP</span> $25.15
                       </div>
                     </div>
                   </div>
@@ -362,39 +320,29 @@ const CreateNewItem = ({}) => {
                         <div className="lbl1">Fees</div>
                       </div>
                       <div className="row-right flex items-end jc flex-col">
-                        <div className="lbl2">
-                          To Digital Block Exchange NFT 2.5%
-                        </div>
+                        <div className="lbl2">To Digital Block Exchange NFT 2.5%</div>
                         <div className="lbl2">To EXPLODED 10%</div>
                       </div>
                     </div>
                     <div className="row flex flex-col text-start">
                       <div className="lbl1 text-start">Minimum Bid</div>
-                      <div className="lbl2 text-start">
-                        Set your starting bid price
-                      </div>
+                      <div className="lbl2 text-start">Set your starting bid price</div>
                       <div className="price-box flex aic">
                         <div className="dropDown flex aic jc flex-col rel">
                           <div className="category flex aic">
                             <div
                               className="cbox cleanbtn flex aic rel"
-                              onClick={(e) => {
+                              onClick={e => {
                                 e.stopPropagation();
                                 setHide(!hide);
-                              }}
-                            >
+                              }}>
                               <div className="slt flex aic">
                                 <div className="unit-name flex aic font s14 b4">
                                   <span className="icon">
                                     <img src="./images/XRPL_Logo1.svg" />
                                   </span>
-                                  <span
-                                    className="unit-eng flex aic font s14 b4"
-                                    placeholder="XRP"
-                                  >
-                                    {selectedcompany
-                                      ? selectedcompany.title
-                                      : "XRP"}
+                                  <span className="unit-eng flex aic font s14 b4" placeholder="XRP">
+                                    {selectedcompany ? selectedcompany.title : "XRP"}
                                   </span>
                                 </div>
                               </div>
@@ -404,64 +352,46 @@ const CreateNewItem = ({}) => {
                               </div>
                             </div>
                           </div>
-                          <div
-                            className={`block flex aic abs ${
-                              hide ? "show" : ""
-                            }`}
-                          >
+                          <div className={`block flex aic abs ${hide ? "show" : ""}`}>
                             <div className="manue flex aic col anim">
                               {statusData.map((item, index) => (
                                 <div
                                   key={index}
                                   className="slt flex aic"
-                                  onClick={(e) => {
+                                  onClick={e => {
                                     setHide(!hide);
                                     setselectedcompany(item);
-                                  }}
-                                >
+                                  }}>
                                   <div className="unit-name flex aic font s14 b4">
-                                    <span className="unit-eng flex aic font s14 b4">
-                                      {item.title}
-                                    </span>
+                                    <span className="unit-eng flex aic font s14 b4">{item.title}</span>
                                   </div>
                                 </div>
                               ))}
                             </div>
                           </div>
                         </div>
-                        <input 
-                        onChange={(e) => setminimumbid(e.target.value)}
-                        value={minimumbid}
-                        type="text" className="txt cleanbtn" />
+                        <input onChange={e => setminimumbid(e.target.value)} value={minimumbid} type="text" className="txt cleanbtn" />
                       </div>
                     </div>
                     <div className="row flex flex-col text-start">
                       <div className="lbl1 text-start">Reserve Price</div>
-                      <div className="lbl2 text-start">
-                        Create a hidden limit by setting a reserve price
-                      </div>
+                      <div className="lbl2 text-start">Create a hidden limit by setting a reserve price</div>
                       <div className="price-box flex aic">
                         <div className="dropDown flex aic jc flex-col rel">
                           <div className="category flex aic">
                             <div
                               className="cbox cleanbtn flex aic rel"
-                              onClick={(e) => {
+                              onClick={e => {
                                 e.stopPropagation();
                                 setHide2(!hide2);
-                              }}
-                            >
+                              }}>
                               <div className="slt flex aic">
                                 <div className="unit-name flex aic font s14 b4">
                                   <span className="icon">
                                     <img src="./images/XRPL_Logo1.svg" />
                                   </span>
-                                  <span
-                                    className="unit-eng flex aic font s14 b4"
-                                    placeholder="XRP"
-                                  >
-                                    {selectedcompany2
-                                      ? selectedcompany2.title
-                                      : "XRP"}
+                                  <span className="unit-eng flex aic font s14 b4" placeholder="XRP">
+                                    {selectedcompany2 ? selectedcompany2.title : "XRP"}
                                   </span>
                                 </div>
                               </div>
@@ -471,35 +401,30 @@ const CreateNewItem = ({}) => {
                               </div>
                             </div>
                           </div>
-                          <div
-                            className={`block flex aic abs ${
-                              hide2 ? "show" : ""
-                            }`}
-                          >
+                          <div className={`block flex aic abs ${hide2 ? "show" : ""}`}>
                             <div className="manue flex aic col anim">
                               {statusData.map((item, index) => (
                                 <div
                                   key={index}
                                   className="slt flex aic"
-                                  onClick={(e) => {
+                                  onClick={e => {
                                     setHide2(!hide2);
                                     setselectedcompany2(item);
-                                  }}
-                                >
+                                  }}>
                                   <div className="unit-name flex aic font s14 b4">
-                                    <span className="unit-eng flex aic font s14 b4">
-                                      {item.title}
-                                    </span>
+                                    <span className="unit-eng flex aic font s14 b4">{item.title}</span>
                                   </div>
                                 </div>
                               ))}
                             </div>
                           </div>
                         </div>
-                        <input 
-                        value={reserve_price}
-                        onChange={(e) => setreserve_price(e.target.value)}
-                        type="text" className="txt cleanbtn" />
+                        <input
+                          value={reserve_price}
+                          onChange={e => setreserve_price(e.target.value)}
+                          type="text"
+                          className="txt cleanbtn"
+                        />
                       </div>
                     </div>
                   </div>
@@ -507,12 +432,8 @@ const CreateNewItem = ({}) => {
               </div>
             </div>
           </div>
-          <div 
-          onClick={sellNFT}
-          className="action flex aic jc">
-            <div className="btn button">
-              {loading ? "Loading..." : "Post your listing" }
-            </div>
+          <div onClick={sellNFT} className="action flex aic jc">
+            <div className="btn button">{loading ? "Loading..." : "Post your listing"}</div>
           </div>
         </div>
       </div>

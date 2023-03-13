@@ -95,13 +95,6 @@ const OfferModel = ({
         getBookOffers(submitBookOfferData, accountNo)
           .then(res => {
             if (res.status === "success" && res.result?.offers.length) {
-              // const offerResult = _.orderBy(
-              //   res.result.offers,
-              //   ["Sequence"],
-              //   ["desc"]
-              // );
-              // console.log("bookOffers", res.result.offers);
-              // console.log("reverse offerResult", offerResult);
               dispatch(bookOfferAction.setBookOffersProcessing());
               dispatch(bookOfferAction.setBookOffers(res.result.offers));
               dispatch(bookOfferAction.setStopBookOffersProcessing());

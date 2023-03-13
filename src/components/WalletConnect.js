@@ -10,7 +10,7 @@ import * as QRCodeAction from "../redux/xummQRCode/action";
 import { SocketContext } from "../context/soket";
 import XummLogo from "../Images/XummLogo.png";
 import LegerLogo from "../Images/XRPLLogo.png";
-import setAuthToken from '../redux/actions/setHeaderToken'
+import setAuthToken from "../redux/actions/setHeaderToken";
 const WalletConnect = ({ open, setOpen }) => {
   const socket = useContext(SocketContext);
   const dispatch = useDispatch();
@@ -30,17 +30,7 @@ const WalletConnect = ({ open, setOpen }) => {
 
   const connectXumppwallet = async () => {
     setloading(true);
-    // const res = await axios.post("https://worldtradingexchange.com/users/Accounts/connectwallet");
-    // console.log("connectXumppwallet res22", res);
-    // if (res) {
-    //   setxumppres(res?.data);
-    // }
-    // let data = res?.data;
-    //from redux
-
     socket.emit("xumm-qr-code");
-    // console.log("QRCodeImage", QRCodeImage);
-
     if (qRCodeImage == null) {
       socket.on("qr-response", args => {
         console.log("qr-response", args);
@@ -51,12 +41,6 @@ const WalletConnect = ({ open, setOpen }) => {
 
     socket.on("account-response", args => {
       console.log("account-responsee", args);
-      //   {
-      //     "balance": 1000,
-      //     "account": "rGCbGE1KarbC9JL8psrK5ZmVw2LSMsyA8n",
-      //     "success": true,
-      //     "userToken": "9bce2f19-3b00-4f35-a833-098b243953f2"
-      // }
       dispatch(balanceAction.setBalance(args));
       setxumppres(args);
       Verifywallet(args.account, args?.userToken);
@@ -68,10 +52,9 @@ const WalletConnect = ({ open, setOpen }) => {
 
     socket.on("connection");
   };
-  //Verifywallet('rGCbGE1KarbC9JL8psrK5ZmVw2LSMsyA8n',"9bce2f19-3b00-4f35-a833-098b243953f2")
+
   const Verifywallet = async (wallet, userToken) => {
     console.log("Verifywallet", { wallet, userToken });
-    // userToken = "47bf218a-7ce4-44ab-bf20-e2bc1298b960"
 
     try {
       const res = await axios.post(`${process.env.REACT_APP_API_URL}/users/Accounts/verifyWallet`, {
@@ -87,18 +70,13 @@ const WalletConnect = ({ open, setOpen }) => {
       }
       let data = res?.data;
 
-      if(res){
-        setAuthToken(data.access_token)
+      if (res) {
+        setAuthToken(data.access_token);
       }
-      // let data = {
-      //   id: 124,
-      //   wallet_address: "rK5adqWCSJs7chADSbBpc42RSFd8isMo3x",
-      //   access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3YWxsZXRfYWRkcmVzcyI6InJLNWFkcVdDU0pzN2NoQURTYkJwYzQyUlNGZDhpc01vM3giLCJpYXQiOjE2NTk4OTQ1NTksImV4cCI6MTY1OTk4MDk1OX0.pJ7Bq-E99jc_ince4sT0MaGZ5iZeRg_jYacaAaWIXts",
-      //   request_token : "fe1e3903-63b0-4382-a567-92d5b5d7d2ee"
-      // }
-      localStorage.setItem("nft_login",JSON.stringify(data))
+
+      localStorage.setItem("nft_login", JSON.stringify(data));
       const res2 = await axios.get(`${process.env.REACT_APP_API_URL}/profiles/getuserProfile/${data.id}`);
-      // console.log("res22", res2);
+
       if (res2?.data) {
         dispatch({
           type: "GET_USER",
