@@ -50,4 +50,4 @@ jobs:
         run: docker push $IMAGE_NAME
 
       - name: Deploy Docker image
-        run: gcloud run deploy ${{ vars.GCP_APP_NAME }} --image $IMAGE_NAME --region us-central1 --platform managed --allow-unauthenticated --cpu 1 --min-instances 1 --max-instances 4 --memory 256Mi --port 8080 --no-use-http2 --set-env-vars NODE_ENV=production --service-account ${{ vars.GCP_ACCOUNT_NAME }}@${{ vars.GCP_PROJECT_ID }}.iam.gserviceaccount.com
+        run: gcloud run deploy ${{ vars.GCP_APP_NAME }} --image $IMAGE_NAME --region us-west1 --platform managed --allow-unauthenticated --cpu 1 --min-instances 1 --max-instances 4 --memory 256Mi --port 8080 --no-use-http2 --set-env-vars NODE_ENV=production --service-account ${{ vars.GCP_ACCOUNT_NAME }}@${{ vars.GCP_PROJECT_ID }}.iam.gserviceaccount.com
