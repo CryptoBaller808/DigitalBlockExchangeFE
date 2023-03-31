@@ -1,4 +1,4 @@
-name: Automated deployment
+name: Cloud Run Deployment
 
 on:
   push:
@@ -6,31 +6,48 @@ on:
 
 jobs:
   deploy:
+    name: Deploy to Cloud Run
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      id-token: write
+
     env:
-      NODE_ENV: production
+      IMAGE_NAME: gcr.io/${{ vars.GCP_PROJECT_ID }}/${{ vars.GCP_APP_NAME }}
       DISABLE_ESLINT_PLUGIN: true
 
     steps:
-      - name: Checkout the repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
       - name: Setup Node 16
         uses: actions/setup-node@v3
         with:
-          node-version: 16
-      - run: npm i -f
-      - run: npm run build
-      - run: cd _deploy && cp -r ../build ./ && zip -rq ../deploy.zip .
+          node-version: 18
 
-      - name: Deploy to EBS
-        uses: einaregilsson/beanstalk-deploy@v21
+      - name: Build React App
+        run: |
+          npm i -f
+          npm run build
+          cp -r ./build ./_deploy/
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
         with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: ${{ vars.APP_NAME }}
-          environment_name: ${{ vars.ENV_NAME }}
-          version_label: "version-${{github.run_number}}"
-          region: us-east-1
-          deployment_package: deploy.zip
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker --quietz
+
+      - name: Build Docker Image
+        run: docker build . -t $IMAGE_NAME
+
+      - name: Push Docker Image
+        run: docker push $IMAGE_NAME
+
+      - name: Deploy Docker image
+        run: gcloud run deploy ${{ vars.GCP_APP_NAME }} --image $IMAGE_NAME --region us-central1 --platform managed --allow-unauthenticated --cpu 1 --min-instances 1 --max-instances 4 --memory 256Mi --port 8080 --no-use-http2 --set-env-vars NODE_ENV=production --service-account ${{ vars.GCP_ACCOUNT_NAME }}@${{ vars.GCP_PROJECT_ID }}.iam.gserviceaccount.com

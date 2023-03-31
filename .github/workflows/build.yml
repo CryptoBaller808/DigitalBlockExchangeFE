@@ -17,6 +17,9 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16
-      - run: npm i -f
-      - run: npm run build
+          node-version: 18
+
+      - name: Build React App
+        run: |
+          npm i -f
+          npm run build
