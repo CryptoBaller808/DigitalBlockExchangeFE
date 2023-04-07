@@ -23,9 +23,14 @@ const Swap = () => {
   const [show, setShow] = useState(false);
   const [isTransaction, setIsTransaction] = useState(false)
   const [success, setSuccess] = useState('')
+  const [XRPId, setXRPId] = useState(0)
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    if (swapTo.value !== "") {
+      setShow(true);
+    }
+  }
   const [flag, setFlag] = useState(false)
   const swapFromRef = useRef()
   const options = [
@@ -37,8 +42,8 @@ const Swap = () => {
   const balance = useSelector(state => state.signInData?.balance);
   const isWalletConnected = useSelector(state => state.authReducer.isWalletConnected);
 
-  const [swapFrom, setSwapFrom] = useState({ currency: "", issuer: "", id: -1, value: "" })
-  const [swapTo, setSwapTo] = useState({ currency: "", issuer: "", value: "", id: -1 })
+  const [swapFrom, setSwapFrom] = useState({ currency: "", issuer: "", id: 0, value: "" })
+  const [swapTo, setSwapTo] = useState({ currency: "", issuer: "", value: "", id: 0 })
   const [finalExchangeRate, setFinalExchangeRate] = useState('')
   const [exchangeRate, setExchangeRate] = useState({
     swapFromExchange: "",
@@ -58,13 +63,28 @@ const Swap = () => {
     fetchCurrency()
   }, [])
 
+  useEffect(() => {
+    if (currencies) {
+      const fetchXRPId = currencies.map(c => {
+        if (c.asset_code === 'XRP') {
+          setXRPId(c.id)
+        }
+        return c;
+      })
+    }
+
+  }, [currencies])
+
+
+
 
   // handle swap
   const handleSwap = () => {
-    const { account, userToken } = balance;
+    const { account } = balance;
 
     setSwapTo(swapTo => ({ ...swapTo, value: "" }));
     setError('')
+    setSuccess('')
     const item = {
       source_account: account,
       destination_account: account,
@@ -83,12 +103,15 @@ const Swap = () => {
     socket.emit("get-available-swap-path", item);
 
     socket.on("available-path", (args) => {
-      setAccountData(args.alternatives)
+      if (args.alternatives.length === 0) {
+        setError("The amount can't be exchanged, there are not enough offers available on the XRP Decentralized Exchange for amount/pair.")
+      } else {
+        setAccountData(args.alternatives)
+      }
     })
 
     socket.on("available-path-error", (args) => {
       setError(args)
-      console.log(args)
     })
   }
 
@@ -100,19 +123,21 @@ const Swap = () => {
   // prevent same currency
   useEffect(() => {
     if (swapFrom.currency === swapTo.currency) {
-      console.log('same currency')
-      if (swapTo.currency === 'XRP') {
-        setSwapFrom(swapFrom => ({ ...swapFrom, id: 1, currency: 'USD', issuer: "rBZJzEisyXt2gvRWXLxHftFRkd1vJEpBQP" }))
-      } else {
-        setSwapFrom(swapFrom => ({ ...swapFrom, id: 11, currency: 'XRP', issuer: '' }))
+      if(swapFrom.id !== 0){
+        setError("Can't Swap Same Currency")
       }
+      setSwapFrom(swapFrom => ({ ...swapFrom, currency: "XRP", issuer: "null", id: parseInt(XRPId), }))
+      setSwapTo(swapTo => ({ ...swapTo, id: 0, currency: '', issuer: "", value: "" }))
+
     }
   }, [swapFrom.currency, swapTo.currency])
 
   // run handle swap
   useEffect(() => {
     if (swapFrom.currency !== "" && swapFrom.value !== "" && swapTo.currency !== "") {
-      handleSwap()
+      if (swapFrom.currency !== swapTo.currency && balance !== null) {
+        handleSwap();
+      }
     }
     return handleCleanState();
   }, [swapTo.currency, swapFrom.currency, swapFrom.value])
@@ -120,8 +145,9 @@ const Swap = () => {
 
   // handleSetSwap
   const handleSetSwapTo = (e) => {
+    setError('')
+    setSuccess('')
     let value = e.target.value;
-    console.log(value)
     let currentObject = currencies.map(c => {
       if (c.id === parseInt(value)) {
         setSwapTo(swapTo => ({ ...swapTo, currency: c.asset_code, issuer: c.asset_issuer, id: c.id }))
@@ -134,14 +160,15 @@ const Swap = () => {
   // handle success true
   const handleSuccess = () => {
     setIsTransaction(false)
-    setSwapFrom(swapFrom => ({ ...swapFrom, currency: "", issuer: "", id: -1, value: "" }))
-    setSwapTo(swapTo => ({ ...swapTo, currency: "", issuer: "", value: "", id: -1 }))
+    setSwapFrom(swapFrom => ({ ...swapFrom, currency: "", issuer: "", id: 0, value: "" }))
+    setSwapTo(swapTo => ({ ...swapTo, currency: "", issuer: "", value: "", id: 0 }))
   }
 
   // handle setSwapFrom
   const handleSetSwapFrom = (e) => {
+    setError('')
+    setSuccess('')
     let value = e.target.value;
-    console.log(value);
     let currentObject = currencies.map(c => {
       if (c.id === parseInt(value)) {
         setSwapFrom(swapFrom => ({ ...swapFrom, currency: c.asset_code, issuer: c.asset_issuer, id: c.id }))
@@ -158,14 +185,30 @@ const Swap = () => {
 
         // source_amount is an object
 
-        if (data?.destination_amount?.currency === swapTo.currency && data?.source_amount?.currency === swapFrom.currency) {
-          let localExchangeRate = getExchangeRate(data?.source_amount?.value, data?.destination_amount?.value);
+        //  if destination_amount is string 
+
+        if (typeof data?.destination_amount === 'string' && data?.source_amount?.currency === swapFrom.currency) {
+
+          let destAmount = swapTo.currency === 'XRP' ? (parseInt(data?.destination_amount) / 1000000) : parseInt(data?.destination_amount);
+          let localExchangeRate = getExchangeRate(data?.source_amount?.value, destAmount);
           let finalrate = localExchangeRate * swapFrom.value;
           setSwapTo(swapTo => ({ ...swapTo, value: finalrate }))
-          setExchangeRate((exchangeRate) => ({ ...exchangeRate, swapFromExchange: data?.source_amount?.currency, swapToExchange: data?.destination_amount?.currency, exchangeRateForOne: localExchangeRate }))
+          setExchangeRate((exchangeRate) => ({ ...exchangeRate, swapFromExchange: data?.source_amount, swapToExchange: data?.destination_amount?.value, exchangeRateForOne: localExchangeRate }))
           setFinalExchangeRate(finalrate)
           setFlag(true)
+
+        } else {
+          if (data?.destination_amount?.currency === swapTo.currency && data?.source_amount?.currency === swapFrom.currency) {
+            let localExchangeRate = getExchangeRate(data?.source_amount?.value, data?.destination_amount?.value);
+            let finalrate = localExchangeRate * swapFrom.value;
+            setSwapTo(swapTo => ({ ...swapTo, value: finalrate }))
+            setExchangeRate((exchangeRate) => ({ ...exchangeRate, swapFromExchange: data?.source_amount?.currency, swapToExchange: data?.destination_amount?.currency, exchangeRateForOne: localExchangeRate }))
+            setFinalExchangeRate(finalrate)
+            setFlag(true)
+          }
         }
+
+
 
       } else if (typeof data?.source_amount === "string" && swapFrom.currency === "XRP") {
 
@@ -182,10 +225,7 @@ const Swap = () => {
         }
 
       } else {
-        setSwapTo((swapTo) => ({ ...swapTo, value: "" }))
-        setSwapFrom((swapFrom) => ({ ...swapFrom, currency: 'XRP' }))
         setFlag(false)
-        console.log('Same currencies')
       }
       return data;
     })
@@ -223,7 +263,6 @@ const Swap = () => {
         }
       }
 
-
       socket.emit('xumm-payment', item);
       handleClose();
       setIsTransaction(true);
@@ -232,24 +271,24 @@ const Swap = () => {
         setError('Something Went Wrong, Please Try Again');
         setIsTransaction(false);
       }, 2 * 60 * 1000); // 2 minutes in milliseconds
-      
+
       socket.on('swap-payment-response', (args) => {
         clearTimeout(timeoutId); // clear the timeout if a response is received
-        console.log(args);
         if (args.success === true) {
           handleSuccess();
           setSuccess(args.message);
+          setError('');
         } else {
           setIsTransaction(false); // stop the loaders
           if (args.message === 'Rejected') {
             setError("Transaction request on XUMM was declined.");
+          } else if (args.data.dispatched_result === "tecPATH_DRY" || args.data.dispatched_result === "tecPATH_PARTIAL") {
+            setError('The transaction failed due to not enough liquidity for the pair on XRP Decentralized Exchange')
           } else {
             setError("Server Error, Please Try Again.");
           }
         }
       });
-
-
 
     }
 
@@ -316,19 +355,8 @@ const Swap = () => {
                     </div>
                     <div className="about-token flex flex-col w-full">
                       <div className="lbl">Swap From :</div>
-                      {/* <Select
-                        defaultValue={'XRP'}
-                        onChange={(e) => setSwapFrom({ ...swapFrom, currency: e.asset_code, issuer: e.asset_issuer })}
-                        getOptionLabel={option => option.asset_code}
-                        getOptionValue={(option) => option.id}
-                        options={currencies}
-                        placeholder="Select Currency"
-                        className="w-full"
-                        disabled={!currencies ? true : false}
-                        ref={swapFromRef}
-                      /> */}
                       <select className="form-control" value={swapFrom.id} onChange={handleSetSwapFrom}>
-                        <option value="-1">Select</option>
+                        <option value="0">Select</option>
                         {currencies && currencies.map(c => {
                           return <option value={c.id} issuer={c.asset_issuer} key={c.id}>{c.asset_code}</option>
                         })}
@@ -356,18 +384,8 @@ const Swap = () => {
                     </div>
                     <div className="about-token flex flex-col w-full">
                       <div className="lbl">Swap To:</div>
-                      {/* <Select
-                        defaultValue={swapTo}
-                        onChange={(e) => setSwapTo({ ...swapTo, currency: e.asset_code, issuer: e.asset_issuer })}
-                        getOptionLabel={option => option.asset_code}
-                        getOptionValue={(option) => option.id}
-                        options={currencies}
-                        placeholder="Select Currency"
-                        className="w-full"
-                        disabled={!currencies ? true : false}
-                      /> */}
                       <select className="form-control" value={swapTo.id} onChange={handleSetSwapTo} ref={swapToRef}>
-                        <option value="-1">Select</option>
+                        <option value="0">Select</option>
                         {currencies && currencies.map(c => {
                           return <option value={c.id} issuer={c.asset_issuer} key={c.id}>{c.asset_code}</option>
                         })}
@@ -382,7 +400,7 @@ const Swap = () => {
             </div>
           </div>
           <div className="action">
-            {isWalletConnected ? <div className="btn button" onClick={flag ? handleShow : null}>
+            {balance?.success ? <div className="btn button" onClick={flag ? handleShow : null}>
               Swap Currency
             </div> : <div className="btn button" onClick={() => setOpen(true)}>
               Connect Wallet
