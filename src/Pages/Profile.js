@@ -287,7 +287,7 @@ const Profile = () => {
           <div className="wrapWidth wrap flex flex-col">
             <div className="user-info flex flex-col">
               <img
-                src="unknow.jpeg"
+                // src="unknow.jpeg"
                 //src={`${user?.cover_image}`}
                 src={`${user?.cover_image ? user?.cover_image : "unknow.jpeg"}`}
                 className="banner-img"
@@ -424,10 +424,10 @@ const Profile = () => {
                           {console.log(item?.buyer_details)}
                         </div>
                         <div className="row-item flex">
-                          {item?.buyer_details?.firstname} {item?.buyer_details?.lastname}
+                          {item?.seller_details?.firstname} {item?.seller_details?.lastname}
                         </div>
                         <div className="row-item flex">
-                          {item?.seller_details?.firstname} {item?.seller_details?.lastname}
+                          {item?.buyer_details?.firstname} {item?.buyer_details?.lastname}
                         </div>
                         <div className="row-item flex">{moment(item?.entry_date).format("MMMM Do YYYY, h:mm:ss")}</div>
                       </div>

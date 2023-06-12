@@ -16,7 +16,7 @@ const NftDetail = () => {
   const [data, setdata] = useState();
   const [selecteditem, setselecteditem] = useState();
   const [loading, setLoading] = useState(false);
-  const [isBought, setIsBought] = useState(false)
+  const [isBought, setIsBought] = useState(false);
   const signInData = useSelector(state => state.generalReducers?.user);
   const { user } = useSelector((state) => state.generalReducers)
   console.log(signInData);
@@ -43,6 +43,8 @@ const NftDetail = () => {
       const data = res.data;
       setLoading(false);
       toast.success(res?.data);
+      getNftById(id);
+      setIsBought(false);
     } catch (e) {
       console.log(e);
       setLoading(false);
@@ -213,15 +215,16 @@ const NftDetail = () => {
                           </button>
                           :
                           <>
-                            {!isBought ? <div className="btn button" onClick={e => setOpen(true)}>
-                              Buy for {data?.item_sale_info?.price} XRP
-                            </div> :
-                              <div className="btn button" onClick={handleAcceptNft}>
-                                {loading ? "Waiting for the response" : "Accept The Nft"}
-                              </div>}
-                            {/* <div className="btn button" onClick={e => setOpen(true)}>
-                              Buy for {data?.item_sale_info?.price} XRP
-                            </div> */}
+                            {selecteditem?.current_owner_details?.wallet_address !== signInData?.wallet_address &&
+                              <>
+                                {!isBought ? <div className="btn button" onClick={e => setOpen(true)}>
+                                  Buy for {data?.item_sale_info?.price} XRP
+                                </div> :
+                                  <div className="btn button" onClick={handleAcceptNft}>
+                                    {loading ? "Waiting for the response" : "Accept The Nft"}
+                                  </div>}
+                              </>
+                            }
                           </>
 
                         }
