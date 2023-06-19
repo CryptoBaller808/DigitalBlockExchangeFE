@@ -4,12 +4,15 @@ import { CrossIcon, RoundCrossIcon } from "../Icons";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from 'react-toastify';
+import { covertXrpToUsd } from "../helper/api/convertToUsd";
 
 const Completecheckout = ({ setOpen, id, iteminfo, setIsBought, getNftById }) => {
   const [data, setdata] = useState()
   const { user } = useSelector((state) => state.generalReducers)
   const [loading, setloading] = useState(false);
- 
+  const [convertedRate, setConvertedRate] = useState(0);
+
+
 
   const buyFixPriceItem = async () => {
     console.log('data...', {
@@ -43,10 +46,22 @@ const Completecheckout = ({ setOpen, id, iteminfo, setIsBought, getNftById }) =>
         toast.success("Error! Please try again.")
       }
       setloading(false)
+      getNftById(id);
 
     }
 
   }
+
+  // convert xrp to usd
+  const convertToUsd = async () => {
+    let xrpRate = Number(iteminfo?.item_sale_info?.price);
+    let convertedRate = await covertXrpToUsd(xrpRate);
+    setConvertedRate(convertedRate);
+  }
+
+  useEffect(() => {
+    convertToUsd();
+  }, [])
 
 
   console.log('Completecheckout', id, iteminfo)
@@ -78,7 +93,7 @@ const Completecheckout = ({ setOpen, id, iteminfo, setIsBought, getNftById }) =>
               <div className="right-side flex flex-col">
                 <div className="type">{iteminfo?.item_collection?.category_details?.category_name}</div>
                 <div className="name">{iteminfo?.title}</div>
-                <div className="fee">Creator Fees: {iteminfo?.item_collection?.royalty}%</div>
+                <div className="fee">Creator Fees: {iteminfo?.item_collection?.royalty || 0}%</div>
               </div>
             </div>
             <div className="right flex flex-col jc">
@@ -88,7 +103,7 @@ const Completecheckout = ({ setOpen, id, iteminfo, setIsBought, getNftById }) =>
                 </span>
                 <div className="xrp-tag">{iteminfo?.item_sale_info?.price} XRP</div>
               </div>
-              <div className="price">$196.21</div>
+              <div className="price">${convertedRate || 0}</div>
             </div>
           </div>
           <div className="t-price flex aic justify-between">

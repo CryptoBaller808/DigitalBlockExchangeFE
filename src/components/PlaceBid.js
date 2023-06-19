@@ -19,6 +19,9 @@ const PlaceBid = ({ open, setOpen, selecteditem, getNftById }) => {
   const [Open2, setOpen2] = useState(0);
   const [errormessage, seterrormessage] = useState("");
   const [loading, setloading] = useState(false);
+  const [platformFee, setPlatformFee] = useState(0);
+  const [recievedFee, setRecievedFee] = useState(0);
+
 
   const handleClick = message => {
     setOpen2(true);
@@ -27,6 +30,18 @@ const PlaceBid = ({ open, setOpen, selecteditem, getNftById }) => {
   const handleClose = () => {
     setOpen2(false);
   };
+
+  // get platform fee
+  const getPlatformFee = async () => {
+    try {
+      const res = await axios.get('https://api.digitalblock.exchange/collection/getplatformfee');
+      const data = res.data;
+      setPlatformFee(data?.platform_fee);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   const bidOnNFT = async id => {
     console.log("id", id);
     if (bid_price < Number(selecteditem?.minimum_bid)) {
@@ -62,9 +77,20 @@ const PlaceBid = ({ open, setOpen, selecteditem, getNftById }) => {
     } catch (error) {
       console.log("error", error?.response);
       setloading(false);
+      getNftById(selecteditem?.item_id);
       return toast(error?.response?.data);
     }
   };
+
+  // handle set bid
+  const handleSetBid = (e) => {
+    setbid_price(e.target.value);
+
+    let ifValue = Number(e.target.value) || 0;
+    let recievedFee = ifValue/100 * platformFee;
+    setRecievedFee(recievedFee);
+  }
+
   const [selectedHours, setselectedHours] = useState();
   console.log("selecteditem", selecteditem);
   useEffect(() => {
@@ -78,6 +104,7 @@ const PlaceBid = ({ open, setOpen, selecteditem, getNftById }) => {
     document.addEventListener("click", () => {
       setHide(false);
     });
+    getPlatformFee();
   }, []);
 
   return (
@@ -97,18 +124,18 @@ const PlaceBid = ({ open, setOpen, selecteditem, getNftById }) => {
           <div className="select-bid flex flex-col">
             <div className="txt-lbl">Your Bid</div>
             <div className="txt-box flex aic">
-              <input onChange={e => setbid_price(e.target.value)} value={bid_price} type="text" className="txt cleanbtn" />
+              <input onChange={handleSetBid} value={bid_price} type="text" className="txt cleanbtn" />
               <div className="lbl">XRP</div>
             </div>
             <div className="txt-desc">Must be at Least {selecteditem.minimum_bid} XRP</div>
           </div>
           <div className="t-fee flex align-center justify-between">
             <div className="lbl">Service fee</div>
-            <div className="val">1.00 XRP</div>
+            <div className="val">{recievedFee || 0} XRP</div>
           </div>
           <div className="t-bid flex align-center justify-between">
             <div className="lbl">Total bid amount</div>
-            <div className="val">{Number(bid_price) + 1}.00 XRP</div>
+            <div className="val">{Number(bid_price) + recievedFee}.00 XRP</div>
           </div>
           <div className="offer-exp flex flex-col">
             <div className="lbl">Offer Expiration</div>

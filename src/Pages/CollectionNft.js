@@ -14,11 +14,10 @@ const CollectionNft = () => {
   const [hide, setHide] = useState(false);
   const [hide2, setHide2] = useState(false);
   const [statusData, setStatusData] = useState([
-    { id: 1, title: "1 day" },
-    { id: 2, title: "2 days" },
-    { id: 3, title: "3 days" },
+    { id: 1, title: "XRP" },
+
   ]);
-  const [selectedcompany, setselectedcompany] = useState();
+  const [selectedcompany, setselectedcompany] = useState('');
   const [collection_custom_url, setCollection_custom_url] = useState("");
   const [discord_url, setdiscord_url] = useState("");
   const [insta_url, setinsta_url] = useState("");
@@ -34,6 +33,7 @@ const CollectionNft = () => {
     const res = await axios.get(`${process.env.REACT_APP_API_URL}/category/getCategories`);
     setcategories(res?.data);
   };
+
   const create_collectionnft = async () => {
     let thedata = {
       // profile_image,
@@ -381,7 +381,7 @@ const CollectionNft = () => {
                     <div className="slt flex aic">
                       <div className="unit-name flex aic font s14 b4">
                         <span className="unit-eng flex aic font s14 b4" placeholder="Select collection">
-                          {selectedcompany ? selectedcompany.title : "Select collection"}
+                          {selectedcompany ? selectedcompany : "Select collection"}
                         </span>
                       </div>
                     </div>
@@ -393,19 +393,13 @@ const CollectionNft = () => {
                 </div>
                 <div className={`block flex aic abs ${hide ? "show" : ""}`}>
                   <div className="manue flex aic col anim">
-                    {statusData.map((item, index) => (
-                      <div
-                        key={index}
-                        className="slt flex aic"
-                        onClick={e => {
-                          setHide(!hide);
-                          setselectedcompany(item);
-                        }}>
-                        <div className="unit-name flex aic font s14 b4">
-                          <span className="unit-eng flex aic font s14 b4">{item.title}</span>
-                        </div>
+                    <div
+                      className="slt flex aic">
+                      <div className="unit-name flex aic font s14 b4">
+                        <img src="https://cryptologos.cc/logos/history/xrp-logo-2012.png?v=003" alt="xrp" className="xrp-dropdown-img"/>
+                        <span className="unit-eng flex aic font s14 b4" onClick={() => setselectedcompany('XRP')}>XRP</span>
                       </div>
-                    ))}
+                    </div>
                   </div>
                 </div>
               </div>

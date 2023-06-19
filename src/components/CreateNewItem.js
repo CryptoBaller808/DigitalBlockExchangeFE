@@ -28,7 +28,11 @@ const CreateNewItem = () => {
   const [endtime, setendtime] = useState();
   let navigate = useNavigate();
   const [put_on_marketplace, setput_on_marketplace] = useState(true);
-  const [fixedprice, setfixedprice] = useState();
+  const [fixedprice, setfixedprice] = useState(0);
+  const[usdRate, setUsdRate] = useState(0);
+  const [convertedPrice, setConvertedPrice] = useState(0);
+  const [platformaFee, setPlatformFee] = useState(0);
+  const [recieveXrp, setRecieveXrp] = useState(0);
   const [minimumbid, setminimumbid] = useState();
   const [reserve_price, setreserve_price] = useState();
   const query = new URLSearchParams(window.location.search);
@@ -95,6 +99,30 @@ const CreateNewItem = () => {
 
   console.log("NFT Data", nftData)
 
+  // convert xrp to usd 
+  const getUsdValue = async () => {
+
+    try {
+      const res = await axios.get('https://min-api.cryptocompare.com/data/price?fsym=XRP&tsyms=USD');
+      const data = res.data;
+      setUsdRate(data?.USD);
+    }catch(e){
+      console.log(e);
+    }
+  }
+
+  // get platform fee
+  const getPlatformFee = async () => {
+    try {
+      const res = await axios.get('https://api.digitalblock.exchange/collection/getplatformfee');
+      const data = res.data;
+      setPlatformFee(data?.platform_fee);
+    }catch(e) {
+      console.log(e);
+    }
+  }
+
+
   const getNFTDetail = async () => {
     try {
       const res = await axios.get(`${process.env.REACT_APP_API_URL}//mint/getNftById/${item_id}`);
@@ -107,11 +135,24 @@ const CreateNewItem = () => {
       console.log("error", error);
     }
   };
+
+  // handle fixed price
+  const handleFixedPrice = (e) => {
+    setfixedprice(e.target.value);
+    let ifValue = Number(e.target.value) || 0;
+    let recieveAmount = ifValue - (ifValue/100 * platformaFee);
+    let newConverted = (ifValue) ? (Number(recieveAmount) * parseFloat(usdRate)).toFixed(2) :  0;
+    setRecieveXrp(recieveAmount);
+    setConvertedPrice(newConverted);
+  }
+
   useEffect(() => {
     document.addEventListener("click", () => {
       setHide(false);
     });
     getNFTDetail();
+    getUsdValue();
+    getPlatformFee();
   }, []);
   return (
     <div className="create-new-item flex">
@@ -274,7 +315,7 @@ const CreateNewItem = () => {
                         <div className="lbl1">Fees</div>
                       </div>
                       <div className="row-right flex items-end jc flex-col">
-                        <div className="lbl2">To Digital Block Exchange NFT 2.5%</div>
+                        <div className="lbl2">To Digital Block Exchange NFT {platformaFee}%</div>
                         <div className="lbl2">To {nftData?.creator?.firstname ? nftData?.creator?.firstname : "Anonymous"} {nftData?.item_collection?.royalty}%</div>
                       </div>
                     </div>
@@ -323,10 +364,10 @@ const CreateNewItem = () => {
                             </div>
                           </div>
                         </div>
-                        <input value={fixedprice} onChange={e => setfixedprice(e.target.value)} type="text" className="txt cleanbtn" />
+                        <input value={fixedprice} onChange={handleFixedPrice} type="text" className="txt cleanbtn" />
                       </div>
                       <div className="desc flex">
-                        You will receive <span className="des-numb">26.285 XRP</span> $25.15
+                        You will receive <span className="des-numb">{recieveXrp || 0} XRP</span> ${convertedPrice}
                       </div>
                     </div>
                   </div>
@@ -338,8 +379,8 @@ const CreateNewItem = () => {
                         <div className="lbl1">Fees</div>
                       </div>
                       <div className="row-right flex items-end jc flex-col">
-                        <div className="lbl2">To Digital Block Exchange NFT 2.5%</div>
-                        <div className="lbl2">To EXPLODED 10%</div>
+                        <div className="lbl2">To Digital Block Exchange NFT {platformaFee}%</div>
+                        <div className="lbl2">To {nftData?.creator?.firstname ? nftData?.creator?.firstname : "Anonymous"} {nftData?.item_collection?.royalty}%</div>
                       </div>
                     </div>
                     <div className="row flex flex-col text-start">

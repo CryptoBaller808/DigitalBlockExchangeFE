@@ -10,6 +10,9 @@ import { useLocation } from "react-router-dom";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import ShareModal from "./ShareModal";
+import { FaShare } from 'react-icons/fa';
+
 const NftDetail = () => {
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
@@ -17,6 +20,7 @@ const NftDetail = () => {
   const [selecteditem, setselecteditem] = useState();
   const [loading, setLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
+  const [shareLinkModal, setShareLinkModal] = useState(false);
   const signInData = useSelector(state => state.generalReducers?.user);
   const { user } = useSelector((state) => state.generalReducers)
   console.log(signInData);
@@ -56,9 +60,18 @@ const NftDetail = () => {
   useEffect(() => {
     getNftById(id);
   }, []);
+
+  // handle share link 
+  const handleShareLink = () => {
+    setShareLinkModal(true);
+  }
+
   return (
     data && (
+
       <div className="nft-detail flex flex-col">
+
+        {shareLinkModal && <ShareModal shareLinkModal={shareLinkModal} setShareLinkModal={setShareLinkModal}/>}
         <div className="nft-detail-filter flex aic flex-col">
           <Filters />
         </div>
@@ -77,7 +90,6 @@ const NftDetail = () => {
                         <div className="bx flex flex-col">
                           <div className="lbl">{item?.property_name}</div>
                           <div className="lbl2">{item?.property_value}</div>
-                          <div className="val">32.8% rarity</div>
                         </div>
                       ))}
                     </>
@@ -162,9 +174,9 @@ const NftDetail = () => {
                   <div className="item flex flex-col">
                     <div className="lbl">Creator</div>
                     <div className="nft-img flex aic">
-                      <img src={data.creator?.profile_image} className="img" />
+                      <img src={data.creator?.profile_image || "unkdownload.jpeg"} className="img" />
                       <div className="nft-name">
-                        {data.creator?.firstname} {data.creator?.lastname}
+                        {data.creator?.firstname || "Anonymous"} {data.creator?.lastname}
                       </div>
                     </div>
                   </div>
@@ -178,8 +190,8 @@ const NftDetail = () => {
                   <div className="item flex flex-col">
                     <div className="lbl">Owner</div>
                     <div className="nft-img flex aic">
-                      <img src={data.current_owner_details?.profile_image} className="img" />
-                      <div className="nft-name">{data.current_owner_details?.firstname}</div>
+                      <img src={data.current_owner_details?.profile_image || "unkdownload.jpeg"} className="img" />
+                      <div className="nft-name">{data.current_owner_details?.firstname || "Anonymous"}</div>
                     </div>
                   </div>
                   <div className="item flex aic">
@@ -199,9 +211,9 @@ const NftDetail = () => {
                     <div className="lbl">owners</div>
                   </div> */}
                     <div className="social flex flex-col aic jc">
-                      <img src="./images/share-icon.svg" className="icon" />
-
-                      <div className="lbl">share</div>
+                      {/* <img src="./images/share-icon.svg" className="icon" alt="icon" style={{ cursor: 'pointer' }} onClick={handleShareLink}/> */}
+                      <FaShare className="icon" alt="icon" style={{ cursor: 'pointer' }} onClick={handleShareLink}/>
+                      <div className="lbl"  >share</div>
                     </div>
                   </div>
                 </div>
@@ -251,7 +263,25 @@ const NftDetail = () => {
                   {data?.item_activity?.map(item => (
                     <div className="item flex aic">
                       <div className="le flex aic">
-                        <img src="./images/owner-img.png" className="img" />
+
+                        {/* sale type 1 - img */}
+                        {item?.type === 1 && <img src={item?.buyer_details?.profile_image || "unkdownload.jpeg"} className="img" />}
+
+                        {/* sale type 2 - img */}
+                        {item?.type === 2 && <img src={item?.seller_details?.profile_image || "unkdownload.jpeg"} className="img" />}
+
+                        {/* sale type 3 - img */}
+                        {item?.type === 3 && <img src={item?.buyer_details?.profile_image || "unkdownload.jpeg"} className="img" />}
+
+                        {/* sale type 4 - img */}
+                        {item?.type === 4 && <img src={item?.seller__details?.profile_image || "unkdownload.jpeg"} className="img" />}
+
+                        {/* sale type 5 - img */}
+                        {item?.type === 5 && <img src={item?.buyer_details?.profile_image || "unkdownload.jpeg"} className="img" />}
+
+                        {/* sale type 6 - img */}
+                        {item?.type === 6 && <img src={item?.seller_details?.profile_image || "unkdownload.jpeg"} className="img" />}
+
                       </div>
                       <div className="ri">
 
