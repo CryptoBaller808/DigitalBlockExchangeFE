@@ -2945,7 +2945,6 @@ body {
           .img {
             height: 50px;
             width: 50px;
-            object-fit: cover;
             border-radius: 8px;
           }
           .nft-names {
@@ -3571,4 +3570,38 @@ body {
 .xrp-dropdown-img {
   width: 30px;
   margin-right: 15px;
+}
+
+// activity profile
+.activity-img {
+  width: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.activities-table thead {
+  border: 3px solid rgba(143, 143, 143, 0.3);
+}
+.activities-table tbody {
+  border-bottom: 3px solid rgba(143, 143, 143, 0.3);
+}
+.activities-table th {
+  font-weight: 600;
+  text-align: center;
+}
+.activities-table tr {
+  text-align: center;
+}
+.activities-table td {
+  border-left: 3px solid rgba(143, 143, 143, 0.3);
+}
+.activities-table td:last-child {
+  border-right: 3px solid rgba(143, 143, 143, 0.3);
+}
+.activities-table td, .activities-table th {
+  padding: 20px 10px;
+}
+.activity-td-item {
+  display: flex ;
+  justify-content: center;
+  align-items: center;
 }

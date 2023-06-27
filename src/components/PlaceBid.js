@@ -43,6 +43,7 @@ const PlaceBid = ({ open, setOpen, selecteditem, getNftById }) => {
   }
 
   const bidOnNFT = async id => {
+    let priceOfBid = Number(Number(bid_price) + recievedFee)
     console.log("id", id);
     if (bid_price < Number(selecteditem?.minimum_bid)) {
       return handleClick(`Bidding amount must be greater than ${selecteditem.minimum_bid}`);
@@ -55,7 +56,7 @@ const PlaceBid = ({ open, setOpen, selecteditem, getNftById }) => {
       //user_id: selecteditem.user_id,
       user_id: user.id,
       sale_type: selecteditem?.sale_type ? selecteditem?.sale_type : selecteditem?.item_sale_info?.sale_type,
-      bid_price: `${Number(bid_price) + 1}`,
+      bid_price: priceOfBid,
       bid_expire: moment().add(selectedHours.day, "days").format(),
     });
     try {
@@ -64,7 +65,7 @@ const PlaceBid = ({ open, setOpen, selecteditem, getNftById }) => {
         //user_id: selecteditem.user_id,
         user_id: user.id,
         sale_type: selecteditem?.sale_type ? selecteditem?.sale_type : selecteditem?.item_sale_info?.sale_type,
-        bid_price: `${Number(bid_price) + 1}`,
+        bid_price: priceOfBid,
         bid_expire: moment().add(selectedHours.day, "days").format(),
       });
       toast.success(res?.data)
@@ -120,7 +121,7 @@ const PlaceBid = ({ open, setOpen, selecteditem, getNftById }) => {
       <div className="wrap flex flex-col">
         <div className="hdr flex flex-col">
           <div className="hdr-tag">Place a Bid</div>
-          <div className="desc">You are about to place a bid for Facer Pirate #09 by Exploded</div>
+          <div className="desc">You are about to place a bid for {selecteditem?.title} by {selecteditem?.creator?.firstname} {selecteditem?.creator?.lastname}</div>
           <div className="select-bid flex flex-col">
             <div className="txt-lbl">Your Bid</div>
             <div className="txt-box flex aic">
@@ -131,11 +132,11 @@ const PlaceBid = ({ open, setOpen, selecteditem, getNftById }) => {
           </div>
           <div className="t-fee flex align-center justify-between">
             <div className="lbl">Service fee</div>
-            <div className="val">{recievedFee || 0} XRP</div>
+            <div className="val">{(recievedFee).toFixed(3) || 0} XRP</div>
           </div>
           <div className="t-bid flex align-center justify-between">
             <div className="lbl">Total bid amount</div>
-            <div className="val">{Number(bid_price) + recievedFee}.00 XRP</div>
+            <div className="val">{Number(bid_price) + Number(recievedFee)} XRP</div>
           </div>
           <div className="offer-exp flex flex-col">
             <div className="lbl">Offer Expiration</div>

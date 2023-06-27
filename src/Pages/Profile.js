@@ -71,7 +71,7 @@ const Profile = () => {
       }
     }
   }, [activecategory]);
-  useEffect(() => {}, [activeTab]);
+  useEffect(() => { }, [activeTab]);
   const getCollectedItemsByUserId = async () => {
     const res = await axios.get(`${process.env.REACT_APP_API_URL}/profiles/getCollectedItemsByUserId/?id=${user.id}`);
     console.log("getCollectedItemsByUserId", res);
@@ -399,30 +399,35 @@ const Profile = () => {
               <div className="u-a flex">
                 <div className="user-activity flex  flex-col">
                   <div className="tbl flex flex-col">
-                    <div className="row flex aic">
+                    {/* <div className="row flex aic">
                       <div className="row-item flex"></div>
+                      <div className="row-item flex">Type</div>
                       <div className="row-item flex">Item</div>
                       <div className="row-item flex">Price</div>
-                      <div className="row-item flex">Quantity</div>
                       <div className="row-item flex">From</div>
                       <div className="row-item flex">To</div>
                       <div className="row-item flex">Time</div>
                     </div>
                     {activities.map((item, index) => (
                       <div className="row flex aic">
-                        <div className="row-item flex">{item?.tag}</div>
-                        <div className="row-item flex aic">
+                        <div className="row-item"></div>
+                        <div className="row-item">
+                          {item?.type === 1 && "Sale"}
+                          {item?.type === 2 && "Sale"}
+                          {item?.type === 3 && "Sale"}
+                          {item?.type === 4 && "Sale"}
+                          {item?.type === 5 && "Sale"}
+                          {item?.type === 6 && "Sale"}
+                        </div>
+                        {/* <div className="row-item flex">{item?.tag}</div> */}
+                    {/* <div className="row-item flex aic">
                           <img src={item?.item_detail?.image_uri} className="img" />
                           <div className="nft-names flex flex-col">
                             <div className="lbl1">{item?.item_detail?.title}</div>
                             <div className="lbl2">{item?.lbl2}</div>
                           </div>
                         </div>
-                        <div className="row-item flex">{item?.price}</div>
-                        <div className="row-item flex">
-                          {item?.qty}
-                          {console.log(item?.buyer_details)}
-                        </div>
+                        <div className="row-item flex">{Number(item?.price).toFixed(2)}</div>
                         <div className="row-item flex">
                           {item?.seller_details?.firstname} {item?.seller_details?.lastname}
                         </div>
@@ -431,7 +436,53 @@ const Profile = () => {
                         </div>
                         <div className="row-item flex">{moment(item?.entry_date).format("MMMM Do YYYY, h:mm:ss")}</div>
                       </div>
-                    ))}
+                    ))} */}
+
+                    <table className="activities-table">
+                      <thead>
+                        <tr>
+                          <th>Type</th>
+                          <th>Item</th>
+                          <th>Price</th>
+                          <th>Quantity</th>
+                          <th>From</th>
+                          <th>To</th>
+                          <th>Time</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {activities?.map(item => {
+                          return (
+                            <tr>
+                              <td>
+                                {item?.type === 1 && "Sale"}
+                                {item?.type === 2 && "Sale"}
+                                {item?.type === 3 && "Sale"}
+                                {item?.type === 4 && "Sale"}
+                                {item?.type === 5 && "Sale"}
+                                {item?.type === 6 && "Sale"}
+                              </td>
+                              <td className="activity-td-item">
+                                <div className="flex">
+                                  <img src={item?.item_detail?.image_uri} className="img activity-img" />
+                                  <div className="nft-names flex flex-col">
+                                    <div className="lbl1">{item?.item_detail?.title}</div>
+                                    <div className="lbl2">{item?.lbl2}</div>
+                                  </div>
+                                </div>
+
+                              </td>
+                              <td>{item?.price}</td>
+                              <td>{item?.qty}</td>
+                              <td>{item?.seller_details?.firstname} {item?.seller_details?.lastname}</td>
+                              <td>{item?.buyer_details?.firstname} {item?.buyer_details?.lastname}</td>
+                              <td>{moment(item?.entry_date).format("MMMM Do YYYY, h:mm:ss")}</td>
+                            </tr>
+                          )
+                        })}
+                      </tbody>
+                    </table>
+
                   </div>
                 </div>
               </div>
@@ -486,11 +537,11 @@ const Profile = () => {
                     ? searchitemwithuseridorbycategoryloading
                       ? "Loading"
                       : searchitemwithuseridorcategoryitems?.length < 1
-                      ? "No items found"
-                      : searchitemwithuseridorcategoryitems.map((item, index) => <Card item={item} />)
+                        ? "No items found"
+                        : searchitemwithuseridorcategoryitems.map((item, index) => <Card item={item} />)
                     : !loading
-                    ? selectedItems.map((item, index) => <Card item={item} />)
-                    : "Loading..."}
+                      ? selectedItems.map((item, index) => <Card item={item} />)
+                      : "Loading..."}
                 </div>
               </div>
             )}

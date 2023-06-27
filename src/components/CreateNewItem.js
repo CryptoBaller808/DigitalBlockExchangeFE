@@ -38,6 +38,13 @@ const CreateNewItem = () => {
   const query = new URLSearchParams(window.location.search);
   const [loading, setloading] = useState(false);
   const item_id = query.get("item_id");
+
+
+  function convertToUTC(dateString) {
+    const utcDateTime = new Date(dateString).toISOString().replace("T", " ").replace(/\..+/, " UTC");;
+    return utcDateTime;
+  }
+
   // console.log("item_id", item_id);
   const sellNFT = async () => {
     if (tab == "time" && (!minimumbid || !reserve_price || !starttime || !endtime)) {
@@ -68,6 +75,9 @@ const CreateNewItem = () => {
       //   t_auction_reserve_price: Number(reserve_price),
       // });
       toast.info("Please accept request from your app");
+      console.log("Start Date", starttime);
+
+      console.log('End Date', endtime);
       setloading(true);
       const res = await axios.post(`${process.env.REACT_APP_API_URL}/sale/sell/sellNFT`, {
         item_id: item_id,
@@ -85,7 +95,7 @@ const CreateNewItem = () => {
         //setStatusData(res?.data)
         toast.success(res?.data);
         setloading(false);
-        navigate(`/`);
+        navigate(`/nft`);
       }
     } catch (error) {
       console.log("error", error?.response);
@@ -380,7 +390,7 @@ const CreateNewItem = () => {
                       </div>
                       <div className="row-right flex items-end jc flex-col">
                         <div className="lbl2">To Digital Block Exchange NFT {platformaFee}%</div>
-                        <div className="lbl2">To {nftData?.creator?.firstname ? nftData?.creator?.firstname : "Anonymous"} {nftData?.item_collection?.royalty}%</div>
+                        <div className="lbl2">Commission to {nftData?.creator?.firstname ? nftData?.creator?.firstname : "Anonymous"} for Resale {nftData?.item_collection?.royalty}%</div>
                       </div>
                     </div>
                     <div className="row flex flex-col text-start">

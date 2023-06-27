@@ -165,7 +165,7 @@ const NftDetail = () => {
                 <div className="num">{data?.title}</div>
                 {data?.item_sale_info && (
                   <div className="sale-tag flex aic">
-                    <div className="s-lbl">On sale for </div> <span className="s-tag">{data?.item_sale_info?.price} XRP</span>
+                    <div className="s-lbl">On sale for </div> <span className="s-tag">{data?.item_sale_info?.price || data?.item_sale_info?.minimum_bid} XRP</span>
                   </div>
                 )}
 
@@ -191,7 +191,7 @@ const NftDetail = () => {
                     <div className="lbl">Owner</div>
                     <div className="nft-img flex aic">
                       <img src={data.current_owner_details?.profile_image || "unkdownload.jpeg"} className="img" />
-                      <div className="nft-name">{data.current_owner_details?.firstname || "Anonymous"}</div>
+                      <div className="nft-name">{data?.current_owner_details?.firstname ? `${data?.current_owner_details?.firstname} ${data?.current_owner_details?.lastname}` : "Anonymous"} </div>
                     </div>
                   </div>
                   <div className="item flex aic">
