@@ -405,7 +405,7 @@ body {
   background-color: #002244;
   .wrap {
     // padding: 0px 30px;
-    @include media(">=phone", "<=480px") {
+    @include media(">=phone", "<=991px") {
       flex-direction: column;
     }
     .hdr-left {
@@ -422,12 +422,14 @@ body {
           width: 140px;
         }
       }
-      @include media(">=phone", "<=480px") {
+      @include media(">=phone", "<=991px") {
         width: 100%;
         justify-content: space-between;
         .logo-img {
           height: 36px;
         }
+      }
+      @include media(">=phone", "<=991px") {
         .menu-icon {
           cursor: pointer;
           display: flex;
@@ -436,7 +438,7 @@ body {
     }
     .hdr-center {
       flex: 1;
-      @include media(">=phone", "<=480px") {
+      @include media(">=phone", "<=991px") {
         display: none;
       }
       .nav-list {
@@ -469,6 +471,10 @@ body {
             //   }
             // }
           }
+          @include media("<=xlarge") {
+            font-size: 14px;
+            margin-right: 18px;
+          }
           @include media("<=desktop") {
             font-size: 14px;
             margin-right: 18px;
@@ -489,7 +495,7 @@ body {
         font-weight: 600;
         font-size: 16px;
         color: #ffffff;
-        @include media("<=desktop") {
+        @include media("<=xlarge") {
           font-size: 14px;
           padding: 10px 12px;
         }
