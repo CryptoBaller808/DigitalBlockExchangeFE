@@ -6,6 +6,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 const CreateNewItem = () => {
   const [tab, setTab] = useState("fixed");
@@ -41,7 +42,7 @@ const CreateNewItem = () => {
 
 
   function convertToUTC(dateString) {
-    const utcDateTime = new Date(dateString).toISOString().replace("T", " ").replace(/\..+/, " UTC");;
+    const utcDateTime =  moment(dateString).utc().format('YYYY-MM-DD HH:mm:ss');
     return utcDateTime;
   }
 
@@ -62,6 +63,9 @@ const CreateNewItem = () => {
     } else if (tab == "unlimited") {
       sale_type = 3;
     }
+
+    let convertedStartTime = convertToUTC(starttime);
+    let convertedEndTime = convertToUTC(endtime);
     try {
       // console.log("obj", {
       //   item_id: item_id,
@@ -69,8 +73,8 @@ const CreateNewItem = () => {
       //   sale_type: sale_type,
       //   fix_price: Number(fixedprice),
       //   put_on_marketplace: put_on_marketplace,
-      //   t_auction_start_date: starttime,
-      //   t_auction_end_date: endtime,
+      //   t_auction_start_date: convertedStartTime,
+      //   t_auction_end_date: convertedEndTime,
       //   t_auction_minimum_bid: Number(minimumbid),
       //   t_auction_reserve_price: Number(reserve_price),
       // });
@@ -83,10 +87,10 @@ const CreateNewItem = () => {
         item_id: item_id,
         user_id: user?.id,
         sale_type: sale_type,
-        fix_price: Number(fixedprice),
+        fix_price: Number(recieveXrp),
         put_on_marketplace: put_on_marketplace,
-        t_auction_start_date: starttime,
-        t_auction_end_date: endtime,
+        t_auction_start_date: convertedStartTime,
+        t_auction_end_date: convertedEndTime,
         t_auction_minimum_bid: Number(minimumbid),
         t_auction_reserve_price: Number(reserve_price),
       });

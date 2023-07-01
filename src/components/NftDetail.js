@@ -16,24 +16,42 @@ import { FaShare } from 'react-icons/fa';
 const NftDetail = () => {
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
+  const [walletOpen, setWalletOpen] = useState(false);
   const [data, setdata] = useState();
   const [selecteditem, setselecteditem] = useState();
   const [loading, setLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
+  const [actualPrice, setActualPrice] = useState(0);
   const [shareLinkModal, setShareLinkModal] = useState(false);
   const signInData = useSelector(state => state.generalReducers?.user);
   const { user } = useSelector((state) => state.generalReducers)
+  const isWalletConnected = useSelector(state => state.authReducer.isWalletConnected);
   console.log(signInData);
+
+  // actual value 
+  const findActualValue = (price, fee) => {
+    let actualValue = (Number(price) / (1 - Number(fee)/100)).toFixed(3);
+    setActualPrice(actualValue)
+  }
+
+
   const getNftById = async id => {
     const res = await axios.get(`${process.env.REACT_APP_API_URL}/mint/getNftById/${id}`);
+    const res2 = await axios.get('https://api.digitalblock.exchange/collection/getplatformfee');
+    const data = res.data;
+    const fee = res2.data;
+
     console.log("getNftById", res?.data);
     if (res?.data) {
       setdata(res?.data);
       setselecteditem(res?.data);
+      findActualValue(data?.item_sale_info?.price, fee?.platform_fee);
     }
   };
   const searchs = useLocation().search;
   const id = new URLSearchParams(searchs).get("id");
+
+
 
   //  handle accept nft
   const handleAcceptNft = async () => {
@@ -55,11 +73,14 @@ const NftDetail = () => {
       toast.error(e?.response?.data)
     }
   }
+  // get platform fee
 
 
   useEffect(() => {
     getNftById(id);
   }, []);
+
+
 
   // handle share link 
   const handleShareLink = () => {
@@ -71,7 +92,7 @@ const NftDetail = () => {
 
       <div className="nft-detail flex flex-col">
 
-        {shareLinkModal && <ShareModal shareLinkModal={shareLinkModal} setShareLinkModal={setShareLinkModal}/>}
+        {shareLinkModal && <ShareModal shareLinkModal={shareLinkModal} setShareLinkModal={setShareLinkModal} />}
         <div className="nft-detail-filter flex aic flex-col">
           <Filters />
         </div>
@@ -165,7 +186,7 @@ const NftDetail = () => {
                 <div className="num">{data?.title}</div>
                 {data?.item_sale_info && (
                   <div className="sale-tag flex aic">
-                    <div className="s-lbl">On sale for </div> <span className="s-tag">{data?.item_sale_info?.price || data?.item_sale_info?.minimum_bid} XRP</span>
+                    <div className="s-lbl">On sale for </div> <span className="s-tag">{actualPrice || data?.item_sale_info?.minimum_bid} XRP</span>
                   </div>
                 )}
 
@@ -212,49 +233,58 @@ const NftDetail = () => {
                   </div> */}
                     <div className="social flex flex-col aic jc">
                       {/* <img src="./images/share-icon.svg" className="icon" alt="icon" style={{ cursor: 'pointer' }} onClick={handleShareLink}/> */}
-                      <FaShare className="icon" alt="icon" style={{ cursor: 'pointer' }} onClick={handleShareLink}/>
+                      <FaShare className="icon" alt="icon" style={{ cursor: 'pointer' }} onClick={handleShareLink} />
                       <div className="lbl"  >share</div>
                     </div>
                   </div>
                 </div>
                 <div className="actions">
-                  {data?.item_sale_info?.sale_type == 1 ?
-                    (
-                      <>
-                        {signInData?.wallet_address === data?.creator?.wallet_address ?
-                          <button className="btn button" disabled onClick={e => setOpen(true)}>
-                            Buy for {data?.item_sale_info?.price} XRP
-                          </button>
-                          :
+                  {!isWalletConnected ?
+                    <div className="btn button" onClick={() => setWalletOpen(true)}>
+                      Connect Wallet
+                    </div>
+                    :
+                    <>
+                      {data?.item_sale_info?.sale_type == 1 ?
+                        (
                           <>
-                            {selecteditem?.current_owner_details?.wallet_address !== signInData?.wallet_address &&
+                            {signInData?.wallet_address === data?.creator?.wallet_address ?
+                              <button className="btn button" disabled onClick={e => setOpen(true)}>
+                                Buy for {actualPrice} XRP
+                              </button>
+                              :
                               <>
-                                {!isBought ? <div className="btn button" onClick={e => setOpen(true)}>
-                                  Buy for {data?.item_sale_info?.price} XRP
-                                </div> :
-                                  <div className="btn button" onClick={handleAcceptNft}>
-                                    {loading ? "Waiting for the response" : "Accept The Nft"}
-                                  </div>}
+                                {selecteditem?.current_owner_details?.wallet_address !== signInData?.wallet_address &&
+                                  <>
+                                    {!isBought ? <div className="btn button" onClick={e => setOpen(true)}>
+                                      Buy for {actualPrice} XRP
+                                    </div> :
+                                      <div className="btn button" onClick={handleAcceptNft}>
+                                        {loading ? "Waiting for the response" : "Accept The Nft"}
+                                      </div>}
+                                  </>
+                                }
                               </>
+
+                            }
+                          </>
+                        ) : (
+                          <>
+                            {signInData?.wallet_address === data?.creator?.wallet_address ?
+                              <button className="btn button" disabled onClick={e => setOpen2(true)}>
+                                Place a bid
+                              </button>
+                              :
+                              <div className="btn button" onClick={e => setOpen2(true)}>
+                                Place a bid
+                              </div>
                             }
                           </>
 
-                        }
-                      </>
-                    ) : (
-                      <>
-                        {signInData?.wallet_address === data?.creator?.wallet_address ?
-                          <button className="btn button" disabled onClick={e => setOpen2(true)}>
-                            Place a bid
-                          </button>
-                          :
-                          <div className="btn button" onClick={e => setOpen2(true)}>
-                            Place a bid
-                          </div>
-                        }
-                      </>
+                        )}
+                    </>
+                  }
 
-                    )}
                 </div>
               </div>
               <div className="history-box flex flex-col">
@@ -354,6 +384,9 @@ const NftDetail = () => {
         </Modal>
         <Modal open={open2} onClose={() => setOpen2(false)}>
           <PlaceBid open={open2} setOpen={setOpen2} selecteditem={{ ...selecteditem, ...selecteditem?.item_sale_info }} getNftById={getNftById} />
+        </Modal>
+        <Modal open={walletOpen} onClose={() => setWalletOpen(false)}>
+          <WalletConnect open={walletOpen} setOpen={setWalletOpen} />
         </Modal>
       </div>
     )
