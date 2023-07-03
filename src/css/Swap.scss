@@ -2,13 +2,13 @@
   min-height: 730px;
   background: #f5f5f5;
   padding: 100px;
-  @include media(">=phone", "<=480px") {
+  @include media(">=phone", "<=991px") {
     padding: 60px 0;
   }
   .wrap {
     .swap-block {
       width: 55%;
-      @include media(">=phone", "<=480px") {
+      @include media(">=phone", "<=1199px") {
         width: 100%;
       }
       .swap-tab {
@@ -25,7 +25,7 @@
       .swap-cards {
         padding: 50px 0;
         height: 260px;
-        @include media(">=phone", "<=480px") {
+        @include media(">=phone", "<=991px") {
           flex-direction: column;
           height: 100%;
           height: 500px;
@@ -40,7 +40,7 @@
           border-radius: 16px;
           border: 1px solid #76b91b;
           @include media(">=phone", "<=480px") {
-            height: 170px;
+            height: 100%;
           }
           .card-hdr {
             .token-info {
@@ -99,21 +99,29 @@
               &:focus {
                 border-color: #39b54a;
               }
+              @include media(">=phone", "<=480px") {
+                margin-top: 20px;
+              }
             }
           }
+          
         }
         .card-left {
           flex: 1;
           height: 100%;
-          @include media(">=phone", "<=480px") {
+          @include media(">=phone", "<=991px") {
             width: 100%;
+            max-width: 80%;
+            flex:unset;
           }
         }
         .card-right {
           flex: 1;
           height: 100%;
-          @include media(">=phone", "<=480px") {
+          @include media(">=phone", "<=991px") {
             width: 100%;
+            max-width: 80%;
+            flex:unset;
           }
         }
         .card-center {
@@ -155,5 +163,10 @@
         }
       }
     }
+  }
+}
+@media screen and (max-width:991px){
+  .form-control{
+    font-size: 14px;
   }
 }

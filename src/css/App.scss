@@ -484,7 +484,7 @@ body {
     }
     .hdr-right {
       flex: 0.2;
-      justify-content: flex-end;
+      justify-content: center;
       @include media(">=phone", "<=480px") {
         padding: 4px 0;
       }
@@ -688,7 +688,7 @@ body {
         .card {
           margin-top: 30px;
           height: 350px;
-          width: 260px;
+          width: 100%;
           background: #ffffff;
           // box-shadow: 0px 27px 65px rgba(65, 62, 62, 0.08);
           border-radius: 16px;
@@ -829,7 +829,7 @@ body {
         .card {
           margin-top: 30px;
           height: 330px;
-          width: 260px;
+          width: 100%;
           background: #ffffff;
           // box-shadow: 0px 27px 65px rgba(65, 62, 62, 0.08);
           border-radius: 16px;
