@@ -8,7 +8,8 @@ import Modal from "./Modal";
 import Completecheckout from "./Completecheckout";
 import { ToastContainer, toast } from "react-toastify";
 import PlaceBid from "./PlaceBid";
-const Card = ({ item }) => {
+const Card = ({ item, tab }) => {
+  console.log(tab);
   console.log("itemmmmmmmm", item);
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
@@ -96,16 +97,20 @@ const Card = ({ item }) => {
               <div className="lbl">{wishlistcount}</div>
             </div>
           </div>
-          {item?.sale_type == 1 && (
-            <div onClick={e => setOpen(true)} className="btn button cleanbtn">
-              Buy Now
-            </div>
-          )}
-          {item?.sale_type == 2 && (
-            <div onClick={e => setOpen2(true)} className="btn button cleanbtn">
-              Place a bid
-            </div>
-          )}
+          {!tab &&
+            <>
+              {item?.sale_type == 1 && (
+                <div onClick={e => setOpen(true)} className="btn button cleanbtn">
+                  Buy Now
+                </div>
+              )}
+              {item?.sale_type == 2 && (
+                <div onClick={e => setOpen2(true)} className="btn button cleanbtn">
+                  Place a bid
+                </div>
+              )}
+            </>
+          }
         </div>
       </div>
     </div>

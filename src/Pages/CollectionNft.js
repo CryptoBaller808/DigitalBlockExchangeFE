@@ -34,6 +34,9 @@ const CollectionNft = () => {
     setcategories(res?.data);
   };
 
+  let currentUrl = window.location.origin;
+  console.log(currentUrl);
+
   const create_collectionnft = async () => {
     let thedata = {
       // profile_image,
@@ -243,13 +246,17 @@ const CollectionNft = () => {
                 <div className="lbl-1">URL</div>
                 <div className="lbl-2">Customize your URL on Digital Block Exchange NFT Marketplace</div>
               </div>
-              <input
-                value={collection_custom_url}
-                onChange={e => setCollection_custom_url(e.target.value)}
-                type="text"
-                className="txt cleanbtn"
-                placeholder="URL"
-              />
+              <div className="flex align-items-center">
+                <p className="custom-url">{`${currentUrl}/`}</p>
+                <input
+                  value={collection_custom_url}
+                  onChange={e => setCollection_custom_url(e.target.value)}
+                  type="text"
+                  className="txt cleanbtn"
+                  placeholder="URL"
+                />
+              </div>
+
             </div>
             <div className="row flex flex-col">
               <div className="r-lbl flex flex-col">
@@ -396,7 +403,7 @@ const CollectionNft = () => {
                     <div
                       className="slt flex aic">
                       <div className="unit-name flex aic font s14 b4">
-                        <img src="https://cryptologos.cc/logos/history/xrp-logo-2012.png?v=003" alt="xrp" className="xrp-dropdown-img"/>
+                        <img src="https://cryptologos.cc/logos/history/xrp-logo-2012.png?v=003" alt="xrp" className="xrp-dropdown-img" />
                         <span className="unit-eng flex aic font s14 b4" onClick={() => setselectedcompany('XRP')}>XRP</span>
                       </div>
                     </div>

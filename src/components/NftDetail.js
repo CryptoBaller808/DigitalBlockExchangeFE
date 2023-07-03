@@ -6,7 +6,7 @@ import WalletConnect from "./WalletConnect";
 import PlaceBid from "./PlaceBid";
 import Filters from "./Filters";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -26,11 +26,12 @@ const NftDetail = () => {
   const signInData = useSelector(state => state.generalReducers?.user);
   const { user } = useSelector((state) => state.generalReducers)
   const isWalletConnected = useSelector(state => state.authReducer.isWalletConnected);
+  const navigate = useNavigate();
   console.log(signInData);
 
   // actual value 
   const findActualValue = (price, fee) => {
-    let actualValue = (Number(price) / (1 - Number(fee)/100)).toFixed(3);
+    let actualValue = (Number(price) / (1 - Number(fee) / 100)).toFixed(3);
     setActualPrice(actualValue)
   }
 
@@ -80,6 +81,11 @@ const NftDetail = () => {
     getNftById(id);
   }, []);
 
+
+  // handle on resale 
+  const handleOnResale = () => {
+    navigate(`resale/${id}`);
+  }
 
 
   // handle share link 
@@ -245,43 +251,53 @@ const NftDetail = () => {
                     </div>
                     :
                     <>
-                      {data?.item_sale_info?.sale_type == 1 ?
-                        (
-                          <>
-                            {signInData?.wallet_address === data?.creator?.wallet_address ?
-                              <button className="btn button" disabled onClick={e => setOpen(true)}>
-                                Buy for {actualPrice} XRP
-                              </button>
-                              :
+                      {signInData?.wallet_address === data?.current_owner_details?.wallet_address ?
+                        <button className="btn button" onClick={handleOnResale}>
+                          ReSale The Nft
+                        </button>
+                        :
+                        <>
+                          {data?.item_sale_info?.sale_type == 1 ?
+                            (
                               <>
-                                {selecteditem?.current_owner_details?.wallet_address !== signInData?.wallet_address &&
+                                {signInData?.wallet_address === data?.creator?.wallet_address ?
+                                  <button className="btn button" disabled onClick={e => setOpen(true)}>
+                                    Buy for {actualPrice} XRP
+                                  </button>
+                                  :
                                   <>
-                                    {!isBought ? <div className="btn button" onClick={e => setOpen(true)}>
-                                      Buy for {actualPrice} XRP
-                                    </div> :
-                                      <div className="btn button" onClick={handleAcceptNft}>
-                                        {loading ? "Waiting for the response" : "Accept The Nft"}
-                                      </div>}
+                                    {selecteditem?.current_owner_details?.wallet_address !== signInData?.wallet_address &&
+                                      <>
+                                        {!isBought ? <div className="btn button" onClick={e => setOpen(true)}>
+                                          Buy for {actualPrice} XRP
+                                        </div> :
+                                          <div className="btn button" onClick={handleAcceptNft}>
+                                            {loading ? "Waiting for the response" : "Accept The Nft"}
+                                          </div>}
+                                      </>
+                                    }
                                   </>
+
+                                }
+                              </>
+                            ) : (
+                              <>
+                                {signInData?.wallet_address === data?.creator?.wallet_address ?
+                                  <button className="btn button" disabled onClick={e => setOpen2(true)}>
+                                    Place a bid
+                                  </button>
+                                  :
+                                  <div className="btn button" onClick={e => setOpen2(true)}>
+                                    Place a bid
+                                  </div>
                                 }
                               </>
 
-                            }
-                          </>
-                        ) : (
-                          <>
-                            {signInData?.wallet_address === data?.creator?.wallet_address ?
-                              <button className="btn button" disabled onClick={e => setOpen2(true)}>
-                                Place a bid
-                              </button>
-                              :
-                              <div className="btn button" onClick={e => setOpen2(true)}>
-                                Place a bid
-                              </div>
-                            }
-                          </>
+                            )}
+                        </>
 
-                        )}
+                      }
+
                     </>
                   }
 

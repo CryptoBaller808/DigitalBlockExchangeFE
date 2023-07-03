@@ -538,9 +538,14 @@ const Profile = () => {
                       ? "Loading"
                       : searchitemwithuseridorcategoryitems?.length < 1
                         ? "No items found"
-                        : searchitemwithuseridorcategoryitems.map((item, index) => <Card item={item} />)
+                        : searchitemwithuseridorcategoryitems.map((item, index) => <Card item={item} tab="onsale"/>)
                     : !loading
-                      ? selectedItems.map((item, index) => <Card item={item} />)
+                      // ? selectedItems.map((item, index) => {
+                      //   if(item?.item_detail?.item_sale_info?.is_completed === 1){
+                      //     return <Card item={item} />
+                      //   }
+                      // })
+                      ? selectedItems?.map(item  => <Card item={item} tab="onsale" />)
                       : "Loading..."}
                 </div>
               </div>

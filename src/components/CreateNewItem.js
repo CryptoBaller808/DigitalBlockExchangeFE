@@ -87,6 +87,7 @@ const CreateNewItem = () => {
         item_id: item_id,
         user_id: user?.id,
         sale_type: sale_type,
+        resale_status: Number(0),
         fix_price: Number(recieveXrp),
         put_on_marketplace: put_on_marketplace,
         t_auction_start_date: convertedStartTime,

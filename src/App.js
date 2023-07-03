@@ -50,6 +50,7 @@ import NftDetail from "./components/NftDetail";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { useDispatch, useSelector } from "react-redux";
+import Resale from "./Pages/Resale";
 function App() {
   const [openSidebar, setOpenSidebar] = useState(false);
   const dispatch = useDispatch();
@@ -91,6 +92,7 @@ function App() {
           <Route path="/profile" element={<Profile />} exact />
           <Route path="/nft-detail/:name" element={<MyNftDetail />} exact />
           <Route path="/create-item" element={<CreateNewItem />} exact />
+          <Route path="nft-detail/resale/:id" element={<Resale />} exact />
         </Routes>
         <Footer />
       </BrowserRouter>
