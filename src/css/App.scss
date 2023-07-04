@@ -1260,8 +1260,9 @@ body {
         .meta {
           width: 340px;
           .desc {
-            @include media(">=phone", "<=480px") {
+            @include media(">=phone", "<=991px") {
               text-align: center;
+              font-size: 16px;
             }
           }
           .apps-link {
@@ -1290,6 +1291,9 @@ body {
                   font-size: 13px;
                   font-weight: 300;
                   color: #ffffff;
+                  @include media(">=phone", "<=991px") {
+                    font-size: 16px;
+                  }
                 }
                 .name {
                   color: #ffffff;

@@ -2,19 +2,20 @@
 .exchange-page {
   min-height: 730px;
   background: #e5e5e5;
-  @include media(">=phone", "<=480px") {
+  padding: 20px 15px;
+  @include media(">=phone", "<=991px") {
     align-items: center;
     justify-content: center;
   }
   .wrap {
-    @include media(">=phone", "<=480px") {
+    @include media(">=phone", "<=991px") {
       padding: 0px 1%;
-      width: 365px;
+      width: 100%;
     }
     .content-block {
       margin-top: 26px;
       margin-bottom: 10px;
-      @include media(">=phone", "<=480px") {
+      @include media(">=phone", "<=991px") {
         flex-direction: column;
       }
       .left {
@@ -43,6 +44,7 @@
             }
             .txt {
               padding: 0 8px;
+              font-size: 18px;
             }
           }
           .token_tabs {
@@ -61,6 +63,9 @@
               cursor: pointer;
               @include anim;
               border-bottom: 3px solid transparent;
+              @include media(">=phone", "<=991px") {
+                font-size: 18px;
+              }
               &.active {
                 font-weight: 600;
                 border-bottom: 3px solid #76b91b;
@@ -206,7 +211,7 @@
         flex: 1.6;
         height: 840px;
         margin: 0 10px;
-        @include media(">=phone", "<=480px") {
+        @include media(">=phone", "<=991px") {
           margin: 10px 0;
           height: 100%;
         }
@@ -217,7 +222,7 @@
           border: 1px solid #76b91b;
           box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
           border-radius: 8px;
-          @include media(">=phone", "<=480px") {
+          @include media(">=phone", "<=991px") {
             height: 100%;
             align-items: start;
             .icon {
@@ -226,7 +231,7 @@
           }
           .content-side {
             flex: 1;
-            @include media(">=phone", "<=480px") {
+            @include media(">=phone", "<=991px") {
               flex-direction: column;
             }
             .cnt_left {
@@ -234,15 +239,18 @@
               font-weight: 600;
               line-height: 20px;
               color: #14192d;
+              @include media(">=phone", "<=991px") {
+                font-size: 14px;
+              }
             }
             .cnt_right {
               flex: 1;
-              @include media(">=phone", "<=480px") {
+              @include media(">=phone", "<=991px") {
                 flex-direction: column;
               }
               .item {
                 flex: 1;
-                @include media(">=phone", "<=480px") {
+                @include media(">=phone", "<=991px") {
                   flex-direction: row;
                   justify-content: space-between;
                   margin-bottom: 10px;
@@ -271,7 +279,7 @@
           border: 1px solid #76b91b;
           box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
           border-radius: 8px;
-          @include media(">=phone", "<=480px") {
+          @include media(">=phone", "<=991px") {
             height: 100%;
           }
           .graph-status {
@@ -329,7 +337,7 @@
           border: 1px solid #76b91b;
           box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
           border-radius: 12px;
-          @include media(">=phone", "<=480px") {
+          @include media(">=phone", "<=991px") {
             height: 100%;
           }
           .connects-tabs {
@@ -368,7 +376,7 @@
             grid-gap: 30px;
             padding: 12px 0;
             height: 100%;
-            @include media(">=phone", "<=480px") {
+            @include media(">=phone", "<=991px") {
               grid-template-columns: repeat(1, 1fr);
             }
             .buy-side {
@@ -697,7 +705,7 @@
       box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
       border-radius: 12px;
       margin-bottom: 20px;
-      @include media(">=phone", "<=480px") {
+      @include media(">=phone", "<=991px") {
         height: 100%;
       }
       .tabs-sec {
@@ -712,7 +720,7 @@
           margin: 0 20px;
           border-bottom: 3px solid transparent;
           @include anim;
-          @include media(">=phone", "<=480px") {
+          @include media(">=phone", "<=991px") {
             font-size: 11px;
             line-height: 12px;
           }
@@ -723,7 +731,7 @@
         }
       }
       .table-block {
-        @include media(">=phone", "<=480px") {
+        @include media(">=phone", "<=991px") {
           overflow: auto;
           ::-webkit-scrollbar {
             width: 4px;
@@ -743,7 +751,7 @@
         }
         .tbl-sec {
           width: 100%;
-          @include media(">=phone", "<=480px") {
+          @include media(">=phone", "<=991px") {
             width: 1700px;
             ::-webkit-scrollbar {
               width: 4px;
@@ -771,7 +779,7 @@
               font-size: 10px;
               line-height: 19px;
               color: #000000;
-              @include media(">=phone", "<=480px") {
+              @include media(">=phone", "<=991px") {
                 width: 140px;
               }
               &.red {
@@ -795,4 +803,10 @@
       }
     }
   }
+
+}
+@include media(">=phone", "<=991px") {
+  .no-result {
+    font-size: 16px;
+}
 }

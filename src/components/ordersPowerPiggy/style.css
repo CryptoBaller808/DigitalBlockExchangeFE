@@ -121,6 +121,9 @@
     display: flex !important;
     justify-content: space-between;
   }
+  .openordersmobile h1{
+    font-size: 16px;
+  }
 
   .openorders1122 {
     display: none !important;
