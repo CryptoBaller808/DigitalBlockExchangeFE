@@ -252,9 +252,17 @@ const NftDetail = () => {
                     :
                     <>
                       {signInData?.wallet_address === data?.current_owner_details?.wallet_address ?
-                        <button className="btn button" onClick={handleOnResale}>
-                          ReSale The Nft
-                        </button>
+                        <>
+                          {data?.item_sale_info?.is_completed === false ?
+                            <button className="btn button" disabled>
+                              On Sale
+                            </button>
+                            :
+                            <button className="btn button" onClick={handleOnResale}>
+                              Resale
+                            </button>}
+                        </>
+
                         :
                         <>
                           {data?.item_sale_info?.sale_type == 1 ?
@@ -282,11 +290,7 @@ const NftDetail = () => {
                               </>
                             ) : (
                               <>
-                                {signInData?.wallet_address === data?.creator?.wallet_address ?
-                                  <button className="btn button" disabled onClick={e => setOpen2(true)}>
-                                    Place a bid
-                                  </button>
-                                  :
+                                {
                                   <div className="btn button" onClick={e => setOpen2(true)}>
                                     Place a bid
                                   </div>

@@ -538,14 +538,22 @@ const Profile = () => {
                       ? "Loading"
                       : searchitemwithuseridorcategoryitems?.length < 1
                         ? "No items found"
-                        : searchitemwithuseridorcategoryitems.map((item, index) => <Card item={item} tab="onsale"/>)
+                        : searchitemwithuseridorcategoryitems.map((item, index) => <Card item={item} tab="onsale" />)
                     : !loading
                       // ? selectedItems.map((item, index) => {
                       //   if(item?.item_detail?.item_sale_info?.is_completed === 1){
                       //     return <Card item={item} />
                       //   }
                       // })
-                      ? selectedItems?.map(item  => <Card item={item} tab="onsale" />)
+                      ?
+                      <>
+                        {activeTab === "On Sale" && selectedItems?.map(item => <Card item={item} tab="onsale" />)}
+                        {activeTab === "Collected" && selectedItems?.map(item => {
+                            if(item?.item_detail?.item_sale_info?.is_completed === 1){
+                              return <Card item={item} tab="resale" />
+                            }
+                        })}
+                      </>
                       : "Loading..."}
                 </div>
               </div>

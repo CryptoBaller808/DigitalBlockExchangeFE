@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
 import { HorzontalMenuIcon, RoundCrossIcon, HeartIcon, HeartFillIcon } from "../Icons";
 import axios from "axios";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "./Modal";
 import Completecheckout from "./Completecheckout";
@@ -10,10 +10,11 @@ import { ToastContainer, toast } from "react-toastify";
 import PlaceBid from "./PlaceBid";
 const Card = ({ item, tab }) => {
   console.log(tab);
-  console.log("itemmmmmmmm", item);
+  console.log("item id", item.item_detail?.id);
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const { user } = useSelector(state => state.generalReducers);
+  const navigate = useNavigate();
   const addtoWishlist = async item_id => {
     if (!user) {
       return;
@@ -57,6 +58,11 @@ const Card = ({ item, tab }) => {
     //getfavouriteByUserId()
     sethighlightstar(false);
   };
+
+  // handle click on sale 
+  const handleClickOnSale = () => {
+    navigate(`/nft-detail/resale/${item?.item_detail?.id}`);
+  }
   return (
     <div>
       <Modal open={open} onClose={() => setOpen(false)}>
@@ -97,7 +103,7 @@ const Card = ({ item, tab }) => {
               <div className="lbl">{wishlistcount}</div>
             </div>
           </div>
-          {!tab &&
+          {!tab ?
             <>
               {item?.sale_type == 1 && (
                 <div onClick={e => setOpen(true)} className="btn button cleanbtn">
@@ -110,6 +116,13 @@ const Card = ({ item, tab }) => {
                 </div>
               )}
             </>
+            :
+            <>
+              {tab === "resale" && <div className="btn button cleanbtn" onClick={handleClickOnSale}>
+              Resale 
+            </div>}
+            </>
+
           }
         </div>
       </div>
