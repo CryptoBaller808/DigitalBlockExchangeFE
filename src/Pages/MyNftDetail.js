@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useParams } from "react-router-dom";
 import Filters from "../components/Filters";
 import { CopyIcon, RoundCrossIcon, SearchIcon, HorzontalMenuIcon, HeartIcon } from "../Icons";
 import axios from "axios";
@@ -12,18 +12,23 @@ const MyNftDetail = ({ location }) => {
   const [collectionitemsloading, setCollectionitemsloading] = useState(true);
   const [collection, setCollection] = useState();
   const [collectionitems, setCollectionitems] = useState([]);
+  const [customCollectionId, setCustomCollectionId] = useState();
   const [collectionitems_activities, setcollectionitems_activities] = useState([]);
   const [search, setsearch] = useState("");
+  const { name } = useParams();
+
   const searchs = useLocation().search;
   const id = new URLSearchParams(searchs).get("id");
   console.log("query", id);
+  console.log("nameee", name);
   const api_getCollection = async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/collection/getCollectionbycId?id=${id}`);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/collection/getCollectionbycId?${id ? `id=${id}` : `custom_url=${name}`}`);
       console.log("api_getCollection_res", res);
       console.log(res?.data);
       if (res?.data) {
         setCollection(res.data?.collection);
+        setCustomCollectionId(res?.data?.collection?.id);
         setCollectionitems(res.data?.item_list?.rows);
       }
       setCollectionloading(false);
@@ -32,12 +37,12 @@ const MyNftDetail = ({ location }) => {
       //setCollectionloading(false)
     }
   };
-  const api_getCollectionitems = async () => {
+  const api_getCollectionitems = async (id) => {
     try {
       const res = await axios.get(`${process.env.REACT_APP_API_URL}/collection/getAllitemsByCollectionId?id=${id}`);
       console.log("api_getCollectionitems_res", res);
       if (res?.data) {
-        setCollectionitems(res.data?.item_list?.rows);
+        setCollectionitems(res.data?.rows);
       }
       setCollectionitemsloading(false);
     } catch (error) {
@@ -45,7 +50,7 @@ const MyNftDetail = ({ location }) => {
       setCollectionitemsloading(false);
     }
   };
-  const api_getActivityByCollectionId = async () => {
+  const api_getActivityByCollectionId = async (id) => {
     try {
       const res = await axios.get(`${process.env.REACT_APP_API_URL}/collection/getActivityByCollectionId?id=${id}`);
       console.log("api_getActivityByCollectionId", res);
@@ -58,10 +63,18 @@ const MyNftDetail = ({ location }) => {
       setCollectionitemsloading(false);
     }
   };
+
+  useEffect(() => {
+
+    if(customCollectionId){
+      console.log("custom url id ",customCollectionId)
+      api_getCollectionitems(customCollectionId);
+      api_getActivityByCollectionId(customCollectionId);
+    }
+
+  }, [customCollectionId])
   useEffect(() => {
     api_getCollection();
-    api_getCollectionitems();
-    api_getActivityByCollectionId();
   }, []);
 
   const activitys = [

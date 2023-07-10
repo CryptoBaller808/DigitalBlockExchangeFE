@@ -33,6 +33,13 @@ const initState = {
           apploaded: true,
         };
       }
+      case "LOGOUT": {
+        return {
+          ...state,
+          user: null,
+          isAuthenticated: false,
+        }
+      }
       default:
         return state;
     }

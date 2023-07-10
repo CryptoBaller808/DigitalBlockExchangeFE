@@ -21,3 +21,9 @@ export const setModalOpen = (payload) => (dispatch) => {
     payload,
   });
 }
+
+export const logoutUser = () => (dispatch) => {
+  dispatch({
+    type: t.LOGOUT_USER
+  })
+}

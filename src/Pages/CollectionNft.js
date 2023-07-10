@@ -28,6 +28,7 @@ const CollectionNft = () => {
   const [description, setdescription] = useState("");
   const [categories, setcategories] = useState([]);
   const [loading, setloading] = useState(false);
+  const [customUrlCheck, setCustomUrlCheck] = useState(false);
   const [selectioncategory, setselectioncategory] = useState("");
   const api_getcatogories = async () => {
     const res = await axios.get(`${process.env.REACT_APP_API_URL}/category/getCategories`);
@@ -37,7 +38,45 @@ const CollectionNft = () => {
   let currentUrl = window.location.origin;
   console.log(currentUrl);
 
+
+  // handle custom url 
+  const handleCustomUrl = (e) => {
+    setCollection_custom_url((e.target.value).trim());
+  }
+
+  // handle copy url
+  const handleCopyUrl = () => {
+    navigator.clipboard.writeText(`${currentUrl}/collection/${collection_custom_url}`);
+    alert('Url Copied')
+  }
+
+  // verify the custom url 
+  const verifyCustomUrl = async () => {
+    if(collection_custom_url === ""){
+      toast.error("Enter the custom url");
+    }else {
+      try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/collection/checkCustomUrl/${collection_custom_url}`);
+        const data = res.data;
+        console.log(data);
+        if(data?.available){
+          setCustomUrlCheck(true);
+          toast.success("custom url is available");
+        }else {
+          setCustomUrlCheck(false);
+          setCollection_custom_url('');
+          toast.error("Custom URL does not exist, please select another name");
+        }
+      }catch(e) {
+        console.log(e);
+        toast.error(e.message);
+      }
+    }
+  }
+
   const create_collectionnft = async () => {
+
+    if(!customUrlCheck) return toast.error('Please verify custom url'); 
     let thedata = {
       // profile_image,
       // cover_image,
@@ -93,7 +132,7 @@ const CollectionNft = () => {
     } catch (error) {
       console.log("error", error.response);
       if (error?.response?.data) {
-        toast.success(`${error?.response?.data}`);
+        toast.error(`${error?.response?.data}`);
       }
     }
   };
@@ -247,14 +286,16 @@ const CollectionNft = () => {
                 <div className="lbl-2">Customize your URL on Digital Block Exchange NFT Marketplace</div>
               </div>
               <div className="flex align-items-center">
-                <p className="custom-url">{`${currentUrl}/`}</p>
+                <p className="custom-url">{`${currentUrl}/collection/`}</p>
                 <input
                   value={collection_custom_url}
-                  onChange={e => setCollection_custom_url(e.target.value)}
+                  onChange={handleCustomUrl}
                   type="text"
-                  className="txt cleanbtn"
+                  className="txt cleanbtn custom-url-input"
                   placeholder="URL"
                 />
+                <button className="btn button verify-btn" onClick={verifyCustomUrl}>Verify</button>
+                {collection_custom_url !== "" && <button className="btn button copy-btn" onClick={handleCopyUrl} title="Copy Url">Copy</button>}
               </div>
 
             </div>
@@ -402,9 +443,9 @@ const CollectionNft = () => {
                   <div className="manue flex aic col anim">
                     <div
                       className="slt flex aic">
-                      <div className="unit-name flex aic font s14 b4">
+                      <div className="unit-name flex aic font s14 b4" onClick={() => setselectedcompany('XRP')}>
                         <img src="https://cryptologos.cc/logos/history/xrp-logo-2012.png?v=003" alt="xrp" className="xrp-dropdown-img" />
-                        <span className="unit-eng flex aic font s14 b4" onClick={() => setselectedcompany('XRP')}>XRP</span>
+                        <span className="unit-eng flex aic font s14 b4">XRP</span>
                       </div>
                     </div>
                   </div>

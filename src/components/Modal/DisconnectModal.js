@@ -1,13 +1,16 @@
 import "./style.css";
 import { Modal, Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { connectWallet } from "../../redux/actions";
+import { connectWallet, logoutUser } from "../../redux/actions";
 import * as balanceAction from "../../redux/xummBalance/action";
 import * as QRCodeAction from "../../redux/xummQRCode/action";
 import * as accountOfferAction from "../../redux/accountOffers/action";
 import * as historyOfferAction from "../../redux/historyOffers/action";
+import { useNavigate } from "react-router-dom";
 
 const DisconnectModal = props => {
+
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const disconnectWallet = () => {
     dispatch(balanceAction.setBalanceEmpty());
@@ -22,6 +25,9 @@ const DisconnectModal = props => {
     dispatch(historyOfferAction.setHistoryOffersProcessing());
     dispatch(historyOfferAction.setHistoryOffers([]));
     dispatch(historyOfferAction.setStopHistoryOffersProcessing());
+    localStorage.removeItem("nft_login");
+    dispatch(logoutUser())
+    navigate('/');
     props.onHide();
   };
 

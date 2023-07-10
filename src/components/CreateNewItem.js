@@ -506,8 +506,8 @@ const CreateNewItem = () => {
               </div>
             </div>
           </div>
-          <div onClick={sellNFT} className="action flex aic jc">
-            <div className="btn button">{loading ? "Loading..." : "Post your listing"}</div>
+          <div  className="action flex aic jc">
+            <div className="btn button" onClick={sellNFT}>{loading ? "Loading..." : "Post your listing"}</div>
           </div>
         </div>
       </div>
