@@ -455,12 +455,12 @@ const Profile = () => {
                           return (
                             <tr>
                               <td>
-                                {item?.type === 1 && "Sale"}
-                                {item?.type === 2 && "Sale"}
-                                {item?.type === 3 && "Sale"}
-                                {item?.type === 4 && "Sale"}
-                                {item?.type === 5 && "Sale"}
-                                {item?.type === 6 && "Sale"}
+                                {item?.type === 1 && "Transaction"}
+                                {item?.type === 2 && "Sale Offer"}
+                                {item?.type === 3 && "Buy Offer"}
+                                {item?.type === 4 && "Sale Cancel"}
+                                {item?.type === 5 && "Buy Cancel"}
+                                {item?.type === 6 && "Nft Minted"}
                               </td>
                               <td className="activity-td-item">
                                 <div className="flex">

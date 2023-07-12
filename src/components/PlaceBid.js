@@ -122,7 +122,7 @@ const PlaceBid = ({ open, setOpen, selecteditem, getNftById }) => {
         <div className="hdr flex flex-col">
           <div className="hdr-tag">Place a Bid</div>
           <div className="desc">You are about to place a bid for {selecteditem?.title || selecteditem?.item_detail?.title} by 
-          {selecteditem?.item_detail?.creator?.firstname} {selecteditem?.item_detail?.creator?.lastname}</div>
+          {selecteditem?.item_detail?.creator?.firstname || " Anonymous"} {selecteditem?.item_detail?.creator?.lastname}</div>
           <div className="select-bid flex flex-col">
             <div className="txt-lbl">Your Bid</div>
             <div className="txt-box flex aic">

@@ -31,8 +31,12 @@ const NftDetail = () => {
 
   // actual value 
   const findActualValue = (price, fee) => {
-    let actualValue = (Number(price) / (1 - Number(fee) / 100)).toFixed(3);
-    setActualPrice(actualValue)
+    if(price !== null){
+      let actualValue = (Number(price) / (1 - Number(fee) / 100)).toFixed(3);
+      setActualPrice(actualValue)
+    }else {
+      setActualPrice(null)
+    }
   }
 
 
