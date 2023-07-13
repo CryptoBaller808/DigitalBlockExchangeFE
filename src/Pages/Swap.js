@@ -60,35 +60,41 @@ const Swap = () => {
 
   // handle swap
   const handleSwap = () => {
-    const { account, userToken } = balance;
-
-    setSwapTo(swapTo => ({ ...swapTo, value: "" }));
     setError("");
-    const item = {
-      source_account: account,
-      destination_account: account,
-      destination_amount: {
-        currency: swapTo.currency,
-        value: "-1",
-        issuer: swapTo.issuer,
-      },
-      sendmax: {
-        currency: swapFrom.currency,
-        value: swapFrom.value,
-        issuer: swapFrom.issuer,
-      },
-    };
+    if (balance) {
+      const { account, userToken } = balance;
 
-    socket.emit("get-available-swap-path", item);
+      setSwapTo(swapTo => ({ ...swapTo, value: "" }));
+      setError("");
+      const item = {
+        source_account: account,
+        destination_account: account,
+        destination_amount: {
+          currency: swapTo.currency,
+          value: "-1",
+          issuer: swapTo.issuer,
+        },
+        sendmax: {
+          currency: swapFrom.currency,
+          value: swapFrom.value,
+          issuer: swapFrom.issuer,
+        },
+      };
 
-    socket.on("available-path", args => {
-      setAccountData(args.alternatives);
-    });
+      socket.emit("get-available-swap-path", item);
 
-    socket.on("available-path-error", args => {
-      setError(args);
-      console.log(args);
-    });
+      socket.on("available-path", args => {
+        setAccountData(args.alternatives);
+      });
+
+      socket.on("available-path-error", args => {
+        setError(args);
+        console.log(args);
+      });
+    }else {
+      setError("Please connect Wallet for SWAP ");
+    }
+
   };
 
   // handle clean state
