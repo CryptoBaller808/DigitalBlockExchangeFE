@@ -623,12 +623,12 @@ body {
     width: 100%;
     min-height: 730px;
     height: calc(100vh - 80px);
-    background-image: url("../../public/images/bg-home.png");
+    background-image: url("../../public/images/header-nft-final-client.gif");
     background-repeat: no-repeat !important;
     background-size: cover !important;
     background-position: right !important;
     @include media(">=phone", "<=480px") {
-      background-image: url("../../public/images/bg-home1.png");
+      background-image: url("../../public/images/header-nft-final-client.gif");
       background-position: center !important;
     }
   }

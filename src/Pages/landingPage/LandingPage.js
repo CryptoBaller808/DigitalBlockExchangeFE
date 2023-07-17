@@ -12,9 +12,9 @@ function LandingPage() {
   return (
     <div>
       <CryptoComponent />
-      <Analytics />
+      {/*<Analytics />*/}
       {/* <Analytic2 /> */}
-      <Tables />
+      {/*<Tables />*/}
       <TradingComponent />
       {/* I himself commit just for test */}
       {/* <HourComponent /> */}

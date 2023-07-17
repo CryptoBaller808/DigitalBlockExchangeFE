@@ -19,7 +19,7 @@ const Footer = () => {
         </div>
         <div className="right flex">
           <div className="items flex flex-col">
-            <div className="tag">Useful Link</div>
+            {/*<div className="tag">Useful Link</div>
             <a href="/" className="lbl">
               About Us
             </a>
@@ -31,33 +31,33 @@ const Footer = () => {
             </a>
             <a href="/" className="lbl">
               Tokenomics
-            </a>
+          </a>*/}
           </div>
           <div className="items flex flex-col">
             <div className="tag">Legal</div>
             <a href="/" className="lbl">
-              Terms
+              Privacy Policy
             </a>
             <a href="/" className="lbl">
-              Privacy
+              Terms of Service
             </a>
           </div>
           <div className="items flex flex-col">
-            <div className="tag">Trading</div>
+            {/*<div className="tag">Trading</div>
             <a href="/" className="lbl">
               Fees
-            </a>
+        </a>*/}
           </div>
           <div className="items flex flex-col">
             <div className="tag">Contact Us</div>
-            <a href="/" className="lbl">
+            {/*<a href="/" className="lbl">
               Submit a request
             </a>
             <a href="/" className="lbl">
               Locate a Lost Deposit
-            </a>
+            </a>*/}
             <a href="/" className="lbl">
-              Telegram
+            FAQ
             </a>
             <a href="/" className="lbl">
               Listing Application

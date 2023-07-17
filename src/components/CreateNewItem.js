@@ -157,7 +157,7 @@ const CreateNewItem = ({}) => {
                     </div>
                   </div>
                   {tab === "time" && (
-                    <div className="row-left1">
+                    <><div className="row-left1">
                       <div className="starting-date flex flex-col">
                         <div className="lbl1">Starting Date</div>
                         <input
@@ -191,9 +191,11 @@ const CreateNewItem = ({}) => {
                         />
                       </div>
                     </div>
+                    <p className="note">Enter in your time zone - entry will be converted to UTC. Final bid will be according to UTC time.</p></>
                   )}
+                  
                   {tab === "unlimited" && (
-                    <div className="row-left2">
+                    <><div className="row-left2">
                       <div className="starting-date flex flex-col">
                         <div className="lbl1">Starting Date</div>
                         <input
@@ -210,7 +212,7 @@ const CreateNewItem = ({}) => {
                           }}
                         />
                       </div>
-                    </div>
+                    </div><p className="note">Enter in your time zone - entry will be converted to UTC. Final bid will be according to UTC time.</p></>
                   )}
                 </div>
               </div>
@@ -219,45 +221,11 @@ const CreateNewItem = ({}) => {
                   <div className="right-block flex flex-col">
                     <div className="row flex aic">
                       <div className="row-left flex flex-col">
-                        <div className="lbl1">Schedule for future time</div>
-                        <div className="lbl2">You can schedule this listing to start at a future date.</div>
-                      </div>
-                      <div className="row-right flex aic jc">
-                        <Toggle setShowDate={setShowDate} />
-                      </div>
-                    </div>
-                    {showDate && (
-                      <div className="row flex flex-col text-start">
-                        <div className="lbl1 text-start">Starting Date</div>
-                        <input
-                          className="date-time"
-                          type="datetime-local"
-                          id="meeting-time"
-                          name="meeting-time"
-                          //   value="2018-06-12T19:30"
-                          onChange={e => {
-                            console.log("e", e.target.value);
-                            setstarttime(e.target.value);
-                          }}
-                        />
-                      </div>
-                    )}
-                    <div className="row flex aic">
-                      <div className="row-left flex flex-col">
-                        <div className="lbl1">Put on marketplace</div>
-                        <div className="lbl2">Allow users to instantly purchase your NFT</div>
-                      </div>
-                      <div className="row-right flex aic jc">
-                        <Toggle setToggle={setput_on_marketplace} initial_value={put_on_marketplace} />
-                      </div>
-                    </div>
-                    <div className="row flex aic">
-                      <div className="row-left flex flex-col">
                         <div className="lbl1">Fees</div>
                       </div>
                       <div className="row-right flex items-end jc flex-col">
                         <div className="lbl2">To Digital Block Exchange NFT 2.5%</div>
-                        <div className="lbl2">To EXPLODED 10%</div>
+                        <div className="lbl2">Commission to USER for Resale 5%</div>
                       </div>
                     </div>
                     <div className="row flex flex-col text-start">
@@ -321,7 +289,7 @@ const CreateNewItem = ({}) => {
                       </div>
                       <div className="row-right flex items-end jc flex-col">
                         <div className="lbl2">To Digital Block Exchange NFT 2.5%</div>
-                        <div className="lbl2">To EXPLODED 10%</div>
+                        <div className="lbl2">Commission to USER for Resale 5%</div>
                       </div>
                     </div>
                     <div className="row flex flex-col text-start">
