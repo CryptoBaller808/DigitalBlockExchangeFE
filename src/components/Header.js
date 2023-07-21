@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { DropDownIcon, MenuIcon } from "../Icons";
-import LogoHorizontal from "../assets/DBX.png";
+import LogoHorizontal from "../assets/DBX-new.png";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Modal from "./Modal";
 import WalletConnect from "./WalletConnect";
