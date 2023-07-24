@@ -65,7 +65,7 @@
   font-size: 1.1rem;
   color: #ffffff;
   font-weight: normal;
-  margin-top: 1.2rem;
+  /*margin-top: 1.2rem;*/
   margin-bottom: 0.8rem;
   margin-left: -1rem;
 }
@@ -90,7 +90,7 @@
   font-size: 1.3rem;
   color: #14192d;
   font-weight: normal;
-  margin-top: 1.2rem;
+  /*margin-top: 1.2rem;*/
   margin-bottom: 0.5rem;
   margin-left: -1rem;
 }
@@ -108,6 +108,9 @@
   justify-content: center !important;
   align-items: center !important;
   flex-direction: column;
+}
+.downdiv {
+  padding: 15px;
 }
 @media (max-width: 510px) {
   .conducttext {

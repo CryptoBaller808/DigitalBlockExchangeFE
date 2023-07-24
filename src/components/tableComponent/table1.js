@@ -189,7 +189,7 @@ function FarmTableCopmponent() {
                 style={{
                   color: "#76B91B",
                   textAlign: "center",
-                  fontSize: "1.2rem",
+                  fontSize: "16px",
                 }}
               >
                 See more

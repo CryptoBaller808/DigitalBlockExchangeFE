@@ -231,7 +231,7 @@ const CreateNewItem = () => {
                     </div>
                   </div>
                   {tab === "time" && (
-                    <div className="row-left1">
+                    <><div className="row-left1">
                       <div className="starting-date flex flex-col">
                         <div className="lbl1">Starting Date</div>
                         <input
@@ -265,9 +265,10 @@ const CreateNewItem = () => {
                         />
                       </div>
                     </div>
+                    <p className="note">Enter in your time zone - entry will be converted to UTC. Final bid will be according to UTC time.</p></>
                   )}
                   {tab === "unlimited" && (
-                    <div className="row-left2">
+                    <><div className="row-left2">
                       <div className="starting-date flex flex-col">
                         <div className="lbl1">Starting Date</div>
                         <input
@@ -285,13 +286,16 @@ const CreateNewItem = () => {
                         />
                       </div>
                     </div>
+                    <p className="note">Enter in your time zone - entry will be converted to UTC. Final bid will be according to UTC time.</p></>
                   )}
                 </div>
               </div>
               <div className="right flex">
                 {tab === "fixed" && (
                   <div className="right-block flex flex-col">
-                    <div className="row flex aic">
+                    
+                    
+                    {/*<div className="row flex aic">
                       <div className="row-left flex flex-col">
                         <div className="lbl1">Schedule for future time</div>
                         <div className="lbl2">You can schedule this listing to start at a future date.</div>
@@ -324,14 +328,14 @@ const CreateNewItem = () => {
                       <div className="row-right flex aic jc">
                         <Toggle setToggle={setput_on_marketplace} initial_value={put_on_marketplace} />
                       </div>
-                    </div>
+                    </div>*/}
                     <div className="row flex aic">
                       <div className="row-left flex flex-col">
                         <div className="lbl1">Fees</div>
                       </div>
                       <div className="row-right flex items-end jc flex-col">
                         <div className="lbl2">To Digital Block Exchange NFT {platformaFee}%</div>
-                        <div className="lbl2">To {nftData?.creator?.firstname ? nftData?.creator?.firstname : "Anonymous"} {nftData?.item_collection?.royalty}%</div>
+                        <div className="lbl2">Commission to {nftData?.creator?.firstname ? nftData?.creator?.firstname : "Anonymous"} for Resale {nftData?.item_collection?.royalty}%</div>
                       </div>
                     </div>
                     <div className="row flex flex-col text-start">

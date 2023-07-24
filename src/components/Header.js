@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { DropDownIcon, MenuIcon } from "../Icons";
-import LogoHorizontal from "../assets/DBXhorizontal-logo.svg";
+import LogoHorizontal from "../assets/DBX-new.png";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Modal from "./Modal";
 import WalletConnect from "./WalletConnect";
@@ -40,13 +40,13 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
   //is wallet is connected or not
   const navList = [
     { id: 1, title: "Home", slug: "/", icon: "" },
-    { id: 2, title: "Buy/Sell", slug: "/buysell", icon: "" },
-    { id: 3, title: "Exchange", slug: "/exchange", icon: "" },
-    { id: 4, title: "Swap", slug: "/swap", icon: "" },
-    { id: 5, title: "NFT", slug: "/nft", icon: "" },
+    { id: 2, title: "Exchange", slug: "/exchange", icon: "" },
+    { id: 3, title: "Swap", slug: "/swap", icon: "" },
+    { id: 4, title: "NFT", slug: "/nft", icon: "" },
+   {/*} { id: 5, title: "NFT", slug: "/nft", icon: "" },
     { id: 6, title: "Orders", slug: "/orders", icon: <DropDownIcon /> },
     { id: 7, title: "DBX Coin", slug: "/dbx_coin", icon: "" },
-    { id: 8, title: "DBX Card", slug: "/dbx_card", icon: "" },
+  { id: 8, title: "DBX Card", slug: "/dbx_card", icon: "" },*/}
   ];
   const handleClickOpen = () => {
     //if (location.pathname === "/exchange") {

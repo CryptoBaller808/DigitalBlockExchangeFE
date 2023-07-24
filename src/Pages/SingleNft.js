@@ -375,7 +375,7 @@ const SingleNft = ({ }) => {
 
               })}
             </div>
-            <div className="row flex aic">
+            {/*<div className="row flex aic">
               <div className="left flex flex-col">
                 <div className="lbl1">Unlockable Content</div>
                 <div className="lbl2">Include unlockable content that can only be accessed by the owner of the item.</div>
@@ -391,7 +391,7 @@ const SingleNft = ({ }) => {
               <div className="right flex aic">
                 <Toggle setToggle={setis_unlockable_content} />
               </div>
-            </div>
+                  </div>*/}
             <div className="row flex aic">
               <div className="left flex flex-col">
                 <div className="lbl1">Explicit and sensitive content</div>

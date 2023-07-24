@@ -1,6 +1,6 @@
 import React from "react";
 import "./style.css";
-import Mainlogo from "../../Images/header-final.svg";
+import Mainlogo from "../../Images/homepage-header-final.gif";
 // import Mainlogo2 from "../../Images/header-mobile-device1 1.png";
 
 function CryptoComponent() {

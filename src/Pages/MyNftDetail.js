@@ -162,7 +162,7 @@ const MyNftDetail = ({ location }) => {
                   </div>
                   <div className="report-lbl">floor price</div>
                 </div>
-                <div className="report-card flex aic jc flex-col">
+                {/*<div className="report-card flex aic jc flex-col">
                   <div className="_numbs flex aic jc">
                     <div className="ico">
                       <RoundCrossIcon />
@@ -170,7 +170,7 @@ const MyNftDetail = ({ location }) => {
                     <div className="numb-lbl">{collection.volume_traded}</div>
                   </div>
                   <div className="report-lbl">volume traded</div>
-                </div>
+                </div>*/}
               </div>
             </div>
           </>

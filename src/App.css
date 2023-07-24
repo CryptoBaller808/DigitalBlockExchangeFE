@@ -8,6 +8,22 @@
 
 .App {
 }
+.avil-wallet p.lbl.flex.aic span {
+  position: absolute;
+  font-size: 11px;
+  color: red;
+  bottom: -17px;
+  right: -7px;
+}
+
+.avil-wallet p.lbl.flex.aic {
+  position: relative;
+}
+p.note {
+  font-size: 12px;
+  text-align: left;
+  color: #959595;
+}
 
 /* html {
   font-size: 62.5%;

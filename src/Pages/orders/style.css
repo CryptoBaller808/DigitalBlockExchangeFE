@@ -36,7 +36,7 @@ a {
   background-color: white !important;
 }
 .iamfixingheight {
-  height: 70vh !important;
+  height: 100% !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;

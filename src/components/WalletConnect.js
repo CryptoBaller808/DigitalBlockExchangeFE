@@ -93,23 +93,23 @@ const WalletConnect = ({ open, setOpen }) => {
         {qRCodeImage ? (
           <>
             <div className="hdr flex aic">
-              <div className="lbl">Please verify through app</div>
+            <div className="lbl">Connect using XUMM</div>
               <div className="ico flex aic jc pointer" onClick={e => setOpen(false)}>
                 <CrossIcon />
               </div>
             </div>
-            <div className="desc">Please scan this qr code from mobile app:</div>
+            <div className="desc">Scan QR code to connect</div>
             <div className="action flex flex-col">
               <div className="avil-wallet flex flex-col aic jc">
                 <div className="btn flex aic jc">
                   <img style={{ width: 140, height: 140 }} src={qRCodeImage} className="img flex aic" />
-                  <p className="lbl flex aic">Qr scanned ?</p>
+                  <p className="lbl flex aic">QR scanned?</p>
                 </div>
               </div>
               <div className="new-wallet flex flex-col aic jc">
                 <div className="qt-lbl"></div>
                 <div onClick={Verifywallet} className="btn button">
-                  Qr scanned ?
+                QR scanned?
                 </div>
               </div>
             </div>
@@ -122,7 +122,7 @@ const WalletConnect = ({ open, setOpen }) => {
                 <CrossIcon />
               </div>
             </div>
-            <div className="desc">Connect your wallet using one of the following methods:</div>
+            <div className="desc">Select your wallet</div>
             <div className="action flex flex-col">
               <div className="avil-wallet flex flex-col aic jc">
                 <div
@@ -135,13 +135,13 @@ const WalletConnect = ({ open, setOpen }) => {
                 </div>
                 <div className="btn flex aic jc">
                   <img src={LegerLogo} className="img flex aic" alt="leger logo" style={{ height: "34px", marginRight: "5px" }} />
-                  <p className="lbl flex aic">Ledger Device</p>
+                  <p className="lbl flex aic">Ledger Device <span>Coming Soon</span></p>
                 </div>
               </div>
-              <div className="new-wallet flex flex-col aic jc">
+              {/*<div className="new-wallet flex flex-col aic jc">
                 <div className="qt-lbl">Don’t have a wallet?</div>
                 <div className="btn button">Create New Wallet</div>
-              </div>
+                </div>*/}
             </div>
           </>
         )}

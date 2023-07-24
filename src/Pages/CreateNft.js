@@ -12,11 +12,9 @@ const CreateNft = () => {
           </Link>
         </div>
         <div className="meta flex aic jc flex-col">
-          <div className="pg-tag">Create Single or Collection</div>
+          <div className="pg-tag">Create Your Collection</div>
           <div className="desc">
-            Choose “Single” if you want your collectible to be one of a kind or
-            <br />
-            “Collection” if you want to sell a collection.
+          Create your “Collection” first to add multiple NFT's to a collection. Choose “Single” to add to your collection or to sell your one of a kind.
           </div>
         </div>
         <div className="boxs">

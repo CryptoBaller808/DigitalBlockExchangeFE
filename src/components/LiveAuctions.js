@@ -5,6 +5,7 @@ import axios from "axios";
 import Modal from "./Modal";
 import PlaceBid from "./PlaceBid";
 import moment from "moment";
+import { Link, NavLink } from "react-router-dom";
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -101,7 +102,9 @@ const LiveAuctions = () => {
       <div key={index}>
         <div className="card flex flex-col">
           <div className="nft-img rel flex jc ">
-            <img src={item?.item_detail?.image_uri} className="img" />
+          <Link to={`/nft-detail?id=${item?.item_detail?.id}`} className="nft-img">
+              <img src={item?.item_detail?.image_uri} className="img" />
+            </Link>
             <div className="time-box abs flex aic jc">
               <p className="lbl">{time} left</p>
               <div className="ico">

@@ -31,6 +31,7 @@
   display: flex;
   justify-content: space-between;
   width: 90%;
+  align-items:flex-end;
 }
 
 .backgroundkiyakian {
@@ -83,13 +84,23 @@
     display: none !important;
   }
 }
-
-@media (max-width: 1024px) {
+@media  screen and (max-width: 1440px) {
+  .marginoftoptable, .maindivofopenorders22{width:100%;}
+}
+@media (max-width: 1200px) {
   .tablestyling {
     border: 1px solid #d8d8d8 !important;
     border-radius: 1rem;
     width: 100%;
     overflow: auto;
+  }
+}
+@media (max-width: 1024px) {
+  .displayflexofopenorders{
+    width:100% !important;
+  }
+  .marginoftoptable{
+    width:100% !important;
   }
 }
 
