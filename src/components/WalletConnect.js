@@ -8,7 +8,7 @@ import * as balanceAction from "../redux/xummBalance/action";
 import * as QRCodeAction from "../redux/xummQRCode/action";
 // import setAuthToken from "../redux/actions/setHeaderToken";
 import { SocketContext } from "../context/soket";
-import XummLogo from "../Images/XummLogo.png";
+import XummLogo from "../Images/XummLogo-new.png";
 import LegerLogo from "../Images/XRPLLogo.png";
 import setAuthToken from "../redux/actions/setHeaderToken";
 const WalletConnect = ({ open, setOpen }) => {
@@ -117,25 +117,29 @@ const WalletConnect = ({ open, setOpen }) => {
         ) : (
           <>
             <div className="hdr flex aic">
-              <div className="lbl">Select a Wallet</div>
+              <div className="lbl">Select a token</div>
               <div className="ico flex aic jc pointer" onClick={e => setOpen(false)}>
                 <CrossIcon />
               </div>
             </div>
-            <div className="desc">Select your wallet</div>
+            {/*<div className="desc">Select a token</div>*/}
             <div className="action flex flex-col">
               <div className="avil-wallet flex flex-col aic jc">
+              <div class="field flex input-search"><input type="text" class="txt search" placeholder="Search name or paste address"  value="" /></div>
                 <div
                   onClick={() => {
                     connectXumppwallet();
                   }}
                   className="btn flex aic jc">
-                  <img src={XummLogo} className="img flex aic" alt="xumm logo" style={{ height: "34px", marginRight: "5px" }} />
-                  <p className="lbl flex aic">{loading ? "loading..." : "XUMM App"}</p>
+                  <img src={XummLogo} className="img flex aic" alt="xumm logo" style={{width:"40px", height: "40px", marginRight: "5px" }} />
+                  <p className="lbl  aic">
+                    {loading ? "loading..." : "DBX"}
+                    <small>DBX Coin</small>
+                    </p>
                 </div>
                 <div className="btn flex aic jc">
-                  <img src={LegerLogo} className="img flex aic" alt="leger logo" style={{ height: "34px", marginRight: "5px" }} />
-                  <p className="lbl flex aic">Ledger Device <span>Coming Soon</span></p>
+                  <img src={LegerLogo} className="img flex aic" alt="leger logo" style={{width:"40px", height: "40px", marginRight: "5px" }} />
+                  <p className="lbl  aic">XRP <small>XRP</small></p>
                 </div>
               </div>
               {/*<div className="new-wallet flex flex-col aic jc">

@@ -1660,8 +1660,8 @@ body {
 
 .wallet-connect {
   background-color: #ffffff;
-  min-height: 400px;
-  width: 335px;
+  min-height: 585px;
+  width: 373px;
   padding: 24px 15px;
   .wrap {
     width: 100%;
@@ -1694,7 +1694,7 @@ body {
       height: 100%;
       .avil-wallet {
         width: 100%;
-        padding: 0px 20px;
+        /*padding: 0px 20px;*/
         .btn {
           width: 100%;
           text-align: center;
@@ -1705,7 +1705,7 @@ body {
           border-radius: 8px;
           margin-bottom: 4px;
           .img {
-            flex: 0.4;
+           /* flex: 0.4;*/
             justify-content: flex-end;
             height: 30px;
           }
@@ -1717,8 +1717,18 @@ body {
             font-weight: 600;
             font-size: 18px;
             line-height: 18px;
-            text-align: center;
+            text-align: left;
             color: #333539;
+            small {
+              color: #000;
+              font-family: "Sofia Pro";
+              font-size: 14px;
+              font-style: normal;
+              font-weight: 400;
+              line-height: 22px;
+              display: block;
+              width: 100%;
+          }
           }
         }
       }
@@ -3945,12 +3955,36 @@ body {
 .dark-mode .swapModal-card p svg path {
   stroke: #fff;
 }
+.dark-mode .wallet-connect .wrap .action .avil-wallet .btn .lbl,
+.dark-mode .wallet-connect .wrap .action .avil-wallet .btn .lbl small{color:#fff;}
 .footer-pg .wrap .left .social .icon:first-child a svg {
   width: 16px;
   height: 15px;
   position: relative;
   left: -1px;
 }
+
+.input-search {
+  width: 100%;
+  max-width: 276px;
+  margin: 30px auto;
+  input.txt.search {
+    border-radius: 8px;
+    border: 1px solid #76B91B;
+    background: rgba(231, 232, 234, 0.30);
+    color: #8F8F8F;
+    font-family: Sofia Pro;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px;
+    height: 56px;
+    max-width: 100%;
+    width: 100%;
+    padding: 10px;
+  }
+}
+
 
 @media screen and (max-width:991px){
   .ant-row .ant-col a {
