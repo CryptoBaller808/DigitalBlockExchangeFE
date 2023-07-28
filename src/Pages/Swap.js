@@ -325,9 +325,9 @@ const Swap = () => {
               <div className="card flex flex-col">
                 <div className="card-hdr flex items-center justify-between">
                   <div className="token-info flex w-full">
-                    <div className="icon flex aic jc">
+                    {/*<div className="icon flex aic jc">
                       <TokenIcon />
-                    </div>
+                    </div>*/}
                     <div className="about-token flex flex-col w-full">
                       <div className="lbl">Swap From :</div>
                       {/* <Select
@@ -377,9 +377,9 @@ const Swap = () => {
               <div className="card flex flex-col">
                 <div className="card-hdr flex items-center justify-between">
                   <div className="token-info flex w-full">
-                    <div className="icon flex aic jc">
+                    {/*<div className="icon flex aic jc">
                       <img src="./images/DBXIcon.png" className="token-img" />
-                    </div>
+                    </div>*/}
                     <div className="about-token flex flex-col w-full">
                       <div className="lbl">Swap To:</div>
                       {/* <Select
