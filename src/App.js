@@ -57,8 +57,8 @@ function App() {
   const gettokenlocalstorage = async () => {
     let data = JSON.parse(localStorage.getItem("nft_login"));
     console.log("login_cred", data);
-    const res2 = await axios.get(`${process.env.REACT_APP_API_URL}/profiles/getuserProfile/${data?.id}`);
-    console.log("res22", res2);
+     const res2 = await axios.get(`${process.env.REACT_APP_API_URL}/profiles/getuserProfile/${data?.id}`);
+     console.log("res22", res2);
     if (res2?.data) {
       dispatch({
         type: "GET_USER",
@@ -66,6 +66,32 @@ function App() {
       });
     }
   };
+  // Function to get the saved mode from localStorage or use the default (light) mode
+  const getSavedMode = () => {
+    const savedMode = localStorage.getItem('mode');
+    return savedMode ? JSON.parse(savedMode) : false;
+  };
+
+  const [isDarkMode, setIsDarkMode] = useState(getSavedMode);
+
+  // Function to handle the checkbox change and toggle between dark and light mode
+  const handleCheckboxChange = () => {
+    setIsDarkMode(prevMode => {
+      const newMode = !prevMode;
+      localStorage.setItem('mode', JSON.stringify(newMode));
+      return newMode;
+    });
+  };
+  
+  // Effect to set the class on the body based on the current mode
+  useEffect(() => {
+    const body = document.body;
+    if (isDarkMode) {
+      body.classList.add('dark-mode');
+    } else {
+      body.classList.remove('dark-mode');
+    }
+  }, [isDarkMode]);
   useEffect(() => {
     gettokenlocalstorage();
   }, []);
@@ -81,7 +107,7 @@ function App() {
           <Route path="/orders/*" element={<Orders />} exact />
           <Route path="/nft" element={<Main />} exact />
           <Route path="/swap" element={<Swap />} exact />
-          <Route path="/exchange" element={<Exchange />} exact />
+          <Route path="/exchange" element={<Exchange isDarkMode={isDarkMode}/>} exact />
           <Route path="/profile-edit" element={<EditProfile />} exact />
           <Route path="/nft-detail" element={<NftDetail />} exact />
           <Route path="/nft-create" element={<CreateNft />} exact />
@@ -97,6 +123,14 @@ function App() {
         </Routes>
         <Footer />
       </BrowserRouter>
+        <div className="color-toggle">
+        <input type="checkbox" className="checkbox" checked={isDarkMode} onChange={handleCheckboxChange} id="checkbox" />
+        <label for="checkbox" className="checkbox-label">
+          <i className="fa fa-moon"></i>
+          <i className="fa fa-sun"></i>
+          <span className="ball"></span>
+        </label>
+      </div>
     </div>
   );
 }

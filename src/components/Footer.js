@@ -4,32 +4,6 @@ import Logo from "../assets/Logo-f.svg";
 import LogoHorizontal from "../assets/DBXhorizontal-logo.svg";
 const Footer = () => {
 
-    // Function to get the saved mode from localStorage or use the default (light) mode
-    const getSavedMode = () => {
-      const savedMode = localStorage.getItem('mode');
-      return savedMode ? JSON.parse(savedMode) : false;
-    };
-  
-    const [isDarkMode, setIsDarkMode] = useState(getSavedMode);
-  
-    // Function to handle the checkbox change and toggle between dark and light mode
-    const handleCheckboxChange = () => {
-      setIsDarkMode(prevMode => {
-        const newMode = !prevMode;
-        localStorage.setItem('mode', JSON.stringify(newMode));
-        return newMode;
-      });
-    };
-  
-    // Effect to set the class on the body based on the current mode
-    useEffect(() => {
-      const body = document.body;
-      if (isDarkMode) {
-        body.classList.add('dark-mode');
-      } else {
-        body.classList.remove('dark-mode');
-      }
-    }, [isDarkMode]);
   return (
     <div className="footer-pg flex">
       <div className="wrapWidth wrap flex aic">
@@ -92,14 +66,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="color-toggle">
-      <input type="checkbox" className="checkbox" checked={isDarkMode} onChange={handleCheckboxChange} id="checkbox" />
-      <label for="checkbox" className="checkbox-label">
-        <i className="fa fa-moon"></i>
-        <i className="fa fa-sun"></i>
-        <span className="ball"></span>
-      </label>
-    </div>
     </div>
   );
 };

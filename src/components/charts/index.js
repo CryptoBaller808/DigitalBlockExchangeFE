@@ -8,20 +8,20 @@ const overrides = {
   "symbolWatermarkProperties.visibility": false,
 };
 
-const Chart = ({ currencyData }) => {
+const Chart = ({ currencyData, isDarkMode }) => {
   const [tvWidget, setTvWIdget] = useState({});
   const [selectedAsset, setSelectedAsset] = useState(currencyData?.info?.title);
   if (!selectedAsset) {
     setSelectedAsset("XRP/USD/rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B");
   }
-
+ 
   useEffect(() => {
     console.log("charts: currencyData update: ", currencyData);
     setSelectedAsset(
       `${currencyData?.info?.title}/${currencyData?.info?.issuerB}`
     );
   }, [currencyData]);
-
+  
   //Initiate tvWidget
   useEffect(() => {
     setTvWIdget(
@@ -35,6 +35,7 @@ const Chart = ({ currencyData }) => {
         datafeed: Datafeed,
         library_path: "/charting_library/",
         autosize: true,
+        theme: isDarkMode ? "Dark" : "Light",
         disabled_features: [
           "header_symbol_search",
           "header_compare",
@@ -53,7 +54,7 @@ const Chart = ({ currencyData }) => {
     return () => {
       //tvWidget?.remove();
     };
-  }, []);
+  }, [isDarkMode]);
 
   // handle asset change
   useEffect(() => {

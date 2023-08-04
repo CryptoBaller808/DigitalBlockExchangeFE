@@ -13,7 +13,7 @@ import AccountOffersTable from "../components/accountOfferTable/AccountOffersTab
 import BookOffersTable from "../components/bookOfferTable/BookOffersTable";
 import Chart from "../components/charts";
 
-const Exchange = () => {
+const Exchange = ({isDarkMode}) => {
   const [tokenTabSelected, setTokenTabSelected] = useState("XRP");
 
   //from our client code
@@ -93,7 +93,7 @@ const Exchange = () => {
               {/* graph center start */}
 
               <div className="graph-sec flex flex-col w-full">
-                <Chart currencyData={currencyData} />
+                <Chart currencyData={currencyData} isDarkMode={isDarkMode} />
               </div>
               {/* graph center end */}
 
