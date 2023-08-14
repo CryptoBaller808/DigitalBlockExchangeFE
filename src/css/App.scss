@@ -3963,7 +3963,9 @@ body {
   position: relative;
   left: -1px;
 }
-
+.dark-mode .swap-page .wrap .swap-block .swap-cards .card select.form-control * {
+    color: #000;
+}
 .input-search {
   width: 100%;
   max-width: 276px;
