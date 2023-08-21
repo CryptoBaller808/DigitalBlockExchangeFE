@@ -19,11 +19,11 @@ const Footer = () => {
           </div>
         </div>
         <div className="right flex">
-          <div className="items flex flex-col">
+          {/*<div className="items flex flex-col">
             <div className="tag">Useful Link</div>
-            {/*<a href="/" className="lbl">
+            <a href="/" className="lbl">
               About Us
-            </a>*/}
+            </a>
             <a href="/" className="lbl">
               Help Center
             </a>
@@ -33,8 +33,8 @@ const Footer = () => {
 
             {/*<a href="/" className="lbl">
               Tokenomics
-          </a>*/}
-          </div>
+            </a>
+          </div>*/}
           <div className="items flex flex-col">
             <div className="tag">Legal</div>
             <a href="/" className="lbl">
@@ -43,12 +43,12 @@ const Footer = () => {
             <a href="/" className="lbl">
             Terms of Service            </a>
           </div>
-          <div className="items flex flex-col">
+          {/*<div className="items flex flex-col">
             <div className="tag">Trading</div>
-            {/*<a href="/" className="lbl">
+            <a href="/" className="lbl">
               Fees
-            </a>*/}
-          </div>
+            </a>
+          </div>*/}
           <div className="items flex flex-col">
             <div className="tag">Contact Us</div>
            {/* <a href="/" className="lbl">
