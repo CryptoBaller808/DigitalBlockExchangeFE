@@ -19,6 +19,15 @@
 .avil-wallet p.lbl.flex.aic {
   position: relative;
 }
+.wallet-connect .wrap .desc.headss{
+  font-family: "Sofia Pro";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 18px;
+  text-align: left;
+  color: #333539;
+}
 p.note {
   font-size: 12px;
   text-align: left;

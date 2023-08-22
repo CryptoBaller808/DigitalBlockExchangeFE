@@ -3732,6 +3732,7 @@ body {
 .dark-mode .color-toggle svg path {
   fill: #fff;
 }
+.dark-mode  .wallet-connect .wrap .desc.headss{color:#fff;}
 .dark-mode {
   background: #1f1f1f;
   color: #fff;
@@ -3757,6 +3758,25 @@ body {
 }
 .dark-mode .exchangediv {
   border: 1px solid #6ac445;
+}
+.dark-mode .my-nfts-page .wrap .profile-tabs .tab-item .lbl {
+  color: #fff;
+}
+.nft-detail .wrap .container .right .exploded-box .collector-sec .item .nft-img .nft-name {
+  color: #000;
+}
+.dark-mode .nft-detail .wrap .container .right .exploded-box .collector-sec .item .nft-img .nft-name {
+  color: #fff;
+}
+.dark-mode .my-nfts-page .wrap .profile-page-nft .card {
+  background: #1f1f1f;
+  border: 1px solid rgba(128, 128, 128, 0.5215686275);
+}
+.dark-mode .my-nfts-page .wrap .profile-page-nft .card .icon svg path {
+  fill: #fff;
+}
+.dark-mode .my-nfts-page .wrap .report-grid .report-card ._numbs .numb-lbl {
+  color: #fff;
 }
 .dark-mode .Mainconduct {
   background: #1f1f1f;

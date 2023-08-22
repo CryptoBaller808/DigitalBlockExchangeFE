@@ -117,12 +117,12 @@ const WalletConnect = ({ open, setOpen }) => {
         ) : (
           <>
             <div className="hdr flex aic">
-              <div className="lbl">Select a token</div>
+              <div className="lbl"></div>
               <div className="ico flex aic jc pointer" onClick={e => setOpen(false)}>
                 <CrossIcon />
               </div>
             </div>
-            {/*<div className="desc">Select a token</div>*/}
+            <div className="desc headss">Select a Wallet</div>
             <div className="action flex flex-col">
               <div className="avil-wallet flex flex-col aic jc">
               <div class="field flex input-search"><input type="text" class="txt search" placeholder="Search name or paste address"  value="" /></div>
@@ -155,3 +155,4 @@ const WalletConnect = ({ open, setOpen }) => {
 };
 
 export default WalletConnect;
+
