@@ -8,7 +8,7 @@ import * as balanceAction from "../redux/xummBalance/action";
 import * as QRCodeAction from "../redux/xummQRCode/action";
 // import setAuthToken from "../redux/actions/setHeaderToken";
 import { SocketContext } from "../context/soket";
-import XummLogo from "../Images/XummLogo-new.png";
+import XummLogo from "../Images/XummLogo.png";
 import LegerLogo from "../Images/XRPLLogo.png";
 import setAuthToken from "../redux/actions/setHeaderToken";
 const WalletConnect = ({ open, setOpen }) => {
@@ -117,12 +117,12 @@ const WalletConnect = ({ open, setOpen }) => {
         ) : (
           <>
             <div className="hdr flex aic">
-              <div className="lbl">Select a token</div>
+              <div className="lbl"></div>
               <div className="ico flex aic jc pointer" onClick={e => setOpen(false)}>
                 <CrossIcon />
               </div>
             </div>
-            {/*<div className="desc">Select a token</div>*/}
+            <div className="desc headss">Select a Wallet</div>
             <div className="action flex flex-col">
               <div className="avil-wallet flex flex-col aic jc">
               <div class="field flex input-search"><input type="text" class="txt search" placeholder="Search name or paste address"  value="" /></div>
@@ -133,19 +133,20 @@ const WalletConnect = ({ open, setOpen }) => {
                   className="btn flex aic jc">
                   <img src={XummLogo} className="img flex aic" alt="xumm logo" style={{width:"40px", height: "40px", marginRight: "5px" }} />
                   <p className="lbl  aic">
-                    {loading ? "loading..." : "DBX"}
-                    <small>DBX Coin</small>
+                    {loading ? "loading..." : "XUMM App"}
+                    {/*<small>XUMM App</small>*/}
                     </p>
                 </div>
                 <div className="btn flex aic jc">
                   <img src={LegerLogo} className="img flex aic" alt="leger logo" style={{width:"40px", height: "40px", marginRight: "5px" }} />
-                  <p className="lbl  aic">XRP <small>XRP</small></p>
+                  {/*<p className="lbl  aic">XRP <small>XRP</small></p>*/}
+                  <p className="lbl  aic">Ledger Device</p>
                 </div>
               </div>
-              {/*<div className="new-wallet flex flex-col aic jc">
+              <div className="new-wallet flex flex-col aic jc">
                 <div className="qt-lbl">Don’t have a wallet?</div>
                 <div className="btn button">Create New Wallet</div>
-                </div>*/}
+                </div>
             </div>
           </>
         )}
@@ -155,3 +156,4 @@ const WalletConnect = ({ open, setOpen }) => {
 };
 
 export default WalletConnect;
+

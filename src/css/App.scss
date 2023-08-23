@@ -1229,7 +1229,7 @@ body {
       font-weight: 700;
       font-size: 54px;
       line-height: 64px;
-      color: #14192d;
+      color: #1f1f1f;
       @include media(">=phone", "<=480px") {
         text-align: center;
         font-size: 20px;
@@ -1301,17 +1301,17 @@ body {
                 }
               }
               &:last-child {
-                color: #14192d;
+                color: #1f1f1f;
                 background: none;
                 border: 1px solid #76b91b;
                 .txt {
                   flex: 1;
                   align-items: Start;
                   .lbl {
-                    color: #14192d;
+                    color: #1f1f1f;
                   }
                   .name {
-                    color: #14192d;
+                    color: #1f1f1f;
                   }
                 }
               }
@@ -1518,7 +1518,7 @@ body {
             font-size: 18px;
             line-height: 22px;
             font-feature-settings: "pnum" on, "lnum" on;
-            color: #14192d;
+            color: #1f1f1f;
           }
           .collector-sec {
             display: grid;
@@ -2418,7 +2418,7 @@ body {
 
           text-align: center;
 
-          color: #14192d;
+          color: #1f1f1f;
         }
         .user-token {
           .icon-token {
@@ -2654,7 +2654,7 @@ body {
 
           text-align: center;
 
-          color: #14192d;
+          color: #1f1f1f;
         }
         .user-token {
           .lbl {
@@ -3211,7 +3211,7 @@ body {
             font-weight: 500;
             font-size: 16px;
             line-height: 16px;
-            color: #14192d;
+            color: #1f1f1f;
             padding: 6px 0;
           }
           .fee {
@@ -3695,21 +3695,49 @@ body {
 }
 .color-toggle {
   background: #d5d2d2;
-  position: fixed;
+  position: absolute;
   z-index: 999;
   right: 20px;
-  bottom: 20px;
+  top: 26px;
   padding: 5px;
   border-radius: 40px;
-  box-shadow: 0px 3px 11px #0000004f;
+  box-shadow: 0px 3px 11px rgba(0, 0, 0, 0.3098039216);
+  cursor: pointer;
 }
-
+@media (max-width: 1200px){
+  .header-cmp .wrapWidth {
+    width: 90%;
+}
+}
+@media (max-width: 991px){
+.header-cmp .wrap .hdr-right {
+  display: none;
+}
+}
+@media (max-width: 768px){
+.header-cmp .wrapWidth {
+    width: 80%;
+}
+}
+@media (max-width: 575px){
+.header-cmp .wrapWidth {
+    width: 87%;
+    margin-left: 0;
+}
+}
 /*************Dark-Mode css**************/
-
+.dark-mode .color-toggle {
+  background: #5ebb46;
+}
+.dark-mode .color-toggle svg path {
+  fill: #fff;
+}
+.dark-mode  .wallet-connect .wrap .desc.headss{color:#fff;}
 .dark-mode {
-  background: #14192D;
+  background: #1f1f1f;
   color: #fff;
 }
+.dark-mode .Maintrading {background: #1f1f1f!important;}
 .dark-mode .tradetext,
 .dark-mode .collection-nft .wrap .meta .pg-tag,
 .dark-mode .single-nft .wrap .meta .pg-tag {
@@ -3731,8 +3759,27 @@ body {
 .dark-mode .exchangediv {
   border: 1px solid #6ac445;
 }
+.dark-mode .my-nfts-page .wrap .profile-tabs .tab-item .lbl {
+  color: #fff;
+}
+.nft-detail .wrap .container .right .exploded-box .collector-sec .item .nft-img .nft-name {
+  color: #000;
+}
+.dark-mode .nft-detail .wrap .container .right .exploded-box .collector-sec .item .nft-img .nft-name {
+  color: #fff;
+}
+.dark-mode .my-nfts-page .wrap .profile-page-nft .card {
+  background: #1f1f1f;
+  border: 1px solid rgba(128, 128, 128, 0.5215686275);
+}
+.dark-mode .my-nfts-page .wrap .profile-page-nft .card .icon svg path {
+  fill: #fff;
+}
+.dark-mode .my-nfts-page .wrap .report-grid .report-card ._numbs .numb-lbl {
+  color: #fff;
+}
 .dark-mode .Mainconduct {
-  background: #14192D;
+  background: #1f1f1f;
   /* color: #fff; */
 }
 .dark-mode  .conducttext {
@@ -3742,17 +3789,17 @@ body {
   color: #fff;
 }
 .dark-mode .Mainaccount {
-  background: #14192D;
+  background: #1f1f1f;
 }
 .dark-mode .Mainaccount .accinputdiv {
   background: #333539;
   border-color: #333539;
 }
 .dark-mode .footer-pg {
-  background: #14192D;
+  background: #1f1f1f;
 }
 .dark-mode .exchange-page {
-  background: #14192D;
+  background: #1f1f1f;
 }
 .dark-mode .exchange-page .wrap .content-block .left .le-top,
 .dark-mode .exchange-page .wrap .content-block .left .le-btm,
@@ -3765,9 +3812,9 @@ body {
 .dark-mode .exchange-page .wrap .content-block .center .connection-sec,
 .dark-mode .exchange-page .wrap .content-block .center .connection-sec .connects-tabs .tabs-item,
 .dark-mode .exchange-page .wrap .orders-sec {
-  background: #032b52;
+  background: #1f1f1f;
   color: #fff;
-  border: 1px solid #032b52;
+  border: 1px solid #80808085;
 }
 .dark-mode .exchange-page .wrap .content-block .left .le-top .token_tabs .item,
 .dark-mode .exchange-page .wrap .content-block .left .le-btm .sec-tag,
@@ -3790,8 +3837,11 @@ body {
 .dark-mode .explore-sec .wraps .p-hdr{
   color: #fff;
 }
+.dark-mode .swap-page .wrap .swap-block .swap-tab {
+    border-bottom: 2px solid #80808085;
+}
 .dark-mode .our-app {
-  background: #14192d;
+  background: #1f1f1f;
 }
 .dark-mode .exchange-page .wrap .content-block .left .le-top .token-table .table-block .tbl-row:hover,
 .dark-mode .exchange-page .wrap .content-block .left .le-btm .token-table .table-block .tbl-row:hover {
@@ -3811,22 +3861,25 @@ body {
   color: #000!important;
 }
 .dark-mode .wallet-connect {
-  background: #032b52;
+  background: #1f1f1f;
 }
 .dark-mode .wallet-connect .ico.flex.aic.jc.pointer svg path {
   stroke: #fff;
 }
 .dark-mode .swap-page {
-  background: #14192D;
+  background: #1f1f1f;
 }
 .dark-mode .swap-page .wrap .swap-block .swap-cards .card {
-  background: rgb(10 32 54);
-
+    background: rgb(31 31 31);
 }
 .dark-mode .swap-page .wrap .swap-block .swap-cards .form-control,
 .dark-mode .swap-page .wrap .swap-block .swap-cards .card .field .txt {
   background: #ffffff30;
   color: #fff;
+}
+.dark-mode .swap-page .wrap .swap-block .swap-cards .form-control * {
+    background: #494949;
+    color: #fff!important;
 }
 .dark-mode .filter-sec .left-search .search-box {
   background: #f3f4f861;
@@ -3839,6 +3892,9 @@ body {
 .dark-mode .live-autions .wraps .live-autions-nft .blk .card .nft-img {
   border: 1px solid #64c146;
   border-radius: 16px 16px 0 0;
+}
+.dark-mode .header-cmp {
+    background-color: #181717;
 }
 .dark-mode .explore-page .wraps .explore-page-nft .card .nft-img img,
 .dark-mode .live-autions .wraps .live-autions-nft .blk .card .nft-img img,
@@ -3857,7 +3913,7 @@ body {
 .dark-mode .explore-page .wraps .explore-page-nft .card .meta .nft-rating .r-num .lbl{color: #fff;}
 
 .dark-mode .explore-page .wraps .explore-page-nft .card {
-  background: #14192d;
+  background: #1f1f1f;
 }
 .dark-mode .explore-page .wraps .explore-page-nft .card .meta .nft-name .icon svg path,
 .dark-mode .hot-bids .wraps .hot-bids-nft .blk .card .meta .nft-name .icon svg path,
@@ -3868,15 +3924,15 @@ body {
 .dark-mode .hot-bids .wraps .hot-bids-nft .blk .card,
 .dark-mode .live-autions .wraps .live-autions-nft .blk .card,
 .dark-mode .explore-sec .wraps .explore-sec-nft .card {
-  background: #14192d;
+  background: #1f1f1f;
 }
-.dark-mode .explore-page .wraps .explore-page-nft .card .meta,
-.dark-mode .hot-bids .wraps .hot-bids-nft .blk .card .meta,
-.dark-mode .live-autions .wraps .live-autions-nft .blk .card .meta,
-.dark-mode .explore-sec .wraps .explore-sec-nft .card .meta {
-  border: 1px solid #fff;
-  border-top: 0;
-  border-radius: 0 0 16px 16px;
+.dark-mode .explore-page .wraps .explore-page-nft .card .meta, .dark-mode .hot-bids .wraps .hot-bids-nft .blk .card .meta, .dark-mode .live-autions .wraps .live-autions-nft .blk .card .meta, .dark-mode .explore-sec .wraps .explore-sec-nft .card .meta {
+    border: 1px solid #80808085;
+    border-top: 0;
+    border-radius: 0 0 16px 16px;
+}
+.dark-mode .explore-page .explore-filter .filter-tabs .tab-item {
+    border-bottom: 1px solid #80808085;
 }
 .dark-mode  .explore-page .wraps .explore-page-nft .card .meta .nft-rating,
 .dark-mode .hot-bids .wraps .hot-bids-nft .blk .card .meta .nft-rating,
@@ -3889,8 +3945,14 @@ body {
   margin-left: 4px;
 }
 .dark-mode .complete-checkout {
-  background: #032b52;
+  background: #1f1f1f;
 }
+.dark-mode .back-btn svg path {
+    stroke: #fff;
+}
+.dark-mode .create-nft-page .wrap .boxs .box .lbl{color:#fff;}
+.dark-mode .openordersmobile h1,
+.dark-mode .ant-checkbox + span{color:#fff;}
 .dark-mode .complete-checkout .wrap .checkout-hdr .icon svg, 
 .dark-mode .complete-checkout .wrap .checkout-hdr .icon svg path {
   fill: #fff;
@@ -3916,23 +3978,24 @@ body {
 }
 
 .dark-mode .buy-sell .wrap .buy-sell-card-block .card {
-  background: #0e2d4c;
+    background: #1f1f1f;
+    border: 1px solid #80808085;
 }
 .dark-mode .siderclasses,
 .dark-mode .siderheightwidth {
-  background-color: #032b52 !important;
-  border: solid #032b52 1px !important;
+  background-color: #1f1f1f !important;
+  border: solid #1f1f1f 1px !important;
 }
 .dark-mode .ant-menu-sub.ant-menu-inline{background-color: #103b64 ;}
 .dark-mode .ant-table {
-  background: #032b52;
+  background: #1f1f1f;
 }
 .dark-mode .ant-table-thead > tr > th,
 .dark-mode .nft-detail .wrap .container .right .history-box .blk .item .ri .lbl {
   color: #fff;
 }
 .dark-mode .tablestyling {
-  border: 1px solid #032b52!important;
+  border: 1px solid #1f1f1f!important;
 }
 .dark-mode  .ant-empty-normal,
 .dark-mode  .profile-page .wrap .profile-tabs .tab-item,
@@ -3947,10 +4010,10 @@ body {
   padding-bottom: 30px;
 }
 .dark-mode .siderheightwidth33 {
-  background-color: #14192d;
+  background-color: #1f1f1f;
 }
 .dark-mode .swapModal-card {
-  background: #032b52;
+  background: #1f1f1f;
 }
 .dark-mode .swapModal-card p svg path {
   stroke: #fff;
@@ -3986,8 +4049,6 @@ body {
     padding: 10px;
   }
 }
-
-
 @media screen and (max-width:991px){
   .ant-row .ant-col a {
     width: 100%;

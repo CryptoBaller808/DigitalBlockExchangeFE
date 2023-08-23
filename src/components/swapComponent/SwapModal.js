@@ -128,7 +128,7 @@ const SwapModal = (props) => {
           id="customized-dialog-title"
           onClose={handleClose}
         >
-          <h2>Select a Token</h2>
+          <h2>Select a Wallet</h2>
         </BootstrapDialogTitle>
         <DialogContent style={{ minHeight: "300px", overflowX: "hidden" }}>
           <input className="tokenInput" placeholder="Search or Paste Token" />

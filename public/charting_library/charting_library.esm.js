@@ -301,7 +301,7 @@ const s = class {
     this._innerAPI().exitFullscreen();
   }
   takeClientScreenshot(e) {
-    return this._innerAPI().takeClientScreenshot(e);
+    return this._innerAPI().takeClienthot(e);
   }
   navigationButtonsVisibility() {
     return this._innerWindow().getNavigationButtonsVisibility();

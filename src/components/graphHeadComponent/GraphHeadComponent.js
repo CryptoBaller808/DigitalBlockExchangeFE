@@ -71,9 +71,9 @@ const GraphHeadComponent = ({ currencyData2 }) => {
           </div>
         </div>
       </div>
-      <div className="icon cursor-pointer ml-3">
+      {/*<div className="icon cursor-pointer ml-3">
         <SunIcon />
-      </div>
+      </div>*/}
     </div>
   );
 };

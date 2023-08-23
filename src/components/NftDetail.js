@@ -28,7 +28,6 @@ const NftDetail = () => {
   const isWalletConnected = useSelector(state => state.authReducer.isWalletConnected);
   const navigate = useNavigate();
   console.log(signInData);
-
   // actual value 
   const findActualValue = (price, fee) => {
     if(price !== null){
@@ -214,8 +213,10 @@ const NftDetail = () => {
                   <div className="item flex flex-col">
                     <div className="lbl">Collection</div>
                     <div className="nft-img flex aic">
-                      <img src={data.item_collection?.profile_image} className="img" />
-                      <div className="nft-name">{data.item_collection?.name}</div>
+                      <a className="nft-img flex aic" href={`/nft-detail/${data.item_collection?.name}?id=${data.item_collection?.id}`}>
+                        <img src={data.item_collection?.profile_image} className="img" />
+                        <div className="nft-name">{data.item_collection?.name}</div>
+                      </a>
                     </div>
                   </div>
                   <div className="item flex flex-col">
