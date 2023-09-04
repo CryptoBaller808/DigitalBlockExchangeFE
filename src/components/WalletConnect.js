@@ -137,16 +137,16 @@ const WalletConnect = ({ open, setOpen }) => {
                     {/*<small>XUMM App</small>*/}
                     </p>
                 </div>
-                <div className="btn flex aic jc">
+                {/* <div className="btn flex aic jc">
                   <img src={LegerLogo} className="img flex aic" alt="leger logo" style={{width:"40px", height: "40px", marginRight: "5px" }} />
-                  {/*<p className="lbl  aic">XRP <small>XRP</small></p>*/}
+                  <p className="lbl  aic">XRP <small>XRP</small></p>
                   <p className="lbl  aic">Ledger Device</p>
-                </div>
+                </div> */}
               </div>
-              <div className="new-wallet flex flex-col aic jc">
+              {/* <div className="new-wallet flex flex-col aic jc">
                 <div className="qt-lbl">Don’t have a wallet?</div>
                 <div className="btn button">Create New Wallet</div>
-                </div>
+              </div> */}
             </div>
           </>
         )}

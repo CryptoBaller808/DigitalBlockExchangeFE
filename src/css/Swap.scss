@@ -105,6 +105,29 @@
               }
             }
           }
+          select{
+            &>option:first-child{
+              color:#a3a6af;
+            }
+          &.form-control{
+            font-size: 16px;
+              background: #ffffff;
+              border: 1px solid rgba(216, 219, 224, 0.5);
+              border-radius: 8px;
+              padding: 8px;
+              width: 100%;
+              border: 1px solid transparent;
+              @include anim;
+              &:focus {
+                border-color: #39b54a;
+                box-shadow:none;
+              }
+             
+              @include media(">=phone", "<=480px") {
+                margin-top: 20px;
+              }
+          }
+        }
         }
         .card-left {
           flex: 1;
@@ -158,6 +181,7 @@
           font-size: 18px;
           line-height: 34px;
           color: #ffffff;
+          margin-top:40px;
         }
       }
     }

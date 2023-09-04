@@ -392,7 +392,7 @@ const SingleNft = ({ }) => {
                 <Toggle setToggle={setis_unlockable_content} />
               </div>
                   </div>*/}
-            <div className="row flex aic">
+            {/* <div className="row flex aic">
               <div className="left flex flex-col">
                 <div className="lbl1">Explicit and sensitive content</div>
                 <div className="lbl2">Set this collection as explicit and sensitive content</div>
@@ -400,14 +400,14 @@ const SingleNft = ({ }) => {
               <div className="right flex aic">
                 <Toggle setToggle={setis_explicit_content} />
               </div>
-            </div>
-            <div className="row flex flex-col">
+            </div> */}
+            {/* <div className="row flex flex-col">
               <div className="r-lbl flex flex-col">
                 <div className="lbl-1">Supply</div>
                 <div className="lbl-2">The number of items that can be minted. ".00001 XRP"</div>
               </div>
               <input disabled type="text" className="txt cleanbtn w-1/2" placeholder="1" />
-            </div>
+            </div> */}
             {/* <div className="row flex flex-col">
               <div className="r-lbl flex flex-col">
                 <div className="lbl-1">Blockchain</div>
