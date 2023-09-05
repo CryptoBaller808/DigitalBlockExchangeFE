@@ -5,17 +5,13 @@ import { CrossIcon } from "../Icons";
 const Sidebar = ({ openSidebar, setOpenSidebar }) => {
   const navBarItems = [
     { lbl: "Home", icon: "./images/menuIcon0.png", slug: "/" },
-    { lbl: "Buy / Sell", icon: "./images/menuIcon1.svg", slug: "/buysell" },
+    //{ lbl: "Buy / Sell", icon: "./images/menuIcon1.svg", slug: "/buysell" },
     { lbl: "Exchange", icon: "./images/menuIcon2.svg", slug: "/exchange" },
     { lbl: "Swap", icon: "./images/menuIcon3.svg", slug: "/swap" },
     { lbl: "NFT", icon: "./images/menuIcon4.svg", slug: "/nft" },
-    {
-      lbl: "Orders",
-      icon: "./images/menuIcon5.svg",
-      slug: "/orders/openorders",
-    },
-    { lbl: "DBX Coin", icon: "./images/menuIcon6.svg", slug: "/dbx_coin" },
-    { lbl: "DBX Card", icon: "./images/menuIcon7.svg", slug: "/dbx_card" },
+    //{lbl: "Orders",icon: "./images/menuIcon5.svg",slug: "/orders/openorders",},
+    //{ lbl: "DBX Coin", icon: "./images/menuIcon6.svg", slug: "/dbx_coin" },
+    //{ lbl: "DBX Card", icon: "./images/menuIcon7.svg", slug: "/dbx_card" },
     {
       lbl: "Explore",
       icon: "./images/menuIcon2.svg",

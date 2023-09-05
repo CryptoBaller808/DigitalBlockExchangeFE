@@ -2681,6 +2681,7 @@ body {
       border: 1px solid #8f8f8f;
       border-radius: 12px;
       width: 70%;
+      display:none;
       @include media(">=phone", "<=480px") {
         grid-template-columns: repeat(2, 1fr);
         grid-gap: 0px;
@@ -2747,7 +2748,7 @@ body {
       }
     }
     .profile-tabs {
-      margin-top: 30px;
+      margin-top: 150px;
       // padding: 10px 0;
       // margin-bottom: 15px;
       border-bottom: 1px solid #eee;
@@ -4058,8 +4059,9 @@ body {
 
 @media screen and (max-width:575px){
 .home-p .home-sec {
-  min-height: 400px;
-  height: 400px;
+  min-height: 200px;
+  height: auto;
   background-size: contain!important;
+  background-position: top right !important;
 }
 }
