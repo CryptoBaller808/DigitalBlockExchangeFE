@@ -9,7 +9,7 @@ function HeartIcon() {
       fill="none"
       viewBox="0 0 35 35"
     >
-      <rect width="35" height="35" fill="#fff" rx="8"></rect>
+      <rect width="35" height="35" rx="8"></rect>
       <path
         stroke="#8F8F8F"
         strokeLinecap="round"

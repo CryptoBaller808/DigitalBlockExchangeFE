@@ -143,6 +143,7 @@
           height: 100%;
           @include media(">=phone", "<=480px") {
             width: 100%;
+            max-width:80%;
           }
         }
         .card-center {
@@ -182,6 +183,11 @@
           line-height: 34px;
           color: #ffffff;
           margin-top:40px;
+          @include media(">=phone", "<=480px") {
+            width: 100%;
+            max-width:80%;
+            margin:40px auto 0;
+          }
         }
       }
     }

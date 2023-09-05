@@ -21,8 +21,12 @@
 
 .compimg {
   width: 60rem !important;
+  filter: invert(1);
 }
-
+.dark-mode .compimg {
+  width: 60rem !important;
+  filter: invert(0);
+}
 .bittext {
   font-size: 1.5rem;
   color: #333539;
