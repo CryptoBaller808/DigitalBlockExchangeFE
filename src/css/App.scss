@@ -750,6 +750,7 @@ body {
                   font-weight: 300;
                   font-size: 15px;
                   color: #8f8f8f;
+                  height:20px;
                 }
                 .ico {
                   cursor: pointer;
@@ -3751,11 +3752,14 @@ body {
 .dark-mode .create-nft-page .wrap .meta .pg-tag {
   color: #fff;
 }
-.dark-mode  .mainexchangediv,
-.dark-mode .cryptodiv,
-.dark-mode .leveragediv,
-.dark-mode .aboutdiv {
-  background: #fff;
+// .dark-mode  .mainexchangediv,
+// .dark-mode .cryptodiv,
+// .dark-mode .leveragediv,
+// .dark-mode .aboutdiv {
+//   background: #fff;
+// }
+.dark-mode .exchangetext{
+  color:#fff;
 }
 .dark-mode .exchangediv {
   border: 1px solid #6ac445;

@@ -2,6 +2,8 @@ import { Col, Row } from "antd";
 import React from "react";
 import "./style.css";
 import Conductimg from "../../Images/Capture.PNG";
+import ComingSoon from "../../Images/coming-soon.png";
+
 
 function ConductComponent() {
   return (
@@ -13,7 +15,7 @@ function ConductComponent() {
         <Row justify="space-between" style={{ marginTop: "4rem" }}>
           <Col xs={24} md={10} lg={10}>
             <div className="compdiv">
-              <img className="compimg" src={Conductimg} alt="" />
+              <img className="compimg" src={ComingSoon} alt="" />
             </div>
           </Col>
           <Col xs={24} md={10} lg={10} className="bitcoll">

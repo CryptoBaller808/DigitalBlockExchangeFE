@@ -66,7 +66,7 @@ const Chart = ({ currencyData, isDarkMode }) => {
   useEffect(() => {
     tvWidget?.onChartReady?.(() => {
       if(isDarkMode){
-        tvWidget?.applyOverrides({"paneProperties.background": "#020024", "paneProperties.backgroundType": "solid", "paneProperties.vertGridProperties.color": "hotpink", "paneProperties.horzGridProperties.color": "hotpink", "scalesProperties.lineColor": "orange", "scalesProperties.textColor": "orange"});
+        tvWidget?.applyOverrides({"paneProperties.background": "#1f1f1f", "paneProperties.backgroundType": "solid", "paneProperties.vertGridProperties.color": "hotpink", "paneProperties.horzGridProperties.color": "hotpink", "scalesProperties.lineColor": "orange", "scalesProperties.textColor": "orange"});
       }
 
       tvWidget?.activeChart?.().setSymbol?.(`${selectedAsset}`);
