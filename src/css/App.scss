@@ -663,9 +663,9 @@ body {
 
 // Home Page
 .home-p {
-  height: 100%;
-  width: 100%;
-  .home-sec {
+/*  height: 100%;
+  width: 100%;*/
+  /*.home-sec {
     height: 100%;
     width: 100%;
     min-height: 730px;
@@ -678,7 +678,7 @@ body {
       background-image: url("../../public/images/header-nft-final-client.gif");
       background-position: center !important;
     }
-  }
+  }*/
   .container {
     min-height: 730px;
     .wrap {
@@ -4118,10 +4118,10 @@ body {
 }
 
 @media screen and (max-width:575px){
-.home-p .home-sec {
+/*.home-p .home-sec {
   min-height: 200px;
   height: auto;
   background-size: contain!important;
   background-position: top right !important;
-}
+}*/
 }
