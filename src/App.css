@@ -6,7 +6,11 @@
   background-position: center !important; */
 }
 
-.App {
+.Maincrypto666 > div {
+  width: 100%;
+}
+video.mainVideo {
+  width: 100%;
 }
 .avil-wallet p.lbl.flex.aic span {
   position: absolute;

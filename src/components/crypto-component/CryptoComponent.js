@@ -1,16 +1,19 @@
 import React from "react";
 import "./style.css";
 import Mainlogo from "../../Images/homepage-header-final.gif";
-// import Mainlogo2 from "../../Images/header-mobile-device1 1.png";
 
 function CryptoComponent() {
   return (
     <div className="Maincrypto666">
       <div>
-        <img className="mainimg" src={Mainlogo} alt="" />
-        {/* <div className="mainimg2">
-          <img src={Mainlogo2} alt="" />
-        </div> */}
+        {/* Your video element */}
+        <video className="mainVideo" autoPlay loop muted>
+          <source src="../../Images/homepage-header-final-new.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+
+        {/* Your image */}
+        {/*<img className="mainimg" src={Mainlogo} alt="" />*/}
       </div>
     </div>
   );
