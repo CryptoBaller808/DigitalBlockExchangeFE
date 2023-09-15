@@ -131,7 +131,7 @@ const Main = ({ mintHandler }) => {
     <div className="home-p flex flex-col">
       {tab == "home" ? <div className="home-sec flex jc">
       <video className="mainVideo" autoPlay loop muted>
-          <source src="../../Images/header-nft-final-client-new.mp4" type="video/mp4" />
+          <source src="../../images/header-nft-final-client-new.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div> : <></>}
