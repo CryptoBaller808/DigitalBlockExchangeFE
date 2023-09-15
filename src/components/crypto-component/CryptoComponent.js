@@ -8,7 +8,7 @@ function CryptoComponent() {
       <div>
         {/* Your video element */}
         <video className="mainVideo" autoPlay loop muted>
-          <source src="../../Images/homepage-header-final-new.mp4" type="video/mp4" />
+          <source src="../../images/homepage-header-final-new.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
 
