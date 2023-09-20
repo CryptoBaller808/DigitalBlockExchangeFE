@@ -129,7 +129,12 @@ const Main = ({ mintHandler }) => {
   ]);
   return (
     <div className="home-p flex flex-col">
-      {tab == "home" ? <div className="home-sec flex jc"></div> : <></>}
+      {tab == "home" ? <div className="home-sec flex jc">
+      <video className="mainVideo" autoPlay loop muted>
+          <source src="../../images/header-nft-final-client-new.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div> : <></>}
       <div className="container flex">
         <div className="wrapWidth wrap flex flex-col">
           <Filters setsearch={setsearch} />
