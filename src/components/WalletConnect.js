@@ -17,6 +17,7 @@ const WalletConnect = ({ open, setOpen }) => {
   const [loading, setloading] = useState();
   const [xumppres, setxumppres] = useState("");
   const QRCodeResponse = useSelector(state => state.QRCodeReducer.QRcode);
+  const [xummUrlMobile, setXummUrlMobile] = useState();
 
   const [qRCodeImage, setQRCodeImage] = useState(QRCodeResponse);
 
@@ -38,6 +39,13 @@ const WalletConnect = ({ open, setOpen }) => {
         setQRCodeImage(args);
       });
     }
+
+    socket.on("qr-app-response", args => {
+      console.log('qr app resp', args);
+      const decodedPayload = decodeURIComponent(args)
+      setXummUrlMobile(decodedPayload);
+      console.log("decoded payload",decodedPayload);
+    })
 
     socket.on("account-response", args => {
       console.log("account-responsee", args);
@@ -84,7 +92,7 @@ const WalletConnect = ({ open, setOpen }) => {
         });
         setOpen(false);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   return (
@@ -93,7 +101,7 @@ const WalletConnect = ({ open, setOpen }) => {
         {qRCodeImage ? (
           <>
             <div className="hdr flex aic">
-            <div className="lbl">Connect using XUMM</div>
+              <div className="lbl">Connect using XUMM</div>
               <div className="ico flex aic jc pointer" onClick={e => setOpen(false)}>
                 <CrossIcon />
               </div>
@@ -106,11 +114,20 @@ const WalletConnect = ({ open, setOpen }) => {
                   <p className="lbl flex aic">QR scanned?</p>
                 </div>
               </div>
-              <div className="new-wallet flex flex-col aic jc">
+              {/* <div className="new-wallet flex flex-col aic jc">
                 <div className="qt-lbl"></div>
                 <div onClick={Verifywallet} className="btn button">
-                QR scanned?
+                  QR scanned?
                 </div>
+              </div> */}
+              <div className="new-wallet flex flex-col aic jc">
+                <div className="qt-lbl"></div>
+                {/* <div onClick={Verifywallet} className="btn button">
+                  Qr scanned ?
+                </div> */}
+                <a href={`${xummUrlMobile}`} target="_blank" className="btn button">
+                  Open XUMM App
+                </a>
               </div>
             </div>
           </>
@@ -125,17 +142,17 @@ const WalletConnect = ({ open, setOpen }) => {
             <div className="desc headss">Select a Wallet</div>
             <div className="action flex flex-col">
               <div className="avil-wallet flex flex-col aic jc">
-              <div class="field flex input-search"><input type="text" class="txt search" placeholder="Search name or paste address"  value="" /></div>
+                <div class="field flex input-search"><input type="text" class="txt search" placeholder="Search name or paste address" value="" /></div>
                 <div
                   onClick={() => {
                     connectXumppwallet();
                   }}
                   className="btn flex aic jc">
-                  <img src={XummLogo} className="img flex aic" alt="xumm logo" style={{width:"40px", height: "40px", marginRight: "5px" }} />
+                  <img src={XummLogo} className="img flex aic" alt="xumm logo" style={{ width: "40px", height: "40px", marginRight: "5px" }} />
                   <p className="lbl  aic">
                     {loading ? "loading..." : "XUMM App"}
                     {/*<small>XUMM App</small>*/}
-                    </p>
+                  </p>
                 </div>
                 {/* <div className="btn flex aic jc">
                   <img src={LegerLogo} className="img flex aic" alt="leger logo" style={{width:"40px", height: "40px", marginRight: "5px" }} />

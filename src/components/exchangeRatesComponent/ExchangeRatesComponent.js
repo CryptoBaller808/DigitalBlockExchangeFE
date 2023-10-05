@@ -192,28 +192,28 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
         <div className="token-table flex">
           <div className="table-block flex flex-col w-full">
             <div className="tbl-row flex">
-              <div className="row-item">Pair</div>
-              <div className="row-item">Price</div>
-              <div className="row-item flex items-center justify-end">
+              <div className="row-item ps-2">Pair</div>
+              <div className="row-item text-center">Price</div>
+              {/* <div className="row-item flex items-center justify-end">
                 24h Chg
                 <spna className="ml-[2px]">
                   <ExchangeIcon />
                 </spna>
-              </div>
+              </div> */}
             </div>
             {loadingData ? (
               <Loader />
             ) : (
               currencyData.map((item, i) => (
                 <div className="tbl-row flex" key={i} onClick={() => handleRow(item)}>
-                  <div className="row-item flex items-center">
+                  <div className="row-item flex items-center ps-2">
                     <span className="name1">{item.title}</span>
                     {/* /<span className="name2">{tokenTabSelected}</span> */}
                   </div>
-                  <div className="row-item"> {parseFloat(item.price).toFixed(3)}</div>
-                  <div className={`row-item flex items-center justify-end ${item.stat < 0 ? "red" : "green"}`}>
+                  <div className="row-item text-center"> {parseFloat(item.price).toFixed(3)}</div>
+                  {/* <div className={`row-item flex items-center justify-end ${item.stat < 0 ? "red" : "green"}`}>
                     {parseFloat(item.stat).toFixed(3)}
-                  </div>
+                  </div> */}
                 </div>
               ))
             )}

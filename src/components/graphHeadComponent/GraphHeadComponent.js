@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { getTickersData } from "../../helper";
 import { SunIcon } from "../../Icons";
 const GraphHeadComponent = ({ currencyData2 }) => {
   const price = currencyData2?.info?.price;
   const title = currencyData2?.info?.title;
 
+  const [tickersData, setTickersData] = useState(null)
+  const [hourChange, setHourChange] = useState(0);
   const tempCurrency = title && title.split("/");
 
   const currentCurrency = tempCurrency?.length && tempCurrency[0];
@@ -22,6 +24,10 @@ const GraphHeadComponent = ({ currencyData2 }) => {
             if (res.data.success) {
               const apiResult = res.data.data;
               const data = Object.values(apiResult)[0];
+              console.log("api result",apiResult);
+              setTickersData(data);
+              let hrChange = (data?.high_price - data?.low_price) / 100;
+              console.log(hrChange);
             }
           })
           .catch(err => console.log("FROM SERVER CHART HEAD ERR", err));
@@ -53,21 +59,21 @@ const GraphHeadComponent = ({ currencyData2 }) => {
             <div className="lbl">Price</div>
             <div className="val">{price}</div>
           </div>
-          <div className="item flex items-center  justify-center flex-col">
+          {/* <div className="item flex items-center  justify-center flex-col">
             <div className="lbl">24h Chg</div>
-            <div className="val">-1%</div>
-          </div>
+            <div className="val">{Number(tickersData?.high_price - tickersData?.low_price)}</div>
+          </div> */}
           <div className="item flex items-center  justify-center flex-col">
             <div className="lbl">24h High</div>
-            <div className="val">0.76680</div>
+            <div className="val">{Number(tickersData?.high_price || 0).toFixed(4) || 0}</div>
           </div>
           <div className="item flex items-center  justify-center flex-col">
             <div className="lbl">24h Vol({currentCurrency})</div>
-            <div className="val">0.73660</div>
+            <div className="val">{Number(tickersData?.volume || 0)?.toFixed(4) || 0}</div>
           </div>
           <div className="item flex items-center  justify-center flex-col">
             <div className="lbl">24h Vol({baseCurrency})</div>
-            <div className="val">69,292,098.28</div>
+            <div className="val">{Number(tickersData?.inverted_volume || 0)?.toFixed(4) || 0}</div>
           </div>
         </div>
       </div>
