@@ -23,6 +23,9 @@ const Swap = () => {
   const [show, setShow] = useState(false);
   const [isTransaction, setIsTransaction] = useState(false);
   const [success, setSuccess] = useState("");
+  const [swapFromBalance, setSwapFromBalance] = useState({});
+  const [swapToBalance, setSwapToBalance] = useState({});
+  const [localExchangeRate, setLocalExchangeRate] = useState(0);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -35,6 +38,7 @@ const Swap = () => {
   ];
 
   const balance = useSelector(state => state.signInData?.balance);
+  // console.log("balance", balance);
   const isWalletConnected = useSelector(state => state.authReducer.isWalletConnected);
 
   const [swapFrom, setSwapFrom] = useState({ currency: "", issuer: "", id: -1, value: "" });
@@ -61,6 +65,7 @@ const Swap = () => {
   // handle swap
   const handleSwap = () => {
     setError("");
+    setLocalExchangeRate(0);
     if (balance) {
       const { account, userToken } = balance;
 
@@ -84,6 +89,7 @@ const Swap = () => {
       socket.emit("get-available-swap-path", item);
 
       socket.on("available-path", args => {
+        console.log(args);
         setAccountData(args.alternatives);
       });
 
@@ -91,6 +97,17 @@ const Swap = () => {
         setError(args);
         console.log(args);
       });
+
+      socket.emit('get-all-user-currencies', {...balance, accountInfo: balance.account});
+
+      socket.on('get-all-user-currencies-response', args => {
+        let accountCurrenciesItem = args.accountCurrencies[0];
+        let currencyListItem = args.currencyList[0];
+        setSwapToBalance(accountCurrenciesItem);
+        setSwapFromBalance(currencyListItem);
+      });
+      socket.on('get-all-user-currencies-error', args => console.log(args));
+
     }else {
       setError("Please connect Wallet for SWAP ");
     }
@@ -154,13 +171,16 @@ const Swap = () => {
   };
 
   useEffect(() => {
+
+
     const find = accountData?.map(data => {
       if (typeof data?.source_amount === "object") {
         // source_amount is an object
 
         if (data?.destination_amount?.currency === swapTo.currency && data?.source_amount?.currency === swapFrom.currency) {
           let localExchangeRate = getExchangeRate(data?.source_amount?.value, data?.destination_amount?.value);
-          let finalrate = localExchangeRate * swapFrom.value;
+          setLocalExchangeRate(localExchangeRate)
+          let finalrate = Number(localExchangeRate * swapFrom.value)?.toFixed(4);
           setSwapTo(swapTo => ({ ...swapTo, value: finalrate }));
           setExchangeRate(exchangeRate => ({
             ...exchangeRate,
@@ -177,7 +197,8 @@ const Swap = () => {
         if (data?.destination_amount?.currency === swapTo.currency) {
           let XRPValue = parseInt(data?.source_amount) / 1000000;
           let localExchangeRate = getExchangeRate(XRPValue, data?.destination_amount?.value);
-          let finalrate = localExchangeRate * swapFrom.value;
+          setLocalExchangeRate(localExchangeRate)
+          let finalrate = Number(localExchangeRate * swapFrom.value)?.toFixed(4);
           setSwapTo(swapTo => ({ ...swapTo, value: finalrate }));
           setExchangeRate(exchangeRate => ({
             ...exchangeRate,
@@ -252,6 +273,8 @@ const Swap = () => {
       });
     }
   };
+
+
 
   return (
     <div className="swap-page flex">
@@ -328,8 +351,8 @@ const Swap = () => {
                     {/*<div className="icon flex aic jc">
                       <TokenIcon />
                     </div>*/}
-                    <div className="about-token flex flex-col w-full">
-                      <div className="lbl">Swap From :</div>
+                    <div className="about-token flex flex-col w-full mb-4">
+                      <div className="lbl mb-2">Swap From :</div>
                       {/* <Select
                         defaultValue={'XRP'}
                         onChange={(e) => setSwapFrom({ ...swapFrom, currency: e.asset_code, issuer: e.asset_issuer })}
@@ -366,6 +389,10 @@ const Swap = () => {
                     maxLength="5"
                   />
                 </div>
+
+                <div className="balance-field">
+                    <p className="current-balance">Balance: {Number(swapFromBalance?.balance?.balance)?.toFixed(4)} {swapFromBalance?.currency}</p>
+                </div>
               </div>
             </div>
             <div className="card-center flex aic jc">
@@ -380,8 +407,8 @@ const Swap = () => {
                     {/*<div className="icon flex aic jc">
                       <img src="./images/DBXIcon.png" className="token-img" />
                     </div>*/}
-                    <div className="about-token flex flex-col w-full">
-                      <div className="lbl">Swap To:</div>
+                    <div className="about-token flex flex-col w-full mb-4">
+                      <div className="lbl mb-2">Swap To:</div>
                       {/* <Select
                         defaultValue={swapTo}
                         onChange={(e) => setSwapTo({ ...swapTo, currency: e.asset_code, issuer: e.asset_issuer })}
@@ -409,7 +436,20 @@ const Swap = () => {
                 <div className="field flex">
                   <input type="text" className="txt cleanbtn" value={swapTo.value} placeholder="Swap amount" disabled />
                 </div>
+                <div className="balance-field">
+                    <p className="current-balance">Balance: {Number(swapToBalance?.balance)?.toFixed(4)} {swapToBalance?.currency}</p>
+                </div>
               </div>
+            </div>
+          </div>
+
+          <div className="exchange-box-wrapper">
+            <div className="exchange-box">
+                  <h3>Exchange Rate</h3>
+                  <div className="exchange-box-currency">
+                    <p>1 {swapFromBalance?.currency} = {localExchangeRate?.toFixed(4)} {swapToBalance?.currency}</p>
+                    <ExchangeArrowIcon />
+                  </div>
             </div>
           </div>
           <div className="action">
