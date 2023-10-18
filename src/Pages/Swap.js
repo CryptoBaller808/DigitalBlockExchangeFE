@@ -92,7 +92,11 @@ const Swap = () => {
 
       socket.on("available-path", args => {
         console.log("availabkle path",args);
-        setAccountData(args.alternatives);
+        if(args.alternatives?.length === 0){
+          setError("XRP does not have any Swap value for the current pair, please try after sometime.")
+        }else {
+          setAccountData(args.alternatives);
+        }
       });
 
       socket.on("available-path-error", args => {
