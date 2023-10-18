@@ -66,6 +66,8 @@ const Swap = () => {
   const handleSwap = () => {
     setError("");
     setLocalExchangeRate(0);
+    setSwapFromBalance();
+    setSwapToBalance();
     if (balance) {
       const { account, userToken } = balance;
 
@@ -89,22 +91,24 @@ const Swap = () => {
       socket.emit("get-available-swap-path", item);
 
       socket.on("available-path", args => {
-        console.log(args);
+        console.log("availabkle path",args);
         setAccountData(args.alternatives);
       });
 
       socket.on("available-path-error", args => {
+        console.log("error", args);
         setError(args);
-        console.log(args);
       });
 
       socket.emit('get-all-user-currencies', {...balance, accountInfo: balance.account});
 
       socket.on('get-all-user-currencies-response', args => {
-        let accountCurrenciesItem = args.accountCurrencies[0];
+        console.log('get all user currency', args);
+        let accountCurrenciesItem = args.accountCurrencies?.find(item => swapTo.issuer === item?.issuer_address && swapTo.currency === item?.currency);
         let currencyListItem = args.currencyList[0];
-        setSwapToBalance(accountCurrenciesItem);
         setSwapFromBalance(currencyListItem);
+        setSwapToBalance(accountCurrenciesItem);
+
       });
       socket.on('get-all-user-currencies-error', args => console.log(args));
 
@@ -123,9 +127,9 @@ const Swap = () => {
   useEffect(() => {
     if (swapFrom.currency === swapTo.currency) {
       if (swapTo.currency === "XRP") {
-        setSwapFrom(swapFrom => ({ ...swapFrom, id: 1, currency: "USD", issuer: "rBZJzEisyXt2gvRWXLxHftFRkd1vJEpBQP" }));
+        setSwapFrom(swapFrom => ({ ...swapFrom, id: 4, currency: "USD", issuer: "rBZJzEisyXt2gvRWXLxHftFRkd1vJEpBQP" }));
       } else {
-        setSwapFrom(swapFrom => ({ ...swapFrom, id: 11, currency: "XRP", issuer: "" }));
+        setSwapFrom(swapFrom => ({ ...swapFrom, id: 2, currency: "XRP", issuer: "", value: 0 }));
       }
     }
   }, [swapFrom.currency, swapTo.currency]);
@@ -136,7 +140,7 @@ const Swap = () => {
       handleSwap();
     }
     return handleCleanState();
-  }, [swapTo.currency, swapFrom.currency, swapFrom.value]);
+  }, [swapTo.issuer, swapFrom.currency, swapFrom.value]);
 
   // handleSetSwap
   const handleSetSwapTo = e => {
@@ -274,6 +278,15 @@ const Swap = () => {
     }
   };
 
+  useEffect(() => {
+    console.log("swapfrom", swapFrom);
+  }, [swapFrom])
+
+  useEffect(() => {
+    if(currencies?.length){
+      setSwapTo(swapTo => ({ ...swapTo, id: 5, issuer: "rBZJzEisyXt2gvRWXLxHftFRkd1vJEpBQP", currency: 'USD'}))
+    }
+  }, [currencies])
 
 
   return (
@@ -365,11 +378,11 @@ const Swap = () => {
                         ref={swapFromRef}
                       /> */}
                       <select className="form-control" value={swapFrom.id} onChange={handleSetSwapFrom}>
-                        <option value="-1">Select</option>
+                        <option value="-1" selected>Select</option>
                         {currencies &&
                           currencies.map(c => {
                             return (
-                              <option value={c.id} issuer={c.asset_issuer} key={c.id}>
+                              <option value={c.id} issuer={c.asset_issuer} key={c.id} >
                                 {c.asset_code}
                               </option>
                             );
@@ -391,7 +404,7 @@ const Swap = () => {
                 </div>
 
                 <div className="balance-field">
-                    <p className="current-balance">Balance: {Number(swapFromBalance?.balance?.balance)?.toFixed(4)} {swapFromBalance?.currency}</p>
+                    <p className="current-balance">Balance: {Number(swapFromBalance?.balance?.balance || 0)?.toFixed(4)} {swapFromBalance?.currency}</p>
                 </div>
               </div>
             </div>
@@ -420,7 +433,7 @@ const Swap = () => {
                         disabled={!currencies ? true : false}
                       /> */}
                       <select className="form-control" value={swapTo.id} onChange={handleSetSwapTo} ref={swapToRef}>
-                        <option value="-1">Select</option>
+                        <option value="-1" selected>Select</option>
                         {currencies &&
                           currencies.map(c => {
                             return (
@@ -437,7 +450,7 @@ const Swap = () => {
                   <input type="text" className="txt cleanbtn" value={swapTo.value} placeholder="Swap amount" disabled />
                 </div>
                 <div className="balance-field">
-                    <p className="current-balance">Balance: {Number(swapToBalance?.balance)?.toFixed(4)} {swapToBalance?.currency}</p>
+                    <p className="current-balance">Balance: {Number(swapToBalance?.balance || 0)?.toFixed(4)} {swapToBalance?.currency}</p>
                 </div>
               </div>
             </div>
