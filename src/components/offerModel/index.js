@@ -72,6 +72,9 @@ const OfferModel = ({
       currPrice: price,
     };
 
+    console.log("buy offer",buyOfferInfo)
+    console.log("buy offer",sellOfferInfo)
+
     if (offerType === "buy") {
       socket.emit("xumm-payment-request", buyOfferInfo);
     } else {

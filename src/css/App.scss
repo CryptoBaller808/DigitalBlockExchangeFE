@@ -3551,8 +3551,9 @@ body {
 
 
 // swap modal 
+// swap modal 
 .swapTransModal {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -3569,7 +3570,12 @@ body {
   background-color: #fff;
   border-radius: 8px;
   padding: 15px 20px;
+
+  @include media(">=phone", "<=480px") {
+    width: 95%;
+  }
 }
+
 
 // spinner
 .loader {

@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const mainNetURL = "https://api.sologenic.org";
+const mainNetURL = process.env.REACT_APP_SOLOGENIC_API_URL;
 
-const testNetURL = "https://api-testnet.sologenic.org";
+const testNetURL = process.env.REACT_APP_SOLOGENIC_TEST_API_URL;
 
 // Tickers
 export const getPrice = (data) => {

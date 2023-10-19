@@ -8,19 +8,21 @@ import * as accountOfferAction from "../../redux/accountOffers/action";
 import * as historyOfferAction from "../../redux/historyOffers/action";
 import { SocketContext } from "../../context/soket";
 import { Table, Space, Button } from "antd";
-import Loader from "../Loader";
+import Loader from "../loader/Loader";
 import {
   getFullAccountOffers,
   getOrderHistory,
   getTickersData,
 } from "../../helper";
-import currency from "../../helper/currencies";
 import getExchangeRate from "../../helper/api/exchangeRate";
+import { toast } from "react-toastify";
+import ExchangeDeleteModal from "../loader/ExchangeDeleteModal";
 
 const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
   const [orderTab, setOrderTab] = useState("open");
   const [accLoading, setAccLoading] = useState(true);
   const [hisLoading, setHisLoading] = useState(true);
+  const [isLoading, setisLoading] = useState(false);
 
   //new update
   const balanceData = useSelector((state) => state.signInData?.balance);
@@ -100,11 +102,14 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
           if (res.data.success) {
             // setAccLoading(true);
             let offerResult = res.data.data;
-            // console.log("offerResult", offerResult);
+
             // offerResult = _.orderBy(offerResult, ["seq"], ["desc"]);
             dispatch(accountOfferAction.setAccountOffersProcessing());
             dispatch(accountOfferAction.setAccountOffers(offerResult));
+
             dispatch(accountOfferAction.setStopAccountOffersProcessing());
+          } else {
+            dispatch(accountOfferAction.setAccountOffers([]));
           }
         })
         .catch((err) => console.log("err", err));
@@ -202,16 +207,66 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
     },
   ];
 
+  const filteredColumns = columns?.filter(col => col.title !== "Action")
+
   const onDelete = (val, e) => {
+    console.log('inside delete')
     e.preventDefault();
     // const data = bookOffer.filter(item => item.key !== key);
     const accInfo = {
-      account: "",
-      userToken: "",
+      account: balanceData?.account,
+      userToken: balanceData?.userToken,
+      tx_id: val?.txId
     };
+
+    setisLoading(true);
     // socket.on("payment-response", args => {
     // })
-    // socket.emit("xumm-payment-request", accInfo);
+    socket.emit("delete-offers", accInfo);
+
+
+    socket.on('delete-offers-response', args => {
+      setisLoading(false);
+      if (args?.success === false) {
+        toast.error(args?.message);
+      } else if (args?.success === true) {
+        toast.success(args?.message);
+
+        // get account offer 
+        getFullAccountOffers(userAccount)
+          .then((res) => {
+            if (res.data.success) {
+              // setAccLoading(true);
+              let offerResult = res?.data?.data;
+              // offerResult = _.orderBy(offerResult, ["seq"], ["desc"]);
+              dispatch(accountOfferAction.setAccountOffersProcessing())
+              dispatch(accountOfferAction.setAccountOffers(offerResult));
+
+              dispatch(accountOfferAction.setStopAccountOffersProcessing());
+            } else {
+              dispatch(accountOfferAction.setAccountOffers([]));
+            }
+          })
+          .catch((err) => console.log("err", err));
+
+        //get offer history
+        getOrderHistory(userAccount)
+          .then((res) => {
+            // console.log("getOrderHistory res----------->", res);
+
+            if (res.data.success) {
+              // setAccLoading(true);
+              // console.log("-------------HISTORY OFF------------------");
+
+              dispatch(historyOfferAction.setHistoryOffersProcessing());
+              dispatch(historyOfferAction.setHistoryOffers(res?.data?.data || []));
+              dispatch(historyOfferAction.setStopHistoryOffersProcessing());
+            }
+          })
+          .catch((err) => console.log("err", err));
+      }
+
+    })
   };
 
   const dataSource = accountOfferData.map((obj, indx) => {
@@ -315,30 +370,50 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
     fetchData();
   }, [currencyData2]);
   return (
-    <div className="orders-sec flex flex-col">
-      <div className="tabs-sec flex aic">
-        <div
-          className={`i-tab ${orderTab === "open" ? "active" : ""}`}
-          onClick={(e) => setOrderTab("open")}
-        >
-          Open orders
+    <>
+      {isLoading && <ExchangeDeleteModal />}
+      <div className="orders-sec flex flex-col">
+        <div className="tabs-sec flex aic">
+          <div
+            className={`i-tab ${orderTab === "open" ? "active" : ""}`}
+            onClick={(e) => setOrderTab("open")}
+          >
+            Open orders
+          </div>
+          <div
+            className={`i-tab ${orderTab === "history" ? "active" : ""}`}
+            onClick={(e) => setOrderTab("history")}
+          >
+            24h Order History (Last 50)
+          </div>
+
         </div>
-        <div
-          className={`i-tab ${orderTab === "history" ? "active" : ""}`}
-          onClick={(e) => setOrderTab("history")}
-        >
-          24h Order History (Last 50)
-        </div>
-      </div>
-      <div className="table-block flex overflow-scroll">
-        <div className="tbl-sec flex flex-col">
-          <div className="tbl-row flex">
-            {columns.map((obj) => (
-              <div className="tbl-col" key={obj.key}>
-                {obj.title}
-              </div>
-            ))}
-            {/* <div className="tbl-col">Date</div>
+        <div className="table-block flex overflow-scroll">
+          <div className="tbl-sec flex flex-col">
+            <div className="tbl-row flex">
+
+              {orderTab === 'open' ?
+                <>
+                  {columns.map((obj) => {
+
+                    return (
+                      <div className="tbl-col" key={obj.key}>
+                        {obj.title}
+                      </div>
+                    )
+
+                  })}
+                </> : <>
+                  {filteredColumns?.map((obj) => {
+                    return (
+                      <div className="tbl-col" key={obj.key}>
+                        {obj.title}
+                      </div>
+                    )
+                  })}
+                </>
+              }
+              {/* <div className="tbl-col">Date</div>
             <div className="tbl-col">Pair</div>
             <div className="tbl-col">Type</div>
             <div className="tbl-col">Side</div>
@@ -349,21 +424,66 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
             <div className="tbl-col">Total</div>
             <div className="tbl-col">Trigger rule</div>
             <div className="tbl-col">Action</div> */}
-          </div>
-          {/* {accLoading && <Loader />} */}
-          {isWalletConnected ? (
-            orderTab === "open" ? (
-              !accLoading ? (
-                dataSource.length > 0 ? (
-                  dataSource.map((item, index) => (
+            </div>
+            {/* {accLoading && <Loader />} */}
+            {isWalletConnected ? (
+              orderTab === "open" ? (
+                !accLoading ? (
+                  dataSource.length > 0 ? (
+                    dataSource.map((item, index) => {
+
+                      let total = (Number(item?.price) * Number(item?.amount)).toFixed(4);
+                      return (
+                        <div className="tbl-row flex" key={index}>
+                          <div className="tbl-col">{item.date}</div>
+                          <div className="tbl-col">{item.pair}</div>
+                          <div className="tbl-col">{item.offerType}</div>
+                          <div
+                            className={`tbl-col ${item.side == "Buy" ? "green" : "red"
+                              }`}
+                          >
+                            {item.side}
+                          </div>
+
+                          <div className="tbl-col">{item.price}</div>
+                          <div className="tbl-col">{item?.amount}</div>
+                          <div className="tbl-col">{total}</div>
+                          {/* <div className="tbl-col">{item.filled2}</div>
+                      <div className="tbl-col">{item.total}</div>
+                      <div className="tbl-col">{item.rule}</div> */}
+                          {/* class of below : ${
+                  item.action == "Cancel" ? "blue" : item.action == "Cancelled" ? "red" : item.history.status == "Filled" ? "green" : ""
+                } */}
+                          <div
+                            onClick={(e) => onDelete(item.action, e)}
+                            className={`tbl-col cursor-pointer red`}
+                          >
+                            Delete
+                            {/* {orderTab === "history" ? <> {item.history.status}</> : <>{item.action}</>} */}
+                          </div>
+                        </div>
+                      )
+                    })
+                  ) : (
+                    <>
+                      <div className="flex items-center justify-center no-result">
+                        No result found
+                      </div>
+                    </>
+                  )
+                ) : (
+                  <Loader />
+                )
+              ) : !hisLoading ? (
+                dataSourceHistory.length > 0 ? (
+                  dataSourceHistory.map((item, index) => (
                     <div className="tbl-row flex" key={index}>
                       <div className="tbl-col">{item.date}</div>
                       <div className="tbl-col">{item.pair}</div>
                       <div className="tbl-col">{item.offerType}</div>
                       <div
-                        className={`tbl-col ${
-                          item.side == "Buy" ? "green" : "red"
-                        }`}
+                        className={`tbl-col ${item.side == "Buy" ? "green" : "red"
+                          }`}
                       >
                         {item.side}
                       </div>
@@ -377,13 +497,13 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
                       {/* class of below : ${
                   item.action == "Cancel" ? "blue" : item.action == "Cancelled" ? "red" : item.history.status == "Filled" ? "green" : ""
                 } */}
-                      <div
-                        onClick={(e) => onDelete(item.action, e)}
+                      {/* <div
+                        onClick={(e) => onDelete(item, e)}
                         className={`tbl-col cursor-pointer red`}
                       >
                         Delete
-                        {/* {orderTab === "history" ? <> {item.history.status}</> : <>{item.action}</>} */}
-                      </div>
+                        {/* {orderTab === "history" ? <> {item.history.status}</> : <>{item.action}</>} 
+                      </div> */}
                     </div>
                   ))
                 ) : (
@@ -396,59 +516,17 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
               ) : (
                 <Loader />
               )
-            ) : !hisLoading ? (
-              dataSourceHistory.length > 0 ? (
-                dataSourceHistory.map((item, index) => (
-                  <div className="tbl-row flex" key={index}>
-                    <div className="tbl-col">{item.date}</div>
-                    <div className="tbl-col">{item.pair}</div>
-                    <div className="tbl-col">{item.offerType}</div>
-                    <div
-                      className={`tbl-col ${
-                        item.side == "Buy" ? "green" : "red"
-                      }`}
-                    >
-                      {item.side}
-                    </div>
-
-                    <div className="tbl-col">{item.amount}</div>
-                    <div className="tbl-col">{item.price}</div>
-                    <div className="tbl-col">{item.total}</div>
-                    {/* <div className="tbl-col">{item.filled2}</div>
-                      <div className="tbl-col">{item.total}</div>
-                      <div className="tbl-col">{item.rule}</div> */}
-                    {/* class of below : ${
-                  item.action == "Cancel" ? "blue" : item.action == "Cancelled" ? "red" : item.history.status == "Filled" ? "green" : ""
-                } */}
-                    <div
-                      onClick={(e) => onDelete(item, e)}
-                      className={`tbl-col cursor-pointer red`}
-                    >
-                      Delete
-                      {/* {orderTab === "history" ? <> {item.history.status}</> : <>{item.action}</>} */}
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <>
-                  <div className="flex items-center justify-center no-result">
-                    No result found
-                  </div>
-                </>
-              )
             ) : (
-              <Loader />
-            )
-          ) : (
-            <>
-              <div className="flex items-center justify-center no-result">
-                connect wallet
-              </div>
-            </>
-          )}
+              <>
+                <div className="flex items-center justify-center no-result">
+                  connect wallet
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

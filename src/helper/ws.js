@@ -1,7 +1,7 @@
 export const getAccountOffers = account => {
   return new Promise((resolve, reject) => {
     try {
-      const ws = new WebSocket("wss://s.altnet.rippletest.net:51233");
+      const ws = new WebSocket(process.env.REACT_APP_XRP_TESTNET);
 
       const accountOffers = {
         id: 2,
@@ -32,7 +32,7 @@ export const getAccountOffers = account => {
 export const getBookOffers = (data, userAccount) => {
   return new Promise((resolve, reject) => {
     try {
-      const ws = new WebSocket("wss://s.altnet.rippletest.net:51233");
+      const ws = new WebSocket(process.env.REACT_APP_XRP_TESTNET);
 
       const getVal = (issuerVal, curVal) => {
         if (curVal === "XRP") {
@@ -93,7 +93,7 @@ export const getBookOffers = (data, userAccount) => {
 export const getUserCurrencies = account => {
   return new Promise((resolve, reject) => {
     try {
-      const ws = new WebSocket("wss://s.altnet.rippletest.net:51233");
+      const ws = new WebSocket(process.env.REACT_APP_XRP_TESTNET);
 
       const submitData = {
         id: 2,
@@ -125,7 +125,7 @@ export const getUserCurrencies = account => {
 // export const getHistoryOffers = account => {
 //   return new Promise((resolve, reject) => {
 //     try {
-//       const ws = new WebSocket("wss://s.altnet.rippletest.net:51233");
+//       const ws = new WebSocket(process.env.REACT_APP_XRP_TESTNET);
 
 //       const historyOffers = {
 //         id: 2,
