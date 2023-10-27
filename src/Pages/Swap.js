@@ -131,7 +131,7 @@ const Swap = () => {
   useEffect(() => {
     if (swapFrom.currency === swapTo.currency) {
       if (swapTo.currency === "XRP") {
-        setSwapFrom(swapFrom => ({ ...swapFrom, id: 4, currency: "USD", issuer: "rBZJzEisyXt2gvRWXLxHftFRkd1vJEpBQP" }));
+        setSwapFrom(swapFrom => ({ ...swapFrom, id: 15, currency: "USD", issuer: "" }));
       } else {
         setSwapFrom(swapFrom => ({ ...swapFrom, id: 2, currency: "XRP", issuer: "", value: 0 }));
       }
