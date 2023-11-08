@@ -102,7 +102,7 @@ const Swap = () => {
       socket.on("available-path-error", args => {
         console.log("error", args);
         let error = args;
-        
+
         if(typeof error === "string"){
           setError(args);
         }else if(typeof error === "object"){
@@ -110,17 +110,17 @@ const Swap = () => {
         }
       });
 
-      // socket.emit('get-all-user-currencies', {...balance, accountInfo: balance.account});
+      socket.emit('get-all-user-currencies', {...balance, accountInfo: balance.account});
 
-      // socket.on('get-all-user-currencies-response', args => {
-      //   console.log('get all user currency', args);
-      //   let accountCurrenciesItem = args.accountCurrencies?.find(item => swapTo.issuer === item?.issuer_address && swapTo.currency === item?.currency);
-      //   let currencyListItem = args.currencyList[0];
-      //   setSwapFromBalance(currencyListItem);
-      //   setSwapToBalance(accountCurrenciesItem);
+      socket.on('get-all-user-currencies-response', args => {
+        console.log('get all user currency', args);
+        let accountCurrenciesItem = args.accountCurrencies?.find(item => swapTo.issuer === item?.issuer_address && swapTo.currency === item?.currency);
+        let currencyListItem = args.currencyList[0];
+        setSwapFromBalance(currencyListItem);
+        setSwapToBalance(accountCurrenciesItem);
 
-      // });
-      // socket.on('get-all-user-currencies-error', args => console.log(args));
+      });
+      socket.on('get-all-user-currencies-error', args => console.log(args));
 
     }else {
       setError("Please connect Wallet for SWAP ");
