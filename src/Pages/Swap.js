@@ -101,7 +101,13 @@ const Swap = () => {
 
       socket.on("available-path-error", args => {
         console.log("error", args);
-        setError(args);
+        let error = args;
+
+        if(typeof error === "string"){
+          setError(args);
+        }else if(typeof error === "object"){
+          setError("XRP Node is facing some issue, please check after sometime");
+        }
       });
 
       socket.emit('get-all-user-currencies', {...balance, accountInfo: balance.account});
@@ -346,7 +352,7 @@ const Swap = () => {
         </ReactModal.Footer>
       </ReactModal>
       <div className="wrap wrapWidth flex aic flex-col">
-        {error.length !== 0 && (
+        {error !== "" && (
           <Alert variant="danger" onClose={() => setError("")} dismissible>
             <p>{error}</p>
           </Alert>
