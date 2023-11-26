@@ -13,7 +13,6 @@ import moment from "moment";
 const dateFormat = "YYYY/MM/DD";
 
 const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal }) => {
-
   const [tokenTabSelected, setTokenTabSelected] = useState("XRP");
   const [currencyData, setCurrencyData] = useState([]);
   const [rowData, setRowData] = useState(null);
@@ -160,8 +159,6 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
   const fixed4 = number => {
     return number?.toFixed(4);
   };
-  // console.log("currencyData", currencyData);
-  // console.log("dataSource", dataSource);
   return (
     <div className="left flex flex-col">
       {/* Left price bar start */}
@@ -173,6 +170,9 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
           <input type="text" className="txt cleanbtn w-full" placeholder="Search" />
         </div>
         <div className="token_tabs flex">
+          {/* <div className={`item ${tokenTabSelected === "DBX" ? "active" : ""}`} onClick={e => setTokenTabSelected("DBX")}>
+            DBX
+          </div> */}
           <div
             className={`item ${tokenTabSelected === "XRP" ? "active" : ""}`}
             onClick={e => {
@@ -222,7 +222,7 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
                     {parseFloat(item.stat).toFixed(3)}
                   </div> */}
                   </div>
-                )
+                );
               })
             )}
           </div>

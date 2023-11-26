@@ -9,8 +9,7 @@ function TradingComponent() {
       <div>
         <h3 className="tradetext">One-Stop Trading Platfrom</h3>
         <h4 className="tradetext1">
-          Digital Block Exchange uses blockchain and new technologies to allow
-          all users
+          Digital Block Exchange uses blockchain and new technologies to allow all users
           <br /> to access fair financial services
         </h4>
       </div>

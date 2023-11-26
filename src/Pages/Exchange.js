@@ -13,7 +13,7 @@ import AccountOffersTable from "../components/accountOfferTable/AccountOffersTab
 import BookOffersTable from "../components/bookOfferTable/BookOffersTable";
 import Chart from "../components/charts";
 
-const Exchange = ({isDarkMode}) => {
+const Exchange = ({ isDarkMode }) => {
   const [tokenTabSelected, setTokenTabSelected] = useState("XRP");
 
   //from our client code
@@ -112,6 +112,12 @@ const Exchange = ({isDarkMode}) => {
           {/* BOTTOM TABLE START */}
           <AccountOffersTable currencyData2={currencyData} dropVal={dropVal} setDropVal={setDropVal} />
           {/* BOTTOM TABLE END */}
+
+          <div className=" font-normal text-lg text-black text-center">
+            Digital Block Exchanges uses the charting solution provided by TradingView, a platform for traders and investors with versatile
+            analytical tools. It lets you track particular symbols, e.g. XRP USD, as well as dive into a more advanced market analysis with
+            sophisticated data like crypto market cap.
+          </div>
         </div>
       </div>
       {/* </SocketContext.Provider> */}

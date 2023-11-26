@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import { TelegramIcon, TwitterIcon } from "../Icons";
 import Logo from "../assets/Logo-f.svg";
 import LogoHorizontal from "../assets/DBXhorizontal-logo.svg";
 const Footer = () => {
-
   return (
     <div className="footer-pg flex">
       <div className="wrapWidth wrap flex aic">
@@ -34,33 +33,33 @@ const Footer = () => {
             White Paper
           </a>
 
-          {/*<a href="/" className="lbl">
-            Tokenomics
-          </a>
-        </div>*/}
+            {/*<a href="/" className="lbl">
+              Tokenomics
+            </a>
+          </div>*/}
           {/* <div className="items flex flex-col">
-          <div className="tag">Legal</div>
-          <a href="/" className="lbl">
-            Privacy Policy
-          </a>
-          <a href="/" className="lbl">
-            Terms of Service{" "}
-          </a>
-        </div> */}
+            <div className="tag">Legal</div>
+            <a href="/" className="lbl">
+              Privacy Policy
+            </a>
+            <a href="/" className="lbl">
+              Terms of Service{" "}
+            </a>
+          </div> */}
           {/*<div className="items flex flex-col">
-          <div className="tag">Trading</div>
-          <a href="/" className="lbl">
-            Fees
-          </a>
-        </div>*/}
+            <div className="tag">Trading</div>
+            <a href="/" className="lbl">
+              Fees
+            </a>
+          </div>*/}
           <div className="items flex flex-col gap-4">
             <div className="tag">Contact Us</div>
             {/* <a href="/" className="lbl">
-            Submit a request
-          </a>
-          <a href="/" className="lbl">
-            Locate a Lost Deposit
-          </a>*/}
+              Submit a request
+            </a>
+            <a href="/" className="lbl">
+              Locate a Lost Deposit
+            </a>*/}
             <Link to="/listing-application" className="lbl">
               Listing Application
             </Link>
