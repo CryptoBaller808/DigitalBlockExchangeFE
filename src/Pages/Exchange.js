@@ -113,10 +113,16 @@ const Exchange = ({ isDarkMode }) => {
           <AccountOffersTable currencyData2={currencyData} dropVal={dropVal} setDropVal={setDropVal} />
           {/* BOTTOM TABLE END */}
 
-          <div className=" font-normal text-lg text-black text-center">
-            Digital Block Exchanges uses the charting solution provided by TradingView, a platform for traders and investors with versatile
-            analytical tools. It lets you track particular symbols, e.g. XRP USD, as well as dive into a more advanced market analysis with
-            sophisticated data like crypto market cap.
+          <div className="font-normal text-black text-center text-base">
+            Digital Block Exchanges uses the charting solution provided by{" "}
+            <a href="https://www.tradingview.com/" target="_blank" className=" underline text-black">
+              TradingView
+            </a>
+            , a platform for traders and investors with versatile analytical tools. It lets you track particular symbols,{" "}
+            <a href="https://www.tradingview.com/symbols/XRPUSD/" target="_blank" className=" underline text-black">
+              e.g. XRP USD,
+            </a>{" "}
+            as well as dive into a more advanced market analysis with sophisticated data like crypto market cap.
           </div>
         </div>
       </div>
