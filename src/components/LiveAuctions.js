@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Slider from "react-slick";
+
 import { HorzontalMenuIcon, FireIcon } from "../Icons";
 import axios from "axios";
 import Modal from "./Modal";
@@ -23,12 +23,10 @@ const LiveAuctions = () => {
   //const [hotbids,sethotbids] = useState([])
   const getAuctionItemsOnSale = async () => {
     try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/sale/getAuctionItemsOnSale`
-      );
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/sale/getAuctionItemsOnSale`);
       console.log("getAuctionItemsOnSale_res", res);
       if (res?.data) {
-        setNumbs(res.data?.rows);
+        setNumbs(res?.data?.rows);
       }
     } catch (error) {
       console.log("error", error);
@@ -41,41 +39,10 @@ const LiveAuctions = () => {
   useEffect(() => {
     getAuctionItemsOnSale();
   }, []);
-  var settings = {
-    dots: false,
-    infinite: true,
-    autoplay: false,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 2,
-        },
-      },
-      {
-        breakpoint: 568,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
+
   const [numbs, setNumbs] = useState("");
   const [selecteditem, setselecteditem] = useState("");
 
-  console.log("selecteditem", selecteditem);
   const Cardinfo = ({ index, item }) => {
     const [time, settime] = useState([]);
     function getRemaining(date, type) {
@@ -90,10 +57,10 @@ const LiveAuctions = () => {
     useEffect(() => {
       setInterval(() => {
         settime(
-          `${getRemaining(item.auction_end_date, "days")}:${getRemaining(
+          `${getRemaining(item.auction_end_date, "days")}:${getRemaining(item.auction_end_date, "hours")}:${getRemaining(
             item.auction_end_date,
-            "hours"
-          )}:${getRemaining(item.auction_end_date, "seconds")}`
+            "seconds",
+          )}`,
         );
         //:${getRemaining(item.expire,'miliseconds')}
       }, 1000);
@@ -102,7 +69,7 @@ const LiveAuctions = () => {
       <div key={index}>
         <div className="card flex flex-col">
           <div className="nft-img rel flex jc ">
-          <Link to={`/nft-detail?id=${item?.item_detail?.id}`} className="nft-img">
+            <Link to={`/nft-detail?id=${item?.item_detail?.id}`} className="nft-img">
               <img src={item?.item_detail?.image_uri} className="img" />
             </Link>
             <div className="time-box abs flex aic jc">
@@ -124,18 +91,15 @@ const LiveAuctions = () => {
                 <div className="lbl">Top Bid: </div>
               </div>
               <div className="r-like flex aic">
-                <div className="lbl">
-                  {item.top_bid ? `${item.top_bid} XRP` : "0.00 XRP"}
-                </div>
+                <div className="lbl">{item.top_bid ? `${item.top_bid} XRP` : "0.00 XRP"}</div>
               </div>
             </div>
             <div
               className="btn button cleanbtn"
-              onClick={(e) => {
+              onClick={e => {
                 setOpen2(true);
                 setselecteditem(item);
-              }}
-            >
+              }}>
               Place a bid
             </div>
           </div>
@@ -189,8 +153,7 @@ const LiveAuctions = () => {
                 }}
                 navigation={true}
                 modules={[Keyboard, Navigation]}
-                className="mySwiper"
-              >
+                className="mySwiper">
                 {numbs?.map((item, index) => (
                   <SwiperSlide>
                     <Cardinfo index={index} item={item} />

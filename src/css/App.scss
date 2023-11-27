@@ -3021,23 +3021,20 @@ body {
     }
     .left {
       flex: 0.5;
-      width: 250px;
-      justify-content: start;
       @include media(">=phone", "<=480px") {
         flex: 1;
         align-items: center;
         justify-content: center;
       }
       .logo-img {
-        width: 250px;
+        width: 200px;
         @include media(">=phone", "<=480px") {
-          width: 150px;
+          width: 100px;
         }
       }
       .social {
-        // margin-top: 20px;
         justify-content: center;
-        width: 270px;
+        width: 200px;
         gap: 14px;
         .icon {
           height: 24px;
@@ -3061,19 +3058,17 @@ body {
           padding: 15px 0;
         }
         .tag {
-          font-family: "Sofia Sans Condensed", sans-serif;
           font-style: normal;
           font-weight: 500;
-          font-size: 28px;
+          font-size: 24px;
           line-height: 24px;
-          margin-bottom: 30px;
+          margin-bottom: 16px;
           color: #ffffff;
         }
         .lbl {
-          font-family: "Sofia Sans Condensed", sans-serif;
           font-style: normal;
           font-weight: 200;
-          font-size: 26px;
+          font-size: 18px;
           line-height: 27px;
           color: #8f8f8f !important;
           text-decoration: underline;

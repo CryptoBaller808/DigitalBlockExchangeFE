@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Slider from "react-slick";
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -54,7 +53,7 @@ const Main = ({ mintHandler }) => {
   const [searchitems, setsearchitems] = useState("");
   const [showsearchitems, setshowsearchitems] = useState(false);
   const [searchloader, setsearchloader] = useState(false);
-  console.log("searchitems", searchitems);
+
   const searchbackend = async () => {
     try {
       const res = await axios.post(`${process.env.REACT_APP_API_URL}/sale/search`, {
@@ -144,7 +143,7 @@ const Main = ({ mintHandler }) => {
           <Filters setsearch={setsearch} />
           {!showsearchitems && (
             <div className="filter-tabs flex aic">
-              {nftTabs.map((item, i) => (
+              {nftTabs?.map((item, i) => (
                 <div
                   onClick={() => {
                     console.log("clicckcced");

@@ -6,9 +6,9 @@ import LogoHorizontal from "../assets/DBXhorizontal-logo.svg";
 const Footer = () => {
   return (
     <div className="footer-pg flex">
-      <div className="wrapWidth wrap flex aic">
+      <div className="wrapWidth wrap flex items-center gap-3">
         <div className="left flex flex-col">
-          <img src={LogoHorizontal} className="logo-img" />
+          <img src={Logo} className="logo-img" />
           <div className="social flex aic">
             <div className="icon flex aic jc">
               <TelegramIcon />
@@ -52,7 +52,7 @@ const Footer = () => {
               Fees
             </a>
           </div>*/}
-          <div className="items flex flex-col gap-4">
+          <div className="items flex flex-col gap-3">
             <div className="tag">Contact Us</div>
             {/* <a href="/" className="lbl">
               Submit a request
