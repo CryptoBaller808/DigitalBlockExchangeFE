@@ -50,7 +50,7 @@ body {
   width: 1200px;
   margin: 0 auto;
   @include media("<=xlarge") {
-    width: 900px;
+    width: 1200px;
     margin: 0 auto;
   }
   @include media("<=large") {
@@ -429,25 +429,25 @@ body {
           /*height: 36px;*/
         }
         @include media(">=phone", "<=991px") {
-        .menu-icon {
-          cursor: pointer;
-          display: flex;
+          .menu-icon {
+            cursor: pointer;
+            display: flex;
+          }
         }
-      }
       }
     }
     .hdr-center {
       flex: 1;
-      
+
       .nav-list {
+        gap: 28px;
         .li-item {
-          font-family: "Sofia Pro";
+          font-family: "Sofia Sans Condensed";
           font-style: normal;
           font-weight: 400;
-          font-size: 18px;
+          font-size: 22px;
           line-height: 18px;
           color: #ffffff !important;
-          margin-right: 22px;
           cursor: pointer;
           @include anim;
           &:hover {
@@ -470,16 +470,14 @@ body {
             // }
           }
           @include media("<=xlarge") {
-            font-size: 14px;
-            margin-right: 18px;
+            font-size: 22px;
           }
           @include media("<=desktop") {
             font-size: 14px;
-            margin-right: 18px;
           }
         }
       }
-      @media screen and (max-width:991px) {
+      @media screen and (max-width: 991px) {
         display: none;
       }
     }
@@ -617,7 +615,7 @@ body {
 
 // Home Page
 .home-p {
-/*  height: 100%;
+  /*  height: 100%;
   width: 100%;*/
   /*.home-sec {
     height: 100%;
@@ -676,7 +674,10 @@ body {
         @include media(">=phone", "<=480px") {
           height: 120%;
         }
-
+        .swiper {
+          height: 100%;
+          width: 100%;
+        }
         .slick-slider {
           height: 480px !important;
         }
@@ -750,7 +751,7 @@ body {
                   font-weight: 300;
                   font-size: 15px;
                   color: #8f8f8f;
-                  height:20px;
+                  height: 20px;
                 }
                 .ico {
                   cursor: pointer;
@@ -765,12 +766,7 @@ body {
               font-weight: 400;
               border-radius: 30px;
               padding: 6px 12px;
-              background: linear-gradient(
-                48.98deg,
-                rgba(167, 214, 63, 0.9) -34.08%,
-                #39b54a 44.93%,
-                #9fd340 126.52%
-              );
+              background: linear-gradient(48.98deg, rgba(167, 214, 63, 0.9) -34.08%, #39b54a 44.93%, #9fd340 126.52%);
               @include anim;
               &:hover {
                 color: #333539;
@@ -911,12 +907,7 @@ body {
               font-weight: 400;
               border-radius: 30px;
               padding: 6px 12px;
-              background: linear-gradient(
-                48.98deg,
-                rgba(167, 214, 63, 0.9) -34.08%,
-                #39b54a 44.93%,
-                #9fd340 126.52%
-              );
+              background: linear-gradient(48.98deg, rgba(167, 214, 63, 0.9) -34.08%, #39b54a 44.93%, #9fd340 126.52%);
               @include anim;
               &:hover {
                 color: #333539;
@@ -1039,12 +1030,7 @@ body {
             font-weight: 400;
             border-radius: 30px;
             padding: 6px 12px;
-            background: linear-gradient(
-              48.98deg,
-              rgba(167, 214, 63, 0.9) -34.08%,
-              #39b54a 44.93%,
-              #9fd340 126.52%
-            );
+            background: linear-gradient(48.98deg, rgba(167, 214, 63, 0.9) -34.08%, #39b54a 44.93%, #9fd340 126.52%);
             @include anim;
             &:hover {
               color: #333539;
@@ -1190,12 +1176,7 @@ body {
             font-weight: 400;
             border-radius: 30px;
             padding: 6px 12px;
-            background: linear-gradient(
-              48.98deg,
-              rgba(167, 214, 63, 0.9) -34.08%,
-              #39b54a 44.93%,
-              #9fd340 126.52%
-            );
+            background: linear-gradient(48.98deg, rgba(167, 214, 63, 0.9) -34.08%, #39b54a 44.93%, #9fd340 126.52%);
             @include anim;
             &:hover {
               color: #333539;
@@ -1706,7 +1687,7 @@ body {
           border-radius: 8px;
           margin-bottom: 4px;
           .img {
-           /* flex: 0.4;*/
+            /* flex: 0.4;*/
             justify-content: flex-end;
             height: 30px;
           }
@@ -1729,7 +1710,7 @@ body {
               line-height: 22px;
               display: block;
               width: 100%;
-          }
+            }
           }
         }
       }
@@ -2595,12 +2576,7 @@ body {
             font-weight: 400;
             border-radius: 30px;
             padding: 6px 12px;
-            background: linear-gradient(
-              48.98deg,
-              rgba(167, 214, 63, 0.9) -34.08%,
-              #39b54a 44.93%,
-              #9fd340 126.52%
-            );
+            background: linear-gradient(48.98deg, rgba(167, 214, 63, 0.9) -34.08%, #39b54a 44.93%, #9fd340 126.52%);
             @include anim;
             &:hover {
               color: #333539;
@@ -2682,7 +2658,7 @@ body {
       border: 1px solid #8f8f8f;
       border-radius: 12px;
       width: 70%;
-      display:none;
+      display: none;
       @include media(">=phone", "<=480px") {
         grid-template-columns: repeat(2, 1fr);
         grid-gap: 0px;
@@ -2902,7 +2878,6 @@ body {
                 margin-bottom: 4px;
                 cursor: pointer;
                 .svg {
-
                 }
               }
             }
@@ -2913,12 +2888,7 @@ body {
             font-weight: 400;
             border-radius: 30px;
             padding: 6px 12px;
-            background: linear-gradient(
-              48.98deg,
-              rgba(167, 214, 63, 0.9) -34.08%,
-              #39b54a 44.93%,
-              #9fd340 126.52%
-            );
+            background: linear-gradient(48.98deg, rgba(167, 214, 63, 0.9) -34.08%, #39b54a 44.93%, #9fd340 126.52%);
             @include anim;
             &:hover {
               color: #333539;
@@ -3003,29 +2973,26 @@ body {
     }
     .left {
       flex: 0.5;
-      width: 250px;
-      justify-content: start;
       @include media(">=phone", "<=480px") {
         flex: 1;
         align-items: center;
         justify-content: center;
       }
       .logo-img {
-        width: 250px;
+        width: 200px;
         @include media(">=phone", "<=480px") {
-          width: 150px;
+          width: 100px;
         }
       }
       .social {
-        // margin-top: 20px;
         justify-content: center;
-        width: 270px;
+        width: 200px;
+        gap: 14px;
         .icon {
           height: 24px;
           width: 24px;
           padding: 4px;
           cursor: pointer;
-          margin-right: 15px;
           border-radius: 50%;
           background-color: #1da1f2;
         }
@@ -3043,22 +3010,20 @@ body {
           padding: 15px 0;
         }
         .tag {
-          font-family: "Sofia Pro";
           font-style: normal;
-          font-weight: 700;
-          font-size: 18px;
+          font-weight: 500;
+          font-size: 24px;
           line-height: 24px;
-          margin-bottom: 30px;
+          margin-bottom: 16px;
           color: #ffffff;
         }
         .lbl {
-          font-family: "Sofia Pro";
           font-style: normal;
-          font-weight: 400;
-          font-size: 14px;
+          font-weight: 200;
+          font-size: 18px;
           line-height: 27px;
           color: #8f8f8f !important;
-          margin-bottom: 5px;
+          text-decoration: underline;
         }
       }
     }
@@ -3549,9 +3514,8 @@ body {
   }
 }
 
-
-// swap modal 
-// swap modal 
+// swap modal
+// swap modal
 .swapTransModal {
   position: fixed;
   top: 0;
@@ -3576,11 +3540,10 @@ body {
   }
 }
 
-
 // spinner
 .loader {
-  border: 8px solid #f3f3f3; 
-  border-top: 8px solid #3498db; 
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #3498db;
   border-radius: 50%;
   width: 80px;
   height: 80px;
@@ -3588,8 +3551,12 @@ body {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .spinner-text {
@@ -3627,11 +3594,12 @@ body {
 .activities-table td:last-child {
   border-right: 3px solid rgba(143, 143, 143, 0.3);
 }
-.activities-table td, .activities-table th {
+.activities-table td,
+.activities-table th {
   padding: 20px 10px;
 }
 .activity-td-item {
-  display: flex ;
+  display: flex;
   justify-content: center;
   align-items: center;
 }
@@ -3667,7 +3635,6 @@ body {
 .color-toggle .checkbox {
   opacity: 0;
   position: absolute;
-
 }
 .color-toggle .checkbox-label {
   background-color: #111;
@@ -3680,25 +3647,28 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
 }
-.color-toggle .fa-moon {color: #f1c40f;}
-    .color-toggle  .fa-sun {color: #f39c12;}
-    .color-toggle .ball {
-      background-color: #fff;
-      width: 22px;
-      height: 22px;
-      position: absolute;
-      left: 2px;
-      top: 2px;
-      border-radius: 50%;
-      transition: transform 0.2s linear;
-    }
+.color-toggle .fa-moon {
+  color: #f1c40f;
+}
+.color-toggle .fa-sun {
+  color: #f39c12;
+}
+.color-toggle .ball {
+  background-color: #fff;
+  width: 22px;
+  height: 22px;
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  border-radius: 50%;
+  transition: transform 0.2s linear;
+}
 .checkbox:checked + .checkbox-label .ball {
   transform: translateX(24px);
 }
 
-.checkbox:checked + .checkbox-label  {
+.checkbox:checked + .checkbox-label {
   background: #6ac445;
 }
 .color-toggle {
@@ -3712,26 +3682,26 @@ body {
   box-shadow: 0px 3px 11px rgba(0, 0, 0, 0.3098039216);
   cursor: pointer;
 }
-@media (max-width: 1200px){
+@media (max-width: 1200px) {
   .header-cmp .wrapWidth {
     width: 90%;
+  }
 }
+@media (max-width: 991px) {
+  .header-cmp .wrap .hdr-right {
+    display: none;
+  }
 }
-@media (max-width: 991px){
-.header-cmp .wrap .hdr-right {
-  display: none;
-}
-}
-@media (max-width: 768px){
-.header-cmp .wrapWidth {
+@media (max-width: 768px) {
+  .header-cmp .wrapWidth {
     width: 80%;
+  }
 }
-}
-@media (max-width: 575px){
-.header-cmp .wrapWidth {
+@media (max-width: 575px) {
+  .header-cmp .wrapWidth {
     width: 87%;
     margin-left: 0;
-}
+  }
 }
 /*************Dark-Mode css**************/
 .dark-mode .color-toggle {
@@ -3740,12 +3710,16 @@ body {
 .dark-mode .color-toggle svg path {
   fill: #fff;
 }
-.dark-mode  .wallet-connect .wrap .desc.headss{color:#fff;}
+.dark-mode .wallet-connect .wrap .desc.headss {
+  color: #fff;
+}
 .dark-mode {
   background: #1f1f1f;
   color: #fff;
 }
-.dark-mode .Maintrading {background: #1f1f1f!important;}
+.dark-mode .Maintrading {
+  background: #1f1f1f !important;
+}
 .dark-mode .tradetext,
 .dark-mode .collection-nft .wrap .meta .pg-tag,
 .dark-mode .single-nft .wrap .meta .pg-tag {
@@ -3764,8 +3738,8 @@ body {
 // .dark-mode .aboutdiv {
 //   background: #fff;
 // }
-.dark-mode .exchangetext{
-  color:#fff;
+.dark-mode .exchangetext {
+  color: #fff;
 }
 .dark-mode .exchangediv {
   border: 1px solid #6ac445;
@@ -3793,7 +3767,7 @@ body {
   background: #1f1f1f;
   /* color: #fff; */
 }
-.dark-mode  .conducttext {
+.dark-mode .conducttext {
   color: #fff;
 }
 .dark-mode .bittext {
@@ -3838,18 +3812,18 @@ body {
 .dark-mode .exchange-page .wrap .content-block .left .le-top .token-table .table-block .tbl-row .row-item .name1,
 .dark-mode .wallet-connect .wrap .hdr .lbl,
 .dark-mode .swap-page .wrap .swap-block .swap-tab .swap-item,
-.dark-mode  .swap-page .wrap .swap-block .swap-cards .card .card-hdr .token-info .about-token .lbl,
+.dark-mode .swap-page .wrap .swap-block .swap-cards .card .card-hdr .token-info .about-token .lbl,
 .dark-mode .filter-tabs .tab-item .tag,
 .dark-mode .explore-page .wraps .p-hdr,
 .dark-mode .hot-bids .wraps .hot-bids-nft .blk .card .meta .nft-numb,
 .dark-mode .hot-bids .wraps .hot-bids-nft .blk .card .meta .nft-rating .r-num .lbl,
 .dark-mode .hot-bids .wraps .p-hdr,
 .dark-mode .live-autions .wraps .p-hdr,
-.dark-mode .explore-sec .wraps .p-hdr{
+.dark-mode .explore-sec .wraps .p-hdr {
   color: #fff;
 }
 .dark-mode .swap-page .wrap .swap-block .swap-tab {
-    border-bottom: 2px solid #80808085;
+  border-bottom: 2px solid #80808085;
 }
 .dark-mode .our-app {
   background: #1f1f1f;
@@ -3863,13 +3837,13 @@ body {
 .dark-mode .our-app .wrap .meta .right .meta .apps-link .btn:last-child .txt .name,
 .dark-mode .live-autions .wraps .live-autions-nft .blk .card .meta .nft-rating .r-num .lbl,
 .dark-mode .explore-sec .wraps .explore-sec-nft .card .meta .nft-numb,
-.dark-mode  .explore-sec .wraps .explore-sec-nft .card .meta .nft-rating .r-num .lbl,
+.dark-mode .explore-sec .wraps .explore-sec-nft .card .meta .nft-rating .r-num .lbl,
 .dark-mode .buy-sell .wrap .buy-sell-card-block .card .meta .card-tag,
-.dark-mode .buy-sell .wrap .buy-sell-card-block .card .meta .card-desc{
+.dark-mode .buy-sell .wrap .buy-sell-card-block .card .meta .card-desc {
   color: #fff;
 }
-.dark-mode  .exchange-page .wrap .content-block .right .right-sec-filter .h-right .filter .select * {
-  color: #000!important;
+.dark-mode .exchange-page .wrap .content-block .right .right-sec-filter .h-right .filter .select * {
+  color: #000 !important;
 }
 .dark-mode .wallet-connect {
   background: #1f1f1f;
@@ -3881,7 +3855,7 @@ body {
   background: #1f1f1f;
 }
 .dark-mode .swap-page .wrap .swap-block .swap-cards .card {
-    background: rgb(31 31 31);
+  background: rgb(31 31 31);
 }
 .dark-mode .swap-page .wrap .swap-block .swap-cards .form-control,
 .dark-mode .swap-page .wrap .swap-block .swap-cards .card .field .txt {
@@ -3889,8 +3863,8 @@ body {
   color: #fff;
 }
 .dark-mode .swap-page .wrap .swap-block .swap-cards .form-control * {
-    background: #494949;
-    color: #fff!important;
+  background: #494949;
+  color: #fff !important;
 }
 .dark-mode .filter-sec .left-search .search-box {
   background: #f3f4f861;
@@ -3905,23 +3879,25 @@ body {
   border-radius: 16px 16px 0 0;
 }
 .dark-mode .header-cmp {
-    background-color: #181717;
+  background-color: #181717;
 }
 .dark-mode .explore-page .wraps .explore-page-nft .card .nft-img img,
 .dark-mode .live-autions .wraps .live-autions-nft .blk .card .nft-img img,
-.dark-mode  .explore-sec .wraps .explore-sec-nft .card .nft-img img {
+.dark-mode .explore-sec .wraps .explore-sec-nft .card .nft-img img {
   border-radius: 16px 16px 0 0;
 }
 .dark-mode .hot-bids .wraps .hot-bids-nft .blk .card .nft-img .img {
   border-radius: 16px 16px 0 0;
 }
 .dark-mode .hot-bids .wraps .hot-bids-nft .blk .card .nft-img,
-.dark-mode  .explore-sec .wraps .explore-sec-nft .card .nft-img {
+.dark-mode .explore-sec .wraps .explore-sec-nft .card .nft-img {
   border: 1px solid #5cc04c;
   border-radius: 16px 16px 0 0;
 }
 .dark-mode .explore-page .wraps .explore-page-nft .card .meta .nft-numb,
-.dark-mode .explore-page .wraps .explore-page-nft .card .meta .nft-rating .r-num .lbl{color: #fff;}
+.dark-mode .explore-page .wraps .explore-page-nft .card .meta .nft-rating .r-num .lbl {
+  color: #fff;
+}
 
 .dark-mode .explore-page .wraps .explore-page-nft .card {
   background: #1f1f1f;
@@ -3937,34 +3913,41 @@ body {
 .dark-mode .explore-sec .wraps .explore-sec-nft .card {
   background: #1f1f1f;
 }
-.dark-mode .explore-page .wraps .explore-page-nft .card .meta, .dark-mode .hot-bids .wraps .hot-bids-nft .blk .card .meta, .dark-mode .live-autions .wraps .live-autions-nft .blk .card .meta, .dark-mode .explore-sec .wraps .explore-sec-nft .card .meta {
-    border: 1px solid #80808085;
-    border-top: 0;
-    border-radius: 0 0 16px 16px;
+.dark-mode .explore-page .wraps .explore-page-nft .card .meta,
+.dark-mode .hot-bids .wraps .hot-bids-nft .blk .card .meta,
+.dark-mode .live-autions .wraps .live-autions-nft .blk .card .meta,
+.dark-mode .explore-sec .wraps .explore-sec-nft .card .meta {
+  border: 1px solid #80808085;
+  border-top: 0;
+  border-radius: 0 0 16px 16px;
 }
 .dark-mode .explore-page .explore-filter .filter-tabs .tab-item {
-    border-bottom: 1px solid #80808085;
+  border-bottom: 1px solid #80808085;
 }
-.dark-mode  .explore-page .wraps .explore-page-nft .card .meta .nft-rating,
+.dark-mode .explore-page .wraps .explore-page-nft .card .meta .nft-rating,
 .dark-mode .hot-bids .wraps .hot-bids-nft .blk .card .meta .nft-rating,
 .dark-mode .explore-sec .wraps .explore-sec-nft .card .meta .nft-rating {
   margin-bottom: 15px;
 }
 .dark-mode .explore-page .wraps .explore-page-nft .card .meta .nft-rating .r-like .lbl,
 .dark-mode .hot-bids .wraps .hot-bids-nft .blk .card .meta .nft-rating .r-like .lbl,
-.dark-mode .explore-sec .wraps .explore-sec-nft .card .meta .nft-rating .r-like .lbl{
+.dark-mode .explore-sec .wraps .explore-sec-nft .card .meta .nft-rating .r-like .lbl {
   margin-left: 4px;
 }
 .dark-mode .complete-checkout {
   background: #1f1f1f;
 }
 .dark-mode .back-btn svg path {
-    stroke: #fff;
+  stroke: #fff;
 }
-.dark-mode .create-nft-page .wrap .boxs .box .lbl{color:#fff;}
+.dark-mode .create-nft-page .wrap .boxs .box .lbl {
+  color: #fff;
+}
 .dark-mode .openordersmobile h1,
-.dark-mode .ant-checkbox + span{color:#fff;}
-.dark-mode .complete-checkout .wrap .checkout-hdr .icon svg, 
+.dark-mode .ant-checkbox + span {
+  color: #fff;
+}
+.dark-mode .complete-checkout .wrap .checkout-hdr .icon svg,
 .dark-mode .complete-checkout .wrap .checkout-hdr .icon svg path {
   fill: #fff;
   stroke: #fff;
@@ -3976,28 +3959,32 @@ body {
 .dark-mode .complete-checkout .wrap .t-price .lbl,
 .dark-mode .nft-detail .wrap .container .right .exploded-box .num,
 .dark-mode .nft-detail .wrap .container .right .exploded-box .sale-tag .s-tag,
-.dark-mode  .nft-detail .wrap .container .right .exploded-box .collector-sec .item .lbl,
+.dark-mode .nft-detail .wrap .container .right .exploded-box .collector-sec .item .lbl,
 .dark-mode .nft-detail .wrap .container .left .property-box .tag,
 .dark-mode .nft-detail .wrap .container .left .property-box .property-tag .bx .lbl2,
 .dark-mode .nft-detail .wrap .container .right .history-box .tag,
 .dark-mode .nft-detail .wrap .container .left .detail-box .tag,
 .dark-mode .nft-detail .wrap .container .left .detail-box .blk .item .le .lbl1,
 .dark-mode .nft-detail .wrap .container .left .detail-box .blk .item .ri .lbl,
-.dark-mode .nft-detail .wrap .container .left .detail-box .blk .item .le .lbl{color:#fff;}
+.dark-mode .nft-detail .wrap .container .left .detail-box .blk .item .le .lbl {
+  color: #fff;
+}
 .dark-mode .nft-detail .wrap .container .right .exploded-box .collector-sec .item .social .icon {
   filter: invert(1);
 }
 
 .dark-mode .buy-sell .wrap .buy-sell-card-block .card {
-    background: #1f1f1f;
-    border: 1px solid #80808085;
+  background: #1f1f1f;
+  border: 1px solid #80808085;
 }
 .dark-mode .siderclasses,
 .dark-mode .siderheightwidth {
   background-color: #1f1f1f !important;
   border: solid #1f1f1f 1px !important;
 }
-.dark-mode .ant-menu-sub.ant-menu-inline{background-color: #103b64 ;}
+.dark-mode .ant-menu-sub.ant-menu-inline {
+  background-color: #103b64;
+}
 .dark-mode .ant-table {
   background: #1f1f1f;
 }
@@ -4006,12 +3993,11 @@ body {
   color: #fff;
 }
 .dark-mode .tablestyling {
-  border: 1px solid #1f1f1f!important;
+  border: 1px solid #1f1f1f !important;
 }
-.dark-mode  .ant-empty-normal,
-.dark-mode  .profile-page .wrap .profile-tabs .tab-item,
+.dark-mode .ant-empty-normal,
+.dark-mode .profile-page .wrap .profile-tabs .tab-item,
 .dark-mode .u-a .user-activity .tbl .row .row-item {
-
   color: #fff;
 }
 .dark-mode .nft-detail .wrap .container .right .exploded-box .collector-sec .item .social svg path {
@@ -4030,7 +4016,9 @@ body {
   stroke: #fff;
 }
 .dark-mode .wallet-connect .wrap .action .avil-wallet .btn .lbl,
-.dark-mode .wallet-connect .wrap .action .avil-wallet .btn .lbl small{color:#fff;}
+.dark-mode .wallet-connect .wrap .action .avil-wallet .btn .lbl small {
+  color: #fff;
+}
 .footer-pg .wrap .left .social .icon:first-child a svg {
   width: 16px;
   height: 15px;
@@ -4038,7 +4026,7 @@ body {
   left: -1px;
 }
 .dark-mode .swap-page .wrap .swap-block .swap-cards .card select.form-control * {
-    color: #000;
+  color: #000;
 }
 .input-search {
   width: 100%;
@@ -4046,9 +4034,9 @@ body {
   margin: 30px auto;
   input.txt.search {
     border-radius: 8px;
-    border: 1px solid #76B91B;
-    background: rgba(231, 232, 234, 0.30);
-    color: #8F8F8F;
+    border: 1px solid #76b91b;
+    background: rgba(231, 232, 234, 0.3);
+    color: #8f8f8f;
     font-family: Sofia Pro;
     font-size: 18px;
     font-style: normal;
@@ -4060,15 +4048,15 @@ body {
     padding: 10px;
   }
 }
-@media screen and (max-width:991px){
+@media screen and (max-width: 991px) {
   .ant-row .ant-col a {
     width: 100%;
     padding: 10px;
-}
+  }
 }
 
-@media screen and (max-width:575px){
-/*.home-p .home-sec {
+@media screen and (max-width: 575px) {
+  /*.home-p .home-sec {
   min-height: 200px;
   height: auto;
   background-size: contain!important;

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Slider from "react-slick";
 import { HorzontalMenuIcon, RoundCrossIcon, HeartIcon, HeartFillIcon } from "../Icons";
 import axios from "axios";
 import { Link, NavLink, useNavigate } from "react-router-dom";
@@ -59,10 +58,10 @@ const Card = ({ item, tab }) => {
     sethighlightstar(false);
   };
 
-  // handle click on sale 
+  // handle click on sale
   const handleClickOnSale = () => {
     navigate(`/nft-detail/resale/${item?.item_detail?.id}`);
-  }
+  };
   return (
     <div>
       <Modal open={open} onClose={() => setOpen(false)}>
@@ -103,7 +102,7 @@ const Card = ({ item, tab }) => {
               <div className="lbl">{wishlistcount}</div>
             </div>
           </div>
-          {!tab ?
+          {!tab ? (
             <>
               {item?.sale_type == 1 && (
                 <div onClick={e => setOpen(true)} className="btn button cleanbtn">
@@ -116,14 +115,15 @@ const Card = ({ item, tab }) => {
                 </div>
               )}
             </>
-            :
+          ) : (
             <>
-              {tab === "resale" && <div className="btn button cleanbtn" onClick={handleClickOnSale}>
-              Resale 
-            </div>}
+              {tab === "resale" && (
+                <div className="btn button cleanbtn" onClick={handleClickOnSale}>
+                  Resale
+                </div>
+              )}
             </>
-
-          }
+          )}
         </div>
       </div>
     </div>
