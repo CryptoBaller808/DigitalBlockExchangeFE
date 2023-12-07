@@ -180,6 +180,9 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
             }}>
             XRP
           </div>
+          <div className={`item ${tokenTabSelected === "XLM" ? "active" : ""}`} onClick={e => setTokenTabSelected("XLM")}>
+            XLM
+          </div>
           {/* <div className={`item ${tokenTabSelected === "USDC" ? "active" : ""}`} onClick={e => setTokenTabSelected("USDC")}>
             USDC
           </div>

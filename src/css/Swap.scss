@@ -11,6 +11,61 @@
       @include media(">=phone", "<=1199px") {
         width: 100%;
       }
+      .token-selection {
+        display: none;
+        @include media(">=phone", "<=1199px") {
+          display: flex;
+        }
+        .dropDown {
+          .category {
+            .cbox {
+              min-width: 220px;
+              border-radius: 30px;
+              border: 2px solid #a7d63f;
+              background: rgba(217, 217, 217, 0.5);
+              .slt {
+                .unit-name {
+                  .unit-eng {
+                    color: #000;
+                    text-align: center;
+                    font-size: 18px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: normal;
+                  }
+                }
+              }
+              .arrow-icon {
+                height: 24px;
+                width: 24px;
+                border-radius: 50%;
+                background: #fff;
+                svg {
+                  path {
+                    // fill: transparent;
+                    // stroke: transparent;
+                  }
+                }
+              }
+            }
+          }
+          .block {
+            padding: 12px 0;
+            border-radius: 16px;
+            border: 1px solid #76b91b;
+            background: #fff;
+            box-shadow: 0px 27px 65px 0px rgba(65, 62, 62, 0.08);
+            .manue {
+              .slt {
+                padding: 10px 20px;
+                &:hover {
+                  background: rgba(231, 232, 234, 0.3);
+                }
+              }
+            }
+          }
+        }
+      }
       .swap-tab {
         border-bottom: 2px solid #cfd7de;
         .swap-item {
@@ -110,12 +165,12 @@
               }
             }
           }
-          select{
-            &>option:first-child{
-              color:#a3a6af;
+          select {
+            & > option:first-child {
+              color: #a3a6af;
             }
-          &.form-control{
-            font-size: 16px;
+            &.form-control {
+              font-size: 16px;
               background: #ffffff;
               border: 1px solid rgba(216, 219, 224, 0.5);
               border-radius: 8px;
@@ -125,14 +180,14 @@
               @include anim;
               &:focus {
                 border-color: #39b54a;
-                box-shadow:none;
+                box-shadow: none;
               }
-             
+
               @include media(">=phone", "<=480px") {
                 margin-top: 20px;
               }
+            }
           }
-        }
         }
         .card-left {
           flex: 1;
@@ -140,7 +195,7 @@
           @include media(">=phone", "<=991px") {
             width: 100%;
             max-width: 80%;
-            flex:unset;
+            flex: unset;
           }
         }
         .card-right {
@@ -148,7 +203,7 @@
           height: 100%;
           @include media(">=phone", "<=480px") {
             width: 100%;
-            max-width:80%;
+            max-width: 80%;
           }
         }
         .card-center {
@@ -159,12 +214,7 @@
             padding: 20px 10px;
           }
           .exchange-icon {
-            background: linear-gradient(
-              48.98deg,
-              rgba(167, 214, 63, 0.9) -34.08%,
-              #39b54a 44.93%,
-              #9fd340 126.52%
-            );
+            background: linear-gradient(48.98deg, rgba(167, 214, 63, 0.9) -34.08%, #39b54a 44.93%, #9fd340 126.52%);
             box-shadow: 0px 0px 4px rgba(118, 185, 27, 0.6);
             height: 45px;
             width: 45px;
@@ -219,19 +269,19 @@
           font-size: 18px;
           line-height: 34px;
           color: #ffffff;
-          margin-top:40px;
+          margin-top: 40px;
           @include media(">=phone", "<=480px") {
             width: 100%;
-            max-width:80%;
-            margin:40px auto 0;
+            max-width: 80%;
+            margin: 40px auto 0;
           }
         }
       }
     }
   }
 }
-@media screen and (max-width:991px){
-  .form-control{
+@media screen and (max-width: 991px) {
+  .form-control {
     font-size: 14px;
   }
 }

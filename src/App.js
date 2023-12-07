@@ -74,7 +74,11 @@ function App() {
     const savedMode = localStorage.getItem("mode");
     return savedMode ? JSON.parse(savedMode) : false;
   };
-
+  const [selectedToken, setSelectedToken] = useState({ lbl: "XRP Ledger", value: "xrp", icon: "./images/Invest1.png" });
+  const tokenList = [
+    { lbl: "XRP Ledger", value: "xrp", icon: "./images/Invest1.png" },
+    { lbl: "XLM Network", value: "xlm", icon: "./images/XMLicon.png" },
+  ];
   const [isDarkMode, setIsDarkMode] = useState(getSavedMode);
 
   // Function to handle the checkbox change and toggle between dark and light mode
@@ -98,18 +102,29 @@ function App() {
   useEffect(() => {
     gettokenlocalstorage();
   }, []);
+
   return (
     <div className="App">
       <BrowserRouter>
         <ToastContainer />
-        <Header openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
+        <Header
+          openSidebar={openSidebar}
+          setOpenSidebar={setOpenSidebar}
+          selectedToken={selectedToken}
+          setSelectedToken={setSelectedToken}
+          tokenList={tokenList}
+        />
         <Sidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
         <Routes>
           <Route path="/" element={<LandingPage />} exact />
           <Route path="/buysell" element={<BuySell />} exact />
           <Route path="/orders/*" element={<Orders />} exact />
           <Route path="/nft" element={<Main />} exact />
-          <Route path="/swap" element={<Swap />} exact />
+          <Route
+            path="/swap"
+            element={<Swap selectedToken={selectedToken} setSelectedToken={setSelectedToken} tokenList={tokenList} />}
+            exact
+          />
           <Route path="/exchange" element={<Exchange isDarkMode={isDarkMode} />} exact />
           <Route path="/profile-edit" element={<EditProfile />} exact />
           <Route path="/nft-detail" element={<NftDetail />} exact />

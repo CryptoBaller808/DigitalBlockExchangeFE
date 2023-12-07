@@ -4,7 +4,6 @@ import "./style.css";
 import Conductimg from "../../Images/Capture.PNG";
 import ComingSoon from "../../Images/coming-soon.png";
 
-
 function ConductComponent() {
   return (
     <div className="Mainconduct">
@@ -15,14 +14,13 @@ function ConductComponent() {
         <Row justify="space-between" style={{ marginTop: "4rem" }}>
           <Col xs={24} md={10} lg={10}>
             <div className="compdiv">
-              <img className="compimg" src={ComingSoon} alt="" />
+              <img className="compimg" src="./images/pc-shap.png" alt="" />
             </div>
           </Col>
           <Col xs={24} md={10} lg={10} className="bitcoll">
             <div className="bitdiv">
               <p className="bittext">
-                Digital Block Exchange website & app <br /> provides you with
-                simple & fast
+                Digital Block Exchange website & app <br /> provides you with simple & fast
                 <br /> trading options!
               </p>
               {/* <hr className="hrbit" /> */}
@@ -30,11 +28,7 @@ function ConductComponent() {
             <div className="applediv">
               <div className="downdiv">
                 <div>
-                  <img
-                    style={{ width: "3.5rem", marginTop: "-.5rem" }}
-                    src="apple.png"
-                    alt=""
-                  />
+                  <img style={{ width: "3.5rem", marginTop: "-.5rem" }} src="apple.png" alt="" />
                 </div>
                 <div>
                   <p className="downtext">Download on the</p>
@@ -46,11 +40,7 @@ function ConductComponent() {
             <div className="Androiddiv">
               <div className="downdiv">
                 <div>
-                  <img
-                    style={{ width: "4.5rem" }}
-                    src="Google Play Store 1.png"
-                    alt=""
-                  />
+                  <img style={{ width: "4.5rem" }} src="Google Play Store 1.png" alt="" />
                 </div>
                 <div>
                   <p className="Androidtext">GET IT ON</p>

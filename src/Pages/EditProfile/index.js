@@ -195,11 +195,11 @@ const EditProfile = () => {
               <div className="row-tag">Wallet Address</div>
               <input
                 type="text"
-                value={"0xaef0de5424ea78447791451e630fb3bdb7108be"}
+                // value={"0xaef0de5424ea78447791451e630fb3bdb7108be"}
                 className="txt cleanbtn bg-black cfff"
                 disable={true}
                 placeholder="Wallet Address"
-                value={profileData?.wallet_address}
+                value={profileData?.wallet_address || "0xaef0de5424ea78447791451e630fb3bdb7108be"}
               />
             </div>
             <div onClick={update_profile} className="update-btn flex items-center">

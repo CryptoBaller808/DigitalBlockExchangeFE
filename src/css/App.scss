@@ -438,7 +438,6 @@ body {
     }
     .hdr-center {
       flex: 1;
-
       .nav-list {
         gap: 28px;
         .li-item {
@@ -482,10 +481,59 @@ body {
       }
     }
     .hdr-right {
-      flex: 0.2;
-      justify-content: center;
       @include media(">=phone", "<=480px") {
         padding: 4px 0;
+      }
+      .token-selection {
+        .dropDown {
+          .category {
+            .cbox {
+              min-width: 220px;
+              border-radius: 30px;
+              border: 2px solid #a7d63f;
+              background: rgba(217, 217, 217, 0.5);
+              .slt {
+                .unit-name {
+                  .unit-eng {
+                    color: #000;
+                    text-align: center;
+                    font-size: 18px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: normal;
+                  }
+                }
+              }
+              .arrow-icon {
+                height: 24px;
+                width: 24px;
+                border-radius: 50%;
+                background: #fff;
+                svg {
+                  path {
+                    // fill: transparent;
+                    // stroke: transparent;
+                  }
+                }
+              }
+            }
+          }
+          .block {
+            padding: 12px 0;
+            border-radius: 16px;
+            border: 1px solid #76b91b;
+            background: #fff;
+            box-shadow: 0px 27px 65px 0px rgba(65, 62, 62, 0.08);
+            .manue {
+              .slt {
+                padding: 10px 20px;
+                &:hover {
+                  background: rgba(231, 232, 234, 0.3);
+                }
+              }
+            }
+          }
+        }
       }
       .btn {
         border-radius: 30px;

@@ -8,10 +8,12 @@ import WalletConnect from "./WalletConnect";
 import { useSelector, useDispatch } from "react-redux";
 import { setModalOpen } from "../redux/actions";
 import DisconnectModal from "./Modal/DisconnectModal";
+import TokenListDropDown from "./TokenListDropDown";
 
-const Header = ({ openSidebar, setOpenSidebar }) => {
+const Header = ({ openSidebar, setOpenSidebar, tokenList, selectedToken, setSelectedToken }) => {
   const dispatch = useDispatch();
   const location = useLocation();
+
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("");
   const [modalShow, setModalShow] = useState(false);
@@ -51,6 +53,7 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
   { id: 8, title: "DBX Card", slug: "/dbx_card", icon: "" },*/
     },
   ];
+
   const handleClickOpen = () => {
     //if (location.pathname === "/exchange") {
     dispatch(setModalOpen(true));
@@ -58,9 +61,9 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
     //}
   };
   return (
-    <div className="header-cmp flex aic">
-      <div className="wrapWidth wrap flex aic">
-        <div className="hdr-left flex aic">
+    <div className="header-cmp flex items-center">
+      <div className="wrapWidth wrap flex items-center">
+        <div className="hdr-left flex items-center">
           <Link to="/">
             <img src={LogoHorizontal} className="logo-img" />
           </Link>
@@ -73,7 +76,7 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
             <MenuIcon />
           </div>
         </div>
-        <div className="hdr-center flex aic jc">
+        <div className="hdr-center flex items-center justify-center">
           <div className="nav-list flex aic">
             {navList.map((item, index) => (
               <NavLink
@@ -88,7 +91,7 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
             ))}
           </div>
         </div>
-        <div className="hdr-right flex aic">
+        <div className="hdr-right flex items-center justify-center gap-3">
           {/* {!generalReducers?.isAuthenticated ? (
             <button className="btn button cleanbtn" onClick={e => setOpen(true)}>
               Connect Wallet
@@ -96,6 +99,9 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
           ) : (
             <h1 style={{ color: "white" }}>{user?.firstname ? user?.firstname : "No name"}</h1>
           )} */}
+          <div className="token-selection flex items-center">
+            <TokenListDropDown dropDownList={tokenList} selectedValue={selectedToken} setSelectedValue={setSelectedToken} />
+          </div>
           {isWalletConnected ? (
             balance?.success ? (
               <>

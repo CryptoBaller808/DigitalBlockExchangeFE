@@ -14,8 +14,9 @@ import { Alert, Button } from "react-bootstrap";
 import ReactModal from "react-bootstrap/Modal";
 import ExchangeModalIcon from "../Images/exchange-color.png";
 import SwapTransModal from "../components/loader/SwapTransModal";
+import TokenListDropDown from "../components/TokenListDropDown";
 
-const Swap = () => {
+const Swap = ({ tokenList, selectedToken, setSelectedToken }) => {
   const socket = useContext(SocketContext);
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
@@ -31,11 +32,6 @@ const Swap = () => {
   const handleShow = () => setShow(true);
   const [flag, setFlag] = useState(false);
   const swapFromRef = useRef();
-  const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
 
   const balance = useSelector(state => state.signInData?.balance);
   // console.log("balance", balance);
@@ -43,6 +39,7 @@ const Swap = () => {
 
   const [swapFrom, setSwapFrom] = useState({ currency: "", issuer: "", id: -1, value: "" });
   const [swapTo, setSwapTo] = useState({ currency: "", issuer: "", value: "", id: -1 });
+  const [swapXlmFrom, setSwapXlmFrom] = useState({ currency: "XLM", issuer: "rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y", id: 20, value: 0 });
   const [finalExchangeRate, setFinalExchangeRate] = useState("");
   const [exchangeRate, setExchangeRate] = useState({
     swapFromExchange: "",
@@ -52,7 +49,7 @@ const Swap = () => {
   const swapToRef = useRef();
   const [accountData, setAccountData] = useState();
   const [currencies, setCurrencies] = useState();
-
+  console.log("currencies", currencies);
   // fetch currencies
   useEffect(() => {
     const fetchCurrency = async () => {
@@ -91,10 +88,10 @@ const Swap = () => {
       socket.emit("get-available-swap-path", item);
 
       socket.on("available-path", args => {
-        console.log("availabkle path",args);
-        if(args.alternatives?.length === 0){
-          setError("XRP does not have any Swap value for the current pair, please try after sometime.")
-        }else {
+        console.log("availabkle path", args);
+        if (args.alternatives?.length === 0) {
+          setError("XRP does not have any Swap value for the current pair, please try after sometime.");
+        } else {
           setAccountData(args.alternatives);
         }
       });
@@ -103,29 +100,28 @@ const Swap = () => {
         console.log("error", args);
         let error = args;
 
-        if(typeof error === "string"){
+        if (typeof error === "string") {
           setError(args);
-        }else if(typeof error === "object"){
+        } else if (typeof error === "object") {
           setError("XRP Node is facing some issue, please check after sometime");
         }
       });
 
-      socket.emit('get-all-user-currencies', {...balance, accountInfo: balance.account});
+      socket.emit("get-all-user-currencies", { ...balance, accountInfo: balance.account });
 
-      socket.on('get-all-user-currencies-response', args => {
-        console.log('get all user currency', args);
-        let accountCurrenciesItem = args.accountCurrencies?.find(item => swapTo.issuer === item?.issuer_address && swapTo.currency === item?.currency);
+      socket.on("get-all-user-currencies-response", args => {
+        console.log("get all user currency", args);
+        let accountCurrenciesItem = args.accountCurrencies?.find(
+          item => swapTo.issuer === item?.issuer_address && swapTo.currency === item?.currency,
+        );
         let currencyListItem = args.currencyList[0];
         setSwapFromBalance(currencyListItem);
         setSwapToBalance(accountCurrenciesItem);
-
       });
-      socket.on('get-all-user-currencies-error', args => console.log(args));
-
-    }else {
+      socket.on("get-all-user-currencies-error", args => console.log(args));
+    } else {
       setError("Please connect Wallet for SWAP ");
     }
-
   };
 
   // handle clean state
@@ -185,15 +181,13 @@ const Swap = () => {
   };
 
   useEffect(() => {
-
-
     const find = accountData?.map(data => {
       if (typeof data?.source_amount === "object") {
         // source_amount is an object
 
         if (data?.destination_amount?.currency === swapTo.currency && data?.source_amount?.currency === swapFrom.currency) {
           let localExchangeRate = getExchangeRate(data?.source_amount?.value, data?.destination_amount?.value);
-          setLocalExchangeRate(localExchangeRate)
+          setLocalExchangeRate(localExchangeRate);
           let finalrate = Number(localExchangeRate * swapFrom.value)?.toFixed(4);
           setSwapTo(swapTo => ({ ...swapTo, value: finalrate }));
           setExchangeRate(exchangeRate => ({
@@ -211,7 +205,7 @@ const Swap = () => {
         if (data?.destination_amount?.currency === swapTo.currency) {
           let XRPValue = parseInt(data?.source_amount) / 1000000;
           let localExchangeRate = getExchangeRate(XRPValue, data?.destination_amount?.value);
-          setLocalExchangeRate(localExchangeRate)
+          setLocalExchangeRate(localExchangeRate);
           let finalrate = Number(localExchangeRate * swapFrom.value)?.toFixed(4);
           setSwapTo(swapTo => ({ ...swapTo, value: finalrate }));
           setExchangeRate(exchangeRate => ({
@@ -290,14 +284,13 @@ const Swap = () => {
 
   useEffect(() => {
     console.log("swapfrom", swapFrom);
-  }, [swapFrom])
+  }, [swapFrom]);
 
   useEffect(() => {
-    if(currencies?.length){
-      setSwapTo(swapTo => ({ ...swapTo, id: 5, issuer: "rBZJzEisyXt2gvRWXLxHftFRkd1vJEpBQP", currency: 'USD'}))
+    if (currencies?.length) {
+      setSwapTo(swapTo => ({ ...swapTo, id: 5, issuer: "rBZJzEisyXt2gvRWXLxHftFRkd1vJEpBQP", currency: "USD" }));
     }
-  }, [currencies])
-
+  }, [currencies]);
 
   return (
     <div className="swap-page flex">
@@ -363,116 +356,193 @@ const Swap = () => {
           </Alert>
         )}
         <div className="swap-block flex flex-col">
+          <div className="token-selection flex items-center mb-5">
+            <TokenListDropDown dropDownList={tokenList} selectedValue={selectedToken} setSelectedValue={setSelectedToken} />
+          </div>
           <div className="swap-tab flex item-center justify-center">
             <div className="swap-item">Swap</div>
           </div>
-          <div className="swap-cards flex items-center">
-            <div className="card-left flex">
-              <div className="card flex flex-col">
-                <div className="card-hdr flex items-center justify-between">
-                  <div className="token-info flex w-full">
-                    {/*<div className="icon flex aic jc">
+          {selectedToken.value === "xrp" ? (
+            <div className="swap-cards flex items-center">
+              <div className="card-left flex">
+                <div className="card flex flex-col">
+                  <div className="card-hdr flex items-center justify-between">
+                    <div className="token-info flex w-full">
+                      {/*<div className="icon flex aic jc">
                       <TokenIcon />
                     </div>*/}
-                    <div className="about-token flex flex-col w-full mb-4">
-                      <div className="lbl mb-2">Swap From :</div>
-                      {/* <Select
-                        defaultValue={'XRP'}
-                        onChange={(e) => setSwapFrom({ ...swapFrom, currency: e.asset_code, issuer: e.asset_issuer })}
-                        getOptionLabel={option => option.asset_code}
-                        getOptionValue={(option) => option.id}
-                        options={currencies}
-                        placeholder="Select Currency"
-                        className="w-full"
-                        disabled={!currencies ? true : false}
-                        ref={swapFromRef}
-                      /> */}
-                      <select className="form-control" value={swapFrom.id} onChange={handleSetSwapFrom}>
-                        <option value="-1" selected>Select</option>
-                        {currencies &&
-                          currencies.map(c => {
-                            return (
-                              <option value={c.id} issuer={c.asset_issuer} key={c.id} >
-                                {c.asset_code}
-                              </option>
-                            );
-                          })}
-                      </select>
+                      <div className="about-token flex flex-col w-full mb-4">
+                        <div className="lbl mb-2">Swap From :</div>
+                        <select className="form-control" value={swapFrom.id} onChange={handleSetSwapFrom}>
+                          <option value="-1" selected>
+                            Select
+                          </option>
+                          {currencies &&
+                            currencies.map(c => {
+                              return (
+                                <option value={c.id} issuer={c.asset_issuer} key={c.id}>
+                                  {c.asset_code}
+                                </option>
+                              );
+                            })}
+                        </select>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="field flex">
-                  <input
-                    type="text"
-                    className="txt cleanbtn"
-                    placeholder="Swap amount"
-                    value={swapFrom.value}
-                    onChange={e => setSwapFrom({ ...swapFrom, value: e.target.value })}
-                    pattern="\d*"
-                    maxLength="5"
-                  />
-                </div>
+                  <div className="field flex">
+                    <input
+                      type="text"
+                      className="txt cleanbtn"
+                      placeholder="Swap amount"
+                      value={swapFrom.value}
+                      onChange={e => setSwapFrom({ ...swapFrom, value: e.target.value })}
+                      pattern="\d*"
+                      maxLength="5"
+                    />
+                  </div>
 
-                <div className="balance-field">
-                    <p className="current-balance">Balance: {Number(swapFromBalance?.balance?.balance || 0)?.toFixed(4)} {swapFromBalance?.currency}</p>
+                  <div className="balance-field">
+                    <p className="current-balance">
+                      Balance: {Number(swapFromBalance?.balance?.balance || 0)?.toFixed(4)} {swapFromBalance?.currency}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="card-center flex aic jc">
-              <div className="exchange-icon flex aic jc">
-                <ExchangeArrowIcon />
+              <div className="card-center flex aic jc">
+                <div className="exchange-icon flex aic jc">
+                  <ExchangeArrowIcon />
+                </div>
               </div>
-            </div>
-            <div className="card-right flex">
-              <div className="card flex flex-col">
-                <div className="card-hdr flex items-center justify-between">
-                  <div className="token-info flex w-full">
-                    {/*<div className="icon flex aic jc">
+              <div className="card-right flex">
+                <div className="card flex flex-col">
+                  <div className="card-hdr flex items-center justify-between">
+                    <div className="token-info flex w-full">
+                      {/*<div className="icon flex aic jc">
                       <img src="./images/DBXIcon.png" className="token-img" />
                     </div>*/}
-                    <div className="about-token flex flex-col w-full mb-4">
-                      <div className="lbl mb-2">Swap To:</div>
-                      {/* <Select
-                        defaultValue={swapTo}
-                        onChange={(e) => setSwapTo({ ...swapTo, currency: e.asset_code, issuer: e.asset_issuer })}
-                        getOptionLabel={option => option.asset_code}
-                        getOptionValue={(option) => option.id}
-                        options={currencies}
-                        placeholder="Select Currency"
-                        className="w-full"
-                        disabled={!currencies ? true : false}
-                      /> */}
-                      <select className="form-control" value={swapTo.id} onChange={handleSetSwapTo} ref={swapToRef}>
-                        <option value="-1" selected>Select</option>
-                        {currencies &&
-                          currencies.map(c => {
-                            return (
-                              <option value={c.id} issuer={c.asset_issuer} key={c.id}>
-                                {c.asset_code}
-                              </option>
-                            );
-                          })}
-                      </select>
+                      <div className="about-token flex flex-col w-full mb-4">
+                        <div className="lbl mb-2">Swap To:</div>
+                        <select className="form-control" value={swapTo.id} onChange={handleSetSwapTo} ref={swapToRef}>
+                          <option value="-1" selected>
+                            Select
+                          </option>
+                          {currencies &&
+                            currencies.map(c => {
+                              return (
+                                <option value={c.id} issuer={c.asset_issuer} key={c.id}>
+                                  {c.asset_code}
+                                </option>
+                              );
+                            })}
+                        </select>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="field flex">
-                  <input type="text" className="txt cleanbtn" value={swapTo.value} placeholder="Swap amount" disabled />
-                </div>
-                <div className="balance-field">
-                    <p className="current-balance">Balance: {Number(swapToBalance?.balance || 0)?.toFixed(4)} {swapToBalance?.currency}</p>
+                  <div className="field flex">
+                    <input type="text" className="txt cleanbtn" value={swapTo.value} placeholder="Swap amount" disabled />
+                  </div>
+                  <div className="balance-field">
+                    <p className="current-balance">
+                      Balance: {Number(swapToBalance?.balance || 0)?.toFixed(4)} {swapToBalance?.currency}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          ) : selectedToken.value === "xlm" ? (
+            <div className="swap-cards flex items-center">
+              <div className="card-left flex">
+                <div className="card flex flex-col">
+                  <div className="card-hdr flex items-center justify-between">
+                    <div className="token-info flex w-full">
+                      <div className="about-token flex flex-col w-full mb-4">
+                        <div className="lbl mb-2">Swap From :</div>
+                        <select className="form-control" value={swapXlmFrom.id} onChange={handleSetSwapFrom}>
+                          <option value="-1" selected>
+                            Select
+                          </option>
+                          {currencies &&
+                            currencies.map(c => {
+                              return (
+                                <option value={c.id} issuer={c.asset_issuer} key={c.id}>
+                                  {c.asset_code}
+                                </option>
+                              );
+                            })}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="field flex">
+                    <input
+                      type="text"
+                      className="txt cleanbtn"
+                      placeholder="Swap amount"
+                      value={swapXlmFrom.value}
+                      onChange={e => setSwapXlmFrom({ ...swapXlmFrom, value: e.target.value })}
+                      pattern="\d*"
+                      maxLength="5"
+                    />
+                  </div>
 
+                  <div className="balance-field">
+                    <p className="current-balance">
+                      Balance: {Number(swapFromBalance?.balance?.balance || 0)?.toFixed(4)} {swapFromBalance?.currency}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="card-center flex aic jc">
+                <div className="exchange-icon flex aic jc">
+                  <ExchangeArrowIcon />
+                </div>
+              </div>
+              <div className="card-right flex">
+                <div className="card flex flex-col">
+                  <div className="card-hdr flex items-center justify-between">
+                    <div className="token-info flex w-full">
+                      {/*<div className="icon flex aic jc">
+                      <img src="./images/DBXIcon.png" className="token-img" />
+                    </div>*/}
+                      <div className="about-token flex flex-col w-full mb-4">
+                        <div className="lbl mb-2">Swap To:</div>
+                        <select className="form-control" value={swapTo.id} onChange={handleSetSwapTo} ref={swapToRef}>
+                          <option value="-1" selected>
+                            Select
+                          </option>
+                          {currencies &&
+                            currencies.map(c => {
+                              return (
+                                <option value={c.id} issuer={c.asset_issuer} key={c.id}>
+                                  {c.asset_code}
+                                </option>
+                              );
+                            })}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="field flex">
+                    <input type="text" className="txt cleanbtn" value={swapTo.value} placeholder="Swap amount" disabled />
+                  </div>
+                  <div className="balance-field">
+                    <p className="current-balance">
+                      Balance: {Number(swapToBalance?.balance || 0)?.toFixed(4)} {swapToBalance?.currency}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : null}
           <div className="exchange-box-wrapper">
             <div className="exchange-box">
-                  <h3>Exchange Rate</h3>
-                  <div className="exchange-box-currency">
-                    <p>1 {swapFromBalance?.currency} = {localExchangeRate?.toFixed(4)} {swapToBalance?.currency}</p>
-                    <ExchangeArrowIcon />
-                  </div>
+              <h3>Exchange Rate</h3>
+              <div className="exchange-box-currency">
+                <p>
+                  1 {swapFromBalance?.currency} = {localExchangeRate?.toFixed(4)} {swapToBalance?.currency}
+                </p>
+                <ExchangeArrowIcon />
+              </div>
             </div>
           </div>
           <div className="action">
