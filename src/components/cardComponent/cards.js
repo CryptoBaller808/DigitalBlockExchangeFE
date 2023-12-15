@@ -1,7 +1,11 @@
 import React from "react";
 import "./cards.css";
 import { Card, Col, Row } from "antd";
-import { EllipsisOutlined, ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
+import {
+  EllipsisOutlined,
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
+} from "@ant-design/icons";
 
 import { Container, Button } from "react-bootstrap";
 
@@ -32,12 +36,21 @@ function Cards() {
               className="images"
               hoverable
               style={{ width: 300 }}
-              cover={<img style={{ borderRadius: "1rem" }} alt="example" src="/assets/images/crd1.png" />}>
+              cover={
+                <img
+                  style={{ borderRadius: "1rem" }}
+                  alt="example"
+                  src="/assets/images/crd1.png"
+                />
+              }
+            >
               <div className="div1">
                 <p>CyberKongVX #5119</p>
                 <div>
                   {" "}
-                  <EllipsisOutlined style={{ fontSize: "2rem", fontWeight: "800" }} />
+                  <EllipsisOutlined
+                    style={{ fontSize: "2rem", fontWeight: "800" }}
+                  />
                 </div>
               </div>
               <div className="div1">
@@ -63,10 +76,19 @@ function Cards() {
               className="images"
               hoverable
               style={{ width: 260 }}
-              cover={<img style={{ borderRadius: "1rem" }} alt="example" src="/assets/images/crd2.png" />}>
+              cover={
+                <img
+                  style={{ borderRadius: "1rem" }}
+                  alt="example"
+                  src="/assets/images/crd2.png"
+                />
+              }
+            >
               <div className="div1">
                 <p>#37 The Boozer</p>
-                <EllipsisOutlined style={{ fontSize: "2rem", fontWeight: "800" }} />
+                <EllipsisOutlined
+                  style={{ fontSize: "2rem", fontWeight: "800" }}
+                />
               </div>
               <div className="div1">
                 <div>
@@ -88,10 +110,19 @@ function Cards() {
               className="images"
               hoverable
               style={{ width: 260 }}
-              cover={<img style={{ borderRadius: "1rem" }} alt="example" src="/assets/images/crd3.png" />}>
+              cover={
+                <img
+                  style={{ borderRadius: "1rem" }}
+                  alt="example"
+                  src="/assets/images/crd3.png"
+                />
+              }
+            >
               <div className="div1">
                 <p>Pep Troopers.</p>
-                <EllipsisOutlined style={{ fontSize: "2rem", fontWeight: "800" }} />
+                <EllipsisOutlined
+                  style={{ fontSize: "2rem", fontWeight: "800" }}
+                />
               </div>
               <div className="div1">
                 <div>
@@ -113,10 +144,19 @@ function Cards() {
               className="images"
               hoverable
               style={{ width: 260 }}
-              cover={<img style={{ borderRadius: "1rem" }} alt="example" src="/assets/images/crd4.png" />}>
+              cover={
+                <img
+                  style={{ borderRadius: "1rem" }}
+                  alt="example"
+                  src="/assets/images/crd4.png"
+                />
+              }
+            >
               <div className="div1">
                 <p>ON1 #7467</p>
-                <EllipsisOutlined style={{ fontSize: "2rem", fontWeight: "800" }} />
+                <EllipsisOutlined
+                  style={{ fontSize: "2rem", fontWeight: "800" }}
+                />
               </div>
               <div className="div1">
                 <div>

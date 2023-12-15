@@ -20,33 +20,35 @@
       grid-gap: 50px;
       margin: 50px 0;
       height: 100%;
-      width: 90%;
+      width: 62%;
       @include media(">=phone", "<=480px") {
         grid-template-columns: repeat(1, 1fr);
         width: 100%;
       }
       @include media(">=phone", "<=767px") {
-        grid-template-columns: repeat(1, 1fr);
-        width: 100%;
+        display: block;
       }
-      @media screen and (max-width: 1199px) {
-        width: 100%;
+      @media screen and (max-width:1199px){
+        width:100%;  
       }
       .card {
-        width: 100%;
         min-height: 460px;
-        padding: 16px;
+        width: 100%;
+        background: #ffffff;
+        box-shadow: 0px 27px 65px rgba(65, 62, 62, 0.08);
         border-radius: 16px;
-        border: 1px solid #76b91b;
-        background: rgba(196, 196, 196, 0.5);
-        box-shadow: 0px 27px 65px 0px rgba(65, 62, 62, 0.08);
-
+        padding: 16px;
         @include media(">=phone", "<=767px") {
           margin-bottom: 20px;
         }
         .img {
+<<<<<<< HEAD
           padding: 20px 0;
           width: 260px;
+=======
+          padding: 40px 0;
+          width: 120px;
+>>>>>>> parent of 3dddafe (add 3 new pages and update the changes on existing pages)
         }
         .meta {
           flex: 1;
@@ -65,12 +67,6 @@
             text-align: center;
             color: #3f444d;
           }
-          .payment-method-logos {
-            .pm-logo {
-              height: 36px;
-              width: 36px;
-            }
-          }
         }
         .btn {
           width: 100%;
@@ -80,15 +76,19 @@
           color: #ffffff;
           border-radius: 12px;
         }
+<<<<<<< HEAD
         &:first-child {
           .img {
             // height: 120px;
             padding-top: 40px;
           }
         }
+=======
+>>>>>>> parent of 3dddafe (add 3 new pages and update the changes on existing pages)
         &:last-child {
           .img {
-            // height: 160px;
+            width: auto;
+            height: 160px;
           }
         }
       }

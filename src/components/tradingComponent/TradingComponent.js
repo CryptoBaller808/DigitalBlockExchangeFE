@@ -9,7 +9,8 @@ function TradingComponent() {
       <div>
         <h3 className="tradetext">One-Stop Trading Platfrom</h3>
         <h4 className="tradetext1">
-          Digital Block Exchange uses blockchain and new technologies to allow all users
+          Digital Block Exchange uses blockchain and new technologies to allow
+          all users
           <br /> to access fair financial services
         </h4>
       </div>
@@ -36,7 +37,7 @@ function TradingComponent() {
               </div>
             </Link>
           </Col>
-          <Col xs={12} md={10} lg={5} className="collll">
+          {/* <Col xs={12} md={10} lg={5} className="collll">
             <Link to="/buysell">
               <div className="leveragediv">
                 <div className="exchangediv">
@@ -45,7 +46,7 @@ function TradingComponent() {
                 <p className="exchangetext">Buy Crypto</p>
               </div>
             </Link>
-          </Col>
+          </Col> */}
           <Col xs={12} md={10} lg={5} className="collll">
             <Link to="/nft">
               <div className="aboutdiv">

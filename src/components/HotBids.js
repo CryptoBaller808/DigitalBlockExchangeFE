@@ -17,11 +17,18 @@ import "swiper/css/pagination";
 
 const HotBids = () => {
   const [hotbids, sethotbids] = useState("");
-  const { user } = useSelector(state => state.generalReducers);
+  const { user } = useSelector((state) => state.generalReducers);
   const getFixedItemsOnSale = async () => {
     try {
+<<<<<<< HEAD
       const res = await axios.get(`${process.env.REACT_APP_API_URL}/sale/getFixedItemsOnSale`);
 
+=======
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/sale/getFixedItemsOnSale`
+      );
+      console.log("hotbid_res", res);
+>>>>>>> parent of 3dddafe (add 3 new pages and update the changes on existing pages)
       if (res?.data) {
         sethotbids(res?.data?.rows);
       }
@@ -83,7 +90,8 @@ const HotBids = () => {
                 }}
                 navigation={true}
                 modules={[Keyboard, Navigation]}
-                className="mySwiper">
+                className="mySwiper"
+              >
                 {hotbids?.map((item, index) => (
                   <SwiperSlide>
                     <Card item={item} />
@@ -93,6 +101,22 @@ const HotBids = () => {
             ) : (
               <div className="lbl">Not Items found</div>
             )}
+            {/* <Slider {...settings}>
+              {
+                hotbids &&
+                <>
+                {
+                hotbids.length > 0 ?
+                hotbids.map((item, index) => (
+                  <Card item={item}/>
+                ))
+                :
+                <div className="lbl">Not Items found</div>
+                }
+                </>
+              }
+              
+            </Slider> */}
           </div>
         </div>
       </div>
