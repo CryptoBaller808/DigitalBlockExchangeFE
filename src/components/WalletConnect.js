@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { CrossIcon } from "../Icons";
 import axios from "axios";
 import { useSelector, useDispatch, connect } from "react-redux";
@@ -7,12 +7,12 @@ import { setModalOpen, connectWallet } from "../redux/actions";
 import * as balanceAction from "../redux/xummBalance/action";
 import * as QRCodeAction from "../redux/xummQRCode/action";
 // import setAuthToken from "../redux/actions/setHeaderToken";
-import { SocketContext } from "../context/soket";
+import { useSocket } from '../context/socket';
 import XummLogo from "../Images/XummLogo.png";
 import LegerLogo from "../Images/XRPLLogo.png";
 import setAuthToken from "../redux/actions/setHeaderToken";
 const WalletConnect = ({ open, setOpen }) => {
-  const socket = useContext(SocketContext);
+  const socket = useSocket();
   const dispatch = useDispatch();
   const [loading, setloading] = useState();
   const [xumppres, setxumppres] = useState("");

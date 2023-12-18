@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import _ from "loadsh";
 import "./style.css";
 import { Modal } from "antd";
@@ -12,7 +12,7 @@ import * as historyOfferAction from "../../redux/historyOffers/action";
 import { getBookOffers, getAccountOffers, getUserCurrencies } from "../../helper/ws";
 import { getFullAccountOffers, getOrderHistory } from "../../helper";
 import { toast } from "react-toastify";
-import { SocketContext } from "../../context/soket";
+import { useSocket } from '../../context/socket';
 import Loader from "../Loader";
 
 const OfferModel = ({
@@ -38,7 +38,7 @@ const OfferModel = ({
 
   const paymentResponse = useSelector(state => state.paymentResponseReducer?.paymentResponse?.success);
 
-  const socket = useContext(SocketContext);
+  const socket = useSocket();
 
   const handleConfirm = () => {
     toast.success("Open Xumm App to approve transaction");

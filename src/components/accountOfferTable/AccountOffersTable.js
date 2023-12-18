@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import _ from "loadsh";
 import moment from "moment";
 import { useSelector, useDispatch } from "react-redux";
@@ -6,7 +6,7 @@ import { getBookOffers, getAccountOffers } from "../../helper/ws";
 import * as bookOfferAction from "../../redux/bookOffers/action";
 import * as accountOfferAction from "../../redux/accountOffers/action";
 import * as historyOfferAction from "../../redux/historyOffers/action";
-import { SocketContext } from "../../context/soket";
+import { useSocket } from '../../context/socket';
 import { Table, Space, Button } from "antd";
 import Loader from "../loader/Loader";
 import {
@@ -48,7 +48,7 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
   const [historyOfferData, setHistoryOfferData] = useState(historyOffer);
   const [tokenTabSelected, setTokenTabSelected] = useState("XRP");
 
-  const socket = useContext(SocketContext);
+  const socket = useSocket();
 
   useEffect(() => {
     setAccLoading(true);
