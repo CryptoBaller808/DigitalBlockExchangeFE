@@ -3,7 +3,7 @@ import ExchangeGraph from "../components/ExchangeGraph";
 import Select from "react-select";
 import { SearchIcon, ExchangeIcon, SunIcon, MenuIcon2 } from "../Icons/";
 import ExchangeRatesComponent from "../components/exchangeRatesComponent/ExchangeRatesComponent";
-import { socket, SocketContext } from "../context/soket";
+import { useSocket } from "../context/socket";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserCurrencies } from "../helper/ws";
 import * as balanceAction from "../redux/xummBalance/action";
@@ -28,6 +28,8 @@ const Exchange = ({ isDarkMode }) => {
   const accountInfo = useSelector(state => state?.signInData?.balance);
 
   const accountNumber = accountInfo?.account;
+
+  const socket = useSocket();
 
   useEffect(() => {
     if (isWalletConnected) {

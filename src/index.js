@@ -7,15 +7,15 @@ import { Provider } from "react-redux";
 import { store, persistor } from "./redux/store";
 import reportWebVitals from "./reportWebVitals";
 import { PersistGate } from "redux-persist/integration/react";
-import { socket, SocketContext } from "./context/soket";
+import { SocketProvider } from './context/socket';
 
 import App from "./App";
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <SocketContext.Provider value={socket}>
+      <SocketProvider>
         <App />
-      </SocketContext.Provider>
+      </SocketProvider>
     </PersistGate>
   </Provider>,
   document.getElementById("root")

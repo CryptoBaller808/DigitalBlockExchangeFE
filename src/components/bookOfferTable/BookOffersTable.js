@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import _ from "loadsh";
 import Loader from "../Loader";
 
@@ -7,7 +7,7 @@ import { MenuIcon2 } from "../../Icons";
 import { useSelector, useDispatch } from "react-redux";
 import { getBookOffers } from "../../helper/ws";
 import * as bookOfferAction from "../../redux/bookOffers/action";
-import { SocketContext } from "../../context/soket";
+import { useSocket } from '../../context/socket';
 
 const BookOffersTable = ({ tokenTabSelected, currencyData, dropVal, setDropVal }) => {
   const [selectedCombined, setSelectedCombined] = useState({ value: 7, label: "7 Decimals", user: "decimal7" });
@@ -62,7 +62,7 @@ const BookOffersTable = ({ tokenTabSelected, currencyData, dropVal, setDropVal }
 
   const [bookOfferData, setBookOfferData] = useState(bookOffer);
 
-  const socket = useContext(SocketContext);
+  const socket = useSocket();
 
   useEffect(() => {
     socket.on("drops-val", args => {

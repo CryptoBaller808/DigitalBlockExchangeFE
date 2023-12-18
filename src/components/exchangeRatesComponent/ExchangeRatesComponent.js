@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { SearchIcon, ExchangeIcon, SunIcon, MenuIcon2 } from "../../Icons";
 //new updateimport getExchangeRate from "../../helper/api/exchangeRate";
 import currency from "../../helper/currencies";
@@ -6,7 +6,7 @@ import getExchangeRate from "../../helper/api/exchangeRate";
 import Loader from "../../components/Loader";
 import { getTradesData } from "../../helper";
 import { useSelector, useDispatch } from "react-redux";
-import { SocketContext } from "../../context/soket";
+import { useSocket } from '../../context/socket';
 //redux
 import * as tradesAction from "../../redux/tradesData/action";
 import moment from "moment";
@@ -27,7 +27,7 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
 
   const [tradeLoading, setTradeLoading] = useState(true);
   const [tradesList, setTradeList] = useState(tradesData);
-  const socket = useContext(SocketContext);
+  const socket = useSocket();
 
   //get all currency data list
   const getAllCurrencyData = async () => {

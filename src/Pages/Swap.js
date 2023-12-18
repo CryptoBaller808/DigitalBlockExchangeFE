@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { TokenIcon, DropDownIcon, ExchangeIcon, ExchangeArrowIcon, ArrowDownIcon } from "../Icons";
 import Modal from "../components/Modal";
 import WalletConnect from "../components/WalletConnect";
 import Select from "react-select";
 import currency from "../helper/currencies";
-import { SocketContext } from "../context/soket";
+import { useSocket } from '../context/socket';
 import { setModalOpen, connectWallet } from "../redux/actions";
 import * as balanceAction from "../redux/xummBalance/action";
 import * as QRCodeAction from "../redux/xummQRCode/action";
@@ -16,7 +16,7 @@ import ExchangeModalIcon from "../Images/exchange-color.png";
 import SwapTransModal from "../components/loader/SwapTransModal";
 
 const Swap = () => {
-  const socket = useContext(SocketContext);
+  const socket = useSocket();
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
   const [state, setState] = useState(null);
