@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { getTickersData } from "../../helper";
-import { SunIcon } from "../../Icons";
+
 const GraphHeadComponent = ({ currencyData2 }) => {
   const price = currencyData2?.info?.price;
   const title = currencyData2?.info?.title;
-
-  const [tickersData, setTickersData] = useState(null)
-  const [hourChange, setHourChange] = useState(0);
+  const [tickersData, setTickersData] = useState(null);
   const tempCurrency = title && title.split("/");
-
   const currentCurrency = tempCurrency?.length && tempCurrency[0];
-
   const baseCurrency = tempCurrency?.length && tempCurrency[1];
 
   useEffect(() => {
@@ -24,7 +20,7 @@ const GraphHeadComponent = ({ currencyData2 }) => {
             if (res.data.success) {
               const apiResult = res.data.data;
               const data = Object.values(apiResult)[0];
-              console.log("api result",apiResult);
+              console.log("api result", apiResult);
               setTickersData(data);
               let hrChange = (data?.high_price - data?.low_price) / 100;
               console.log(hrChange);
@@ -57,7 +53,7 @@ const GraphHeadComponent = ({ currencyData2 }) => {
         <div className="cnt_right flex">
           <div className="item flex items-center  justify-center flex-col">
             <div className="lbl">Price</div>
-            <div className="val">{price}</div>
+            <div className="val">{parseFloat(price).toFixed(5)}</div>
           </div>
           {/* <div className="item flex items-center  justify-center flex-col">
             <div className="lbl">24h Chg</div>

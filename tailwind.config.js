@@ -18,6 +18,14 @@ module.exports = {
         secondary: {
           DEFAULT: "#C1333D",
         },
+        grey: {
+          DEFAULT: "#757575",
+          90: "#8C8C8C",
+          80: "#A3A3A3",
+          70: "#BABABA",
+          60: "#D1D1D1",
+          50: "#E8E8E8",
+        },
       },
       fontFamily: {
         serif: ["Helvetica"],

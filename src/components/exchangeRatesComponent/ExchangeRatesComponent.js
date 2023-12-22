@@ -1,26 +1,32 @@
-import React, { useState, useEffect } from "react";
-import { SearchIcon, ExchangeIcon, SunIcon, MenuIcon2 } from "../../Icons";
+import React, { useState, useEffect, useCallback } from "react";
+import { SearchIcon, ExchangeIcon } from "../../Icons";
 //new updateimport getExchangeRate from "../../helper/api/exchangeRate";
 import currency from "../../helper/currencies";
 import getExchangeRate from "../../helper/api/exchangeRate";
 import Loader from "../../components/Loader";
 import { getTradesData } from "../../helper";
 import { useSelector, useDispatch } from "react-redux";
-import { useSocket } from '../../context/socket';
+import { useSocket } from "../../context/socket";
 //redux
 import * as tradesAction from "../../redux/tradesData/action";
 import moment from "moment";
-const dateFormat = "YYYY/MM/DD";
+import clsx from "clsx";
+import Fuse from "fuse.js";
+// const dateFormat = "YYYY/MM/DD";
+const DECIMALVAL = 7;
+
+let timeout = null;
 
 const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal }) => {
   const [tokenTabSelected, setTokenTabSelected] = useState("XRP");
   const [currencyData, setCurrencyData] = useState([]);
   const [rowData, setRowData] = useState(null);
   const [loadingData, setLoadingData] = useState(true);
-  const [tokenList, setTokenList] = useState([]);
   const [currencyDataLoaded, setCurrencyDataLoaded] = useState(false);
+  const [searching, setSearching] = useState(false);
+  const [searchedPairs, setSearchedPairs] = useState([]);
+
   const dispatch = useDispatch();
-  const [decimalVal, setDecimalVal] = useState(7);
 
   const tradesData = useSelector(state => state.trades?.trades);
   const tradesDataProcessing = useSelector(state => state.trades?.processing);
@@ -32,42 +38,42 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
   //get all currency data list
   const getAllCurrencyData = async () => {
     const selectedCurrency = currency.find(obj => obj.currency === tokenTabSelected);
-    const currencyDataPromise = currency
-      .filter(val => selectedCurrency.currency !== val.currency)
-      .map(obj => {
-        const exchangeData = {
-          curA: tokenTabSelected,
-          issuerA: selectedCurrency.issuer,
-          curB: obj.currency,
-          issuerB: obj.issuer,
-        };
-        return getExchangeRate(exchangeData);
-      });
-    const price = await Promise.all(currencyDataPromise);
-    let titleData = currency
-      .filter(val => selectedCurrency.currency !== val.currency)
-      .map((obj, indx) => {
-        const data = {
-          id: indx,
-          title: `${tokenTabSelected}/${obj.currency}`,
-          stat: "-22.45",
-          curA: tokenTabSelected,
-          issuerA: selectedCurrency.issuer,
-          curB: obj.currency,
-          issuerB: obj.issuer,
-        };
-        return data;
-      });
 
-    price.map((price, indx) => {
-      titleData[indx].price = price;
+    const filteredCurrencies = currency.filter(val => tokenTabSelected !== val.currency);
+
+    const prices = await getExchangeRate({ mainToken: tokenTabSelected, otherPairs: filteredCurrencies });
+    // const currencyDataPromise = currency
+    //   .filter(val => selectedCurrency.currency !== val.currency)
+    //   .map(obj => {
+    //     const exchangeData = {
+    //       curA: tokenTabSelected,
+    //       issuerA: selectedCurrency.issuer,
+    //       curB: obj.currency,
+    //       issuerB: obj.issuer,
+    //     };
+    //     return getExchangeRate(exchangeData);
+    //   });
+
+    let titleData = filteredCurrencies.map((obj, indx) => {
+      const stat = prices.RAW?.[tokenTabSelected]?.[obj.currency] ? prices.RAW[tokenTabSelected][obj.currency].CHANGEPCT24HOUR : "-";
+      const price = prices.RAW?.[tokenTabSelected]?.[obj.currency] ? prices.RAW[tokenTabSelected][obj.currency].PRICE : "-";
+      const data = {
+        id: indx,
+        title: `${tokenTabSelected}/${obj.currency}`,
+        stat: stat,
+        curA: tokenTabSelected,
+        issuerA: selectedCurrency?.issuer,
+        curB: obj.currency,
+        issuerB: obj?.issuer,
+        price: price,
+      };
+      return data;
     });
 
     return titleData;
   };
 
   //set all currency data as select the currency
-
   useEffect(() => {
     if (currencyData.length) {
       setRowData(currencyData[0]);
@@ -89,10 +95,13 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
     setLoadingData(false);
   }, [tokenTabSelected]);
 
-  const handleRow = data => {
-    setRowData(data);
-    getData(data);
-  };
+  const handleRow = useCallback(
+    data => {
+      setRowData(data);
+      getData(data);
+    },
+    [getData],
+  );
 
   //FOR TRADES DATA
   useEffect(() => {
@@ -104,14 +113,14 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
   }, [tradesData]);
 
   const dataSource = tradesData.map((obj, indx) => {
-    const price = parseFloat(obj.price).toFixed(decimalVal);
+    const price = parseFloat(obj.price).toFixed(DECIMALVAL);
     const date = obj.time;
-    const volume = price * parseFloat(obj.amount).toFixed(decimalVal);
+    const volume = price * parseFloat(obj.amount).toFixed(DECIMALVAL);
     return {
       id: indx + 1,
       time: moment(date).format("YYYY/MM/DD HH:mm"),
       price: price,
-      vol: volume.toFixed(decimalVal),
+      vol: volume.toFixed(DECIMALVAL),
     };
   });
 
@@ -155,9 +164,26 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
       }, 2000);
     }
   }, [tradesDataProcessing]);
-  const fixed4 = number => {
-    return number?.toFixed(4);
-  };
+
+  const onTokenSelect = useCallback(selected => {
+    setTokenTabSelected(selected);
+  }, []);
+
+  const onSearch = useCallback(
+    e => {
+      const query = e?.target?.value;
+      setSearching(!!query);
+      if (timeout) clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        const fuse = new Fuse(currencyData, {
+          keys: ["title"],
+          threshold: 0.1,
+        }).search(query);
+        setSearchedPairs(fuse.map(item => item.item));
+      }, 1000);
+    },
+    [currencyData],
+  );
 
   return (
     <div className="left flex flex-col">
@@ -167,51 +193,50 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
           <div className="icon">
             <SearchIcon />
           </div>
-          <input type="text" className="txt cleanbtn w-full" placeholder="Search" />
+          <input type="text" className="txt cleanbtn w-full" placeholder="Search" onChange={onSearch} />
         </div>
         <div className="token_tabs flex">
-          {/* <div className={`item ${tokenTabSelected === "DBX" ? "active" : ""}`} onClick={e => setTokenTabSelected("DBX")}>
-            DBX
-          </div> */}
-          <div
-            className={`item ${tokenTabSelected === "XRP" ? "active" : ""}`}
-            onClick={e => {
-              setTokenTabSelected("XRP");
-            }}>
+          <div className={clsx("item", { active: tokenTabSelected === "XRP" })} onClick={onTokenSelect.bind(this, "XRP")}>
             XRP
           </div>
-          {/* <div className={`item ${tokenTabSelected === "USDC" ? "active" : ""}`} onClick={e => setTokenTabSelected("USDC")}>
-            USDC
+          <div className={clsx("item", { active: tokenTabSelected === "XLM" })} onClick={onTokenSelect.bind(this, "XLM")}>
+            XLM
           </div>
-          <div className={`item ${tokenTabSelected === "ALTS" ? "active" : ""}`} onClick={e => setTokenTabSelected("ALTS")}>
-            ALTS
-          </div> */}
         </div>
+
         <div className="token-table flex">
           <div className="table-block flex flex-col w-full">
             <div className="tbl-row flex">
               <div className="row-item ps-2">Pair</div>
               <div className="row-item text-center">Price</div>
-              {/* <div className="row-item flex items-center justify-end">
+              <div className="row-item flex items-center justify-end">
                 24h Chg
                 <spna className="ml-[2px]">
                   <ExchangeIcon />
                 </spna>
-              </div> */}
+              </div>
             </div>
             {loadingData ? (
               <Loader />
             ) : (
-              currencyData.map((item, i) => (
-                <div className="tbl-row flex" key={i} onClick={() => handleRow(item)}>
+              (searching ? searchedPairs : currencyData).map((item, i) => (
+                <div
+                  className={clsx("tbl-row flex rounded-sm", {
+                    "bg-grey-50": item.title === rowData?.title,
+                  })}
+                  key={i}
+                  onClick={handleRow.bind(this, item)}>
                   <div className="row-item flex items-center ps-2">
                     <span className="name1">{item.title}</span>
-                    {/* /<span className="name2">{tokenTabSelected}</span> */}
                   </div>
-                  <div className="row-item text-center"> {parseFloat(item.price).toFixed(3)}</div>
-                  {/* <div className={`row-item flex items-center justify-end ${item.stat < 0 ? "red" : "green"}`}>
-                    {parseFloat(item.stat).toFixed(3)}
-                  </div> */}
+                  <div className="row-item text-center">{isNaN(item.price) ? "-" : parseFloat(item.price).toFixed(3)}</div>
+                  <div
+                    className={clsx("row-item flex items-center justify-end", {
+                      red: item.stat < 0,
+                      green: item.stat >= 0,
+                    })}>
+                    {isNaN(item.stat) ? "-" : parseFloat(item.stat).toFixed(3) + "%"}
+                  </div>
                 </div>
               ))
             )}

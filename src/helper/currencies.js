@@ -116,18 +116,24 @@ const currency = [
     currency: "SOLO",
     issuer: "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
   },
-  {
-    currency: "XRdoge",
-    issuer: "rLqUC2eCPohYvJCEBJ77eCCqVL2uEiczjA",
-  },
+
   {
     currency: "CORE",
     issuer: "rcoreNywaoz2ZCQ8Lg2EbSLnGuRBmun6D",
   },
-  {
-    currency: "USD",
-    issuer: "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",
-  },
+  //we have commented it out because cryptocomare API was failing
+  // {
+  //   currency: "XRdoge",
+  //   issuer: "rLqUC2eCPohYvJCEBJ77eCCqVL2uEiczjA",
+  // },
+  // {
+  //   currency: "CNY",
+  //   issuer: "rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y",
+  // },
+  // {
+  //   currency: "USD",
+  //   issuer: "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",
+  // },
   {
     currency: "USD",
     issuer: "rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
@@ -164,10 +170,7 @@ const currency = [
     currency: "ELS",
     issuer: "rHXuEaRYnnJHbDeuBH5w8yPh5uwNVh5zAg",
   },
-  {
-    currency: "CNY",
-    issuer: "rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y",
-  },
+
   {
     currency: "BTC",
     issuer: "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",
