@@ -8,6 +8,7 @@ import WalletConnect from "./WalletConnect";
 import { useSelector, useDispatch } from "react-redux";
 import { setModalOpen } from "../redux/actions";
 import DisconnectModal from "./Modal/DisconnectModal";
+import NetworksSelection from "./Networks";
 
 const Header = ({ openSidebar, setOpenSidebar }) => {
   const dispatch = useDispatch();
@@ -88,6 +89,7 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
             ))}
           </div>
         </div>
+        <NetworksSelection />
         <div className="hdr-right flex aic">
           {/* {!generalReducers?.isAuthenticated ? (
             <button className="btn button cleanbtn" onClick={e => setOpen(true)}>

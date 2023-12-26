@@ -10,6 +10,7 @@ import historyOffers from "./historyOffers";
 import trades from "./tradesData";
 import chart from "./chartData";
 import generalReducers from './general'
+import networkReducers from './network'
 
 const rootReducer = combineReducers({
   authReducer,
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   historyOffers,
   trades,
   chart,
-  generalReducers
+  generalReducers,
+  networkReducers
 });
 export default rootReducer;
