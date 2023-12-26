@@ -3,7 +3,7 @@ import {
 } from "./type";
 
 const defaultReducer = {
-  token: 'xrp'
+  token: 'xlm'
 };
 
 const networkReducer = (state = defaultReducer, action) => {

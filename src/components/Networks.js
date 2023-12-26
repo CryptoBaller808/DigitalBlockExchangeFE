@@ -23,9 +23,8 @@ const Item = ({ item, onClick}) => (
     </div> 
 )
 
-const NetworkSelector = () => {
+const NetworkSelector = ({ network }) => {
 
-    const [selected, setSelected] = useState(mapping.xrp)
     const [query, setQuery] = useState("")
     const dispatch = useDispatch();
 
@@ -34,7 +33,6 @@ const NetworkSelector = () => {
     }
 
     const handleMenuClick = useCallback((selected) => () => {
-        setSelected(mapping[selected.key])
         dispatch(setNetwork(selected.key));
     }, [])
 
@@ -54,6 +52,8 @@ const NetworkSelector = () => {
             }
         </div>
     ), [options])
+
+    const selected = useMemo(() => mapping[network], [network])
 
 
     return (

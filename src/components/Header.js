@@ -24,6 +24,9 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
   //prepring user id string
   const accountStr = balance?.account;
   let dottedStr = accountStr?.substr(0, 5) + "..." + accountStr?.substr(accountStr?.length - 4);
+
+  const network = useSelector(state => state.networkReducers.token);
+
   useEffect(() => {
     if (balance == null) {
       setBalanceData(balance);
@@ -89,7 +92,7 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
             ))}
           </div>
         </div>
-        <NetworksSelection />
+        <NetworksSelection network={network}/>
         <div className="hdr-right flex aic">
           {/* {!generalReducers?.isAuthenticated ? (
             <button className="btn button cleanbtn" onClick={e => setOpen(true)}>
