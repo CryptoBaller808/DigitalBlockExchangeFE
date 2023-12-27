@@ -34,43 +34,53 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
   const [tradeLoading, setTradeLoading] = useState(true);
   const [tradesList, setTradeList] = useState(tradesData);
   const socket = useSocket();
-
+  
   //get all currency data list
   const getAllCurrencyData = async () => {
-    const selectedCurrency = currency.find(obj => obj.currency === tokenTabSelected);
 
-    const filteredCurrencies = currency.filter(val => tokenTabSelected !== val.currency);
+    if(tokenTabSelected === "XLM"){
+      const prices = await getExchangeRate({ mainToken: tokenTabSelected });
+      return prices
+    }
+    else{
+      const selectedCurrency = currency.find(obj => obj.currency === tokenTabSelected);
 
-    const prices = await getExchangeRate({ mainToken: tokenTabSelected, otherPairs: filteredCurrencies });
-    // const currencyDataPromise = currency
-    //   .filter(val => selectedCurrency.currency !== val.currency)
-    //   .map(obj => {
-    //     const exchangeData = {
-    //       curA: tokenTabSelected,
-    //       issuerA: selectedCurrency.issuer,
-    //       curB: obj.currency,
-    //       issuerB: obj.issuer,
-    //     };
-    //     return getExchangeRate(exchangeData);
-    //   });
-
-    let titleData = filteredCurrencies.map((obj, indx) => {
-      const stat = prices.RAW?.[tokenTabSelected]?.[obj.currency] ? prices.RAW[tokenTabSelected][obj.currency].CHANGEPCT24HOUR : "-";
-      const price = prices.RAW?.[tokenTabSelected]?.[obj.currency] ? prices.RAW[tokenTabSelected][obj.currency].PRICE : "-";
-      const data = {
-        id: indx,
-        title: `${tokenTabSelected}/${obj.currency}`,
-        stat: stat,
-        curA: tokenTabSelected,
-        issuerA: selectedCurrency?.issuer,
-        curB: obj.currency,
-        issuerB: obj?.issuer,
-        price: price,
-      };
-      return data;
-    });
-
-    return titleData;
+      const filteredCurrencies = currency.filter(val => tokenTabSelected !== val.currency);
+  
+      console.log("filteredCurrencies: ", filteredCurrencies,  " selectedCurrency : ", selectedCurrency)
+  
+      const prices = await getExchangeRate({ mainToken: tokenTabSelected, otherPairs: filteredCurrencies });
+      // const currencyDataPromise = currency
+      //   .filter(val => selectedCurrency.currency !== val.currency)
+      //   .map(obj => {
+      //     const exchangeData = {
+      //       curA: tokenTabSelected,
+      //       issuerA: selectedCurrency.issuer,
+      //       curB: obj.currency,
+      //       issuerB: obj.issuer,
+      //     };
+      //     return getExchangeRate(exchangeData);
+      //   });
+  
+      let titleData = filteredCurrencies.map((obj, indx) => {
+        const stat = prices.RAW?.[tokenTabSelected]?.[obj.currency] ? prices.RAW[tokenTabSelected][obj.currency].CHANGEPCT24HOUR : "-";
+        const price = prices.RAW?.[tokenTabSelected]?.[obj.currency] ? prices.RAW[tokenTabSelected][obj.currency].PRICE : "-";
+        const data = {
+          id: indx,
+          title: `${tokenTabSelected}/${obj.currency}`,
+          stat: stat,
+          curA: tokenTabSelected,
+          issuerA: selectedCurrency?.issuer,
+          curB: obj.currency,
+          issuerB: obj?.issuer,
+          price: price,
+        };
+        return data;
+      });
+  
+      return titleData;
+    }
+   
   };
 
   //set all currency data as select the currency

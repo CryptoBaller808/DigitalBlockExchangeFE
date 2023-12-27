@@ -6,3 +6,9 @@ export const GET_CHART_DATA = "xumm/get-chart";
 export const GET_TVCHART_DATA = "xumm/get-chart-data";
 export const GET_TICKERS = "xumm/get-tickers";
 export const GET_TRADES = "xumm/get-trades-data";
+
+export const GET_STELLAR_TVCHART_DATA = "xlm/get-chart-data";
+export const GET_STELLAR_LIVE_PRICES = "xlm/get-live-prices"
+
+
+

@@ -1,7 +1,7 @@
 import { Api } from "@mui/icons-material";
 import axios from "axios";
 import { BASE_URL } from "../config/index";
-import { GET_ACC_OFFERS, GET_HIS_OFFERS, GET_TVCHART_DATA, GET_CHART_DATA, GET_TICKERS, GET_TRADES } from "./api/url";
+import { GET_ACC_OFFERS, GET_HIS_OFFERS, GET_TVCHART_DATA, GET_CHART_DATA, GET_TICKERS, GET_TRADES, GET_STELLAR_TVCHART_DATA } from "./api/url";
 // import { store } from "../redux/store";
 
 // export const AuthApiCall = (url, method, data = null, headers = {}) => {
@@ -135,8 +135,15 @@ export const getTVChartData = async acc => {
   let data = {
     acc,
   };
+
+  let url = GET_TVCHART_DATA
+
+  if(acc.curA === "XLM")
+    url = GET_STELLAR_TVCHART_DATA
+
+    
   return new Promise((resolve, reject) => {
-    ApiCall(GET_TVCHART_DATA, "post", data)
+    ApiCall(url, "post", data)
       .then(res => resolve(res))
       .catch(reject);
   });
