@@ -64,7 +64,7 @@ const Datafeed = {
 
     getTVChartData({ curA: curA, curB: curB, issuerB: issuerB, period: getIBCompatibleTimeframe(resolution), from: from, to: to })
       .then(res => {
-        const result = res.data.data.map(bar => {
+        const result = (res ? res.data.data : []).map(bar => {
           return {
             time: bar[0] * 1000,
             open: bar[1],
@@ -74,6 +74,7 @@ const Datafeed = {
             volume: bar[5],
           };
         });
+    
         if (result.length > 0) {
           onHistoryCallback(result, { noData: false });
         } else if (lookback < 3) {

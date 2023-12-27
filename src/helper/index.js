@@ -131,6 +131,9 @@ export const getChartData = async acc => {
       .catch(reject);
   });
 };
+
+var loading = false 
+
 export const getTVChartData = async acc => {
   let data = {
     acc,
@@ -141,10 +144,21 @@ export const getTVChartData = async acc => {
   if(acc.curA === "XLM")
     url = GET_STELLAR_TVCHART_DATA
 
-    
+  
   return new Promise((resolve, reject) => {
-    ApiCall(url, "post", data)
-      .then(res => resolve(res))
-      .catch(reject);
+    if(loading){
+      resolve(false)
+    }
+    else{
+      loading = true
+      ApiCall(url, "post", data)
+        .then(res => {
+          resolve(res)
+          setTimeout(() => {
+            loading = false 
+          }, 2000)
+        })
+        .catch(reject);
+    }
   });
 };
