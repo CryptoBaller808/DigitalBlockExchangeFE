@@ -1,10 +1,15 @@
 import { Popover, Input } from 'antd';
 import xmlLogo from "../assets/XLM.svg"
 import xrpLogo from "../assets/XRP.svg"
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useRef } from 'react';
 import { SearchOutlined, DownCircleFilled } from '@ant-design/icons';
 import { useDispatch } from "react-redux";
 import { setNetwork } from "../redux/network/action";
+import { connectWallet, logoutUser } from "../redux/actions";
+import * as balanceAction from "../redux/xummBalance/action";
+import * as QRCodeAction from "../redux/xummQRCode/action";
+import * as accountOfferAction from "../redux/accountOffers/action";
+import * as historyOfferAction from "../redux/historyOffers/action";
 
 const mapping = {
     xrp : { label: "XRP Ledger", icon: xmlLogo },
@@ -26,15 +31,35 @@ const Item = ({ item, onClick}) => (
 const NetworkSelector = ({ network }) => {
 
     const [query, setQuery] = useState("")
+    const [open, setOpen] = useState(false)
     const dispatch = useDispatch();
+
+    const disconnectWallet = () => {
+        dispatch(balanceAction.setBalanceEmpty());
+        dispatch(QRCodeAction.setQRCodeDisconnect());
+        dispatch(connectWallet(false));
+        //clear acc offers content
+    
+        dispatch(accountOfferAction.setAccountOffersProcessing());
+        dispatch(accountOfferAction.setAccountOffers([]));
+        dispatch(accountOfferAction.setStopAccountOffersProcessing());
+        //clear history content
+        dispatch(historyOfferAction.setHistoryOffersProcessing());
+        dispatch(historyOfferAction.setHistoryOffers([]));
+        dispatch(historyOfferAction.setStopHistoryOffersProcessing());
+        localStorage.removeItem("nft_login");
+        dispatch(logoutUser())
+    };
 
     const doSearch = (evt) => {
         setQuery(evt.target.value)
     }
 
     const handleMenuClick = useCallback((selected) => () => {
+        disconnectWallet()
         dispatch(setNetwork(selected.key));
-    }, [])
+        setOpen(false)
+    }, [disconnectWallet])
 
     const renderItem = useCallback((item) => (
         <Item key={item.key} item={item} onClick={handleMenuClick(item)}/>
@@ -57,8 +82,8 @@ const NetworkSelector = ({ network }) => {
 
 
     return (
-        <Popover placement="bottom" title={text} content={content} arrow={false}>
-            <div className='w-[200px] h-[44px] bg-[#8F8F8F] px-1 border-4 border-[#39B54A] flex rounded-3xl items-center justify-between font-semibold mx-3 cursor-pointer'>
+        <Popover open={open} placement="bottom" title={text} content={content} arrow={false}>
+            <div onClick={()=> setOpen(true)} className='w-[200px] h-[44px] bg-[#8F8F8F] px-1 border-4 border-[#39B54A] flex rounded-3xl items-center justify-between font-semibold mx-3 cursor-pointer'>
                 <span className="flex items-center">
                     {getImage(selected.icon, selected.label)}&nbsp;&nbsp;
                     {selected.label}

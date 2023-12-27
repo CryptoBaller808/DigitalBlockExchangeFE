@@ -139,7 +139,7 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
 
       {open && (
         <Modal open={open} onClose={() => setOpen(false)}>
-          <WalletConnect open={open} setOpen={setOpen} />
+          <WalletConnect network={network} open={open} setOpen={setOpen} />
         </Modal>
       )}
       {modalShow && <DisconnectModal show={handelDisconnect} onHide={onHide} />}
