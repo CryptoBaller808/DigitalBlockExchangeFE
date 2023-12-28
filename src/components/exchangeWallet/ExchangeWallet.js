@@ -23,6 +23,7 @@ const ExchangeWallet = ({ currencyData }) => {
   const [totalPrice, setTotalPrice] = useState();
   const [limitPrice, setLimitPrice] = useState();
   const price = currencyData?.info?.price;
+  const network = useSelector(state => state.networkReducers.token);
 
   const dispatch = useDispatch();
 
@@ -592,8 +593,8 @@ const ExchangeWallet = ({ currencyData }) => {
       </div>
       {open && (
         <Modal open={open} onClose={() => setOpen(false)}>
-          <WalletConnect open={open} setOpen={setOpen} />
-        </Modal>
+        <WalletConnect network={network} open={open} setOpen={setOpen} />
+      </Modal>
       )}
       {paymentModel && (
         <OfferModel
