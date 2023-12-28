@@ -8,7 +8,6 @@ export const GET_TICKERS = "xumm/get-tickers";
 export const GET_TRADES = "xumm/get-trades-data";
 
 export const GET_STELLAR_TVCHART_DATA = "xlm/get-chart-data";
-export const GET_STELLAR_LIVE_PRICES = "xlm/get-live-prices"
-
-
-
+export const GET_STELLAR_LIVE_PRICES = "xlm/get-live-prices";
+export const GET_STELLAR_TRADES_DATA = "xlm/get-trades-data";
+export const GET_STELLAR_ORDER_BOOK = "xlm/getorderbooks";
