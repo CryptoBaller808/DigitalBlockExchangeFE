@@ -20,7 +20,7 @@
       grid-gap: 50px;
       margin: 50px 0;
       height: 100%;
-      width: 62%;
+      width: 65%;
       @include media(">=phone", "<=480px") {
         grid-template-columns: repeat(1, 1fr);
         width: 100%;
@@ -34,16 +34,17 @@
       .card {
         min-height: 460px;
         width: 100%;
-        background: #ffffff;
+        background: #e6e6e6;
         box-shadow: 0px 27px 65px rgba(65, 62, 62, 0.08);
         border-radius: 16px;
-        padding: 16px;
+        border-color: #39b54a;
+        padding: 24px 24px;
         @include media(">=phone", "<=767px") {
           margin-bottom: 20px;
         }
         .img {
-          padding: 40px 0;
-          width: 120px;
+          padding: 35px 0;
+          width: 170px;
         }
         .meta {
           flex: 1;
@@ -64,17 +65,18 @@
           }
         }
         .btn {
+          text-decoration: none;
           width: 100%;
           font-weight: 600;
           font-size: 20px;
           line-height: 24px;
-          color: #ffffff;
+          color: #ffffff !important;
           border-radius: 12px;
         }
         &:last-child {
           .img {
-            width: auto;
-            height: 160px;
+            width: 80%;
+            padding: 20px 0;
           }
         }
       }

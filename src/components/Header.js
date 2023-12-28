@@ -40,9 +40,10 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
   //is wallet is connected or not
   const navList = [
     { id: 1, title: "Home", slug: "/", icon: "" },
-    { id: 2, title: "Exchange", slug: "/exchange", icon: "" },
-    { id: 3, title: "Swap", slug: "/swap", icon: "" },
-    { id: 4, title: "NFT", slug: "/nft", icon: "" },
+    { id: 2, title: "Buy/Sell", slug: "/buysell", icon: "" },
+    { id: 3, title: "Exchange", slug: "/exchange", icon: "" },
+    { id: 4, title: "Swap", slug: "/swap", icon: "" },
+    { id: 5, title: "NFT", slug: "/nft", icon: "" },
    {/*} { id: 5, title: "NFT", slug: "/nft", icon: "" },
     { id: 6, title: "Orders", slug: "/orders", icon: <DropDownIcon /> },
     { id: 7, title: "DBX Coin", slug: "/dbx_coin", icon: "" },
