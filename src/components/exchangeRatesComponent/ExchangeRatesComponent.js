@@ -131,6 +131,7 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
       time: formatRelativeDate(date),
       price: price,
       vol: volume.toFixed(DECIMALVAL),
+      color: obj?.color,
     };
   });
 
@@ -271,7 +272,13 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
               dataSource.map((item, i) => {
                 return (
                   <div className="tbl-row flex" key={i}>
-                    <div className="row-item flex items-center">{parseFloat(item.price).toFixed(4)}</div>
+                    <div
+                      className={clsx("row-item flex items-center", {
+                        red: item.color === "red",
+                        green: item.color === "green",
+                      })}>
+                      {parseFloat(item.price).toFixed(4)}
+                    </div>
                     <div className="row-item">{parseFloat(item.vol).toFixed(4)}</div>
                     {/* ${item.type === "red" ? "red" : "green"} */}
                     <div className={`row-item flex items-center justify-end `}>{item.time}</div>
