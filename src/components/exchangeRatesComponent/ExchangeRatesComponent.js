@@ -42,12 +42,7 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
 
       if (tokenTabSelected === "XLM") {
         const prices = await getExchangeRate({ mainToken: tokenTabSelected });
-        return prices.map(pr => {
-          return {
-            ...pr,
-            issuerB: filteredCurrencies.find(cr => cr.currency === pr.curB)?.issuer,
-          };
-        });
+        return prices;
       } else {
         const selectedCurrency = currency.find(obj => obj.currency === tokenTabSelected);
 

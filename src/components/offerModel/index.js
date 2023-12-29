@@ -12,8 +12,18 @@ import * as historyOfferAction from "../../redux/historyOffers/action";
 import { getBookOffers, getAccountOffers, getUserCurrencies } from "../../helper/ws";
 import { getFullAccountOffers, getOrderHistory } from "../../helper";
 import { toast } from "react-toastify";
-import { useSocket } from '../../context/socket';
+import { useSocket } from "../../context/socket";
 import Loader from "../Loader";
+
+const TOAST_MESSAGE = {
+  xlm: "Open LOBSTR App to approve transaction.",
+  xrp: "Open Xumm App to approve transaction.",
+};
+
+const SOCKET_REQUEST = {
+  xlm: "xlm-payment-request",
+  xrp: "xumm-payment-request",
+};
 
 const OfferModel = ({
   show,
@@ -31,54 +41,47 @@ const OfferModel = ({
   setOrderStatus,
 }) => {
   const dispatch = useDispatch();
-
   const accountInfo = useSelector(state => state?.signInData?.balance);
-
   const userToken = accountInfo?.userToken;
-
   const paymentResponse = useSelector(state => state.paymentResponseReducer?.paymentResponse?.success);
-
   const socket = useSocket();
+  const network = useSelector(state => state.networkReducers.token);
 
   const handleConfirm = () => {
-    toast.success("Open Xumm App to approve transaction");
+    toast.success(TOAST_MESSAGE[network]);
     hide();
 
-    const buyOfferInfo = {
-      account: accountNo,
-      buyValue: total.toFixed(5),
-      buyCurrency,
-      buyIssuer,
-      sellValue: amount,
-      sellCurrency,
-      sellIssuer,
-      userToken,
-      side: "Buy",
-      offerType: orderType,
-      currPrice: price,
-    };
-
-    const sellOfferInfo = {
-      account: accountNo,
-      buyValue: amount,
-      buyCurrency: sellCurrency,
-      buyIssuer: sellIssuer,
-      sellValue: total.toFixed(5),
-      sellCurrency: buyCurrency,
-      sellIssuer: buyIssuer,
-      userToken,
-      side: "Sell",
-      offerType: orderType,
-      currPrice: price,
-    };
-
-    console.log("buy offer",buyOfferInfo)
-    console.log("buy offer",sellOfferInfo)
-
     if (offerType === "buy") {
-      socket.emit("xumm-payment-request", buyOfferInfo);
+      const buyOfferInfo = {
+        account: accountNo,
+        buyValue: total.toFixed(5),
+        buyCurrency,
+        buyIssuer,
+        sellValue: amount,
+        sellCurrency,
+        sellIssuer,
+        userToken,
+        side: "Buy",
+        offerType: orderType,
+        currPrice: price,
+      };
+
+      socket.emit(SOCKET_REQUEST[network], buyOfferInfo);
     } else {
-      socket.emit("xumm-payment-request", sellOfferInfo);
+      const sellOfferInfo = {
+        account: accountNo,
+        buyValue: amount,
+        buyCurrency: sellCurrency,
+        buyIssuer: sellIssuer,
+        sellValue: total.toFixed(5),
+        sellCurrency: buyCurrency,
+        sellIssuer: buyIssuer,
+        userToken,
+        side: "Sell",
+        offerType: orderType,
+        currPrice: price,
+      };
+      socket.emit(SOCKET_REQUEST[network], sellOfferInfo);
     }
 
     const submitBookOfferData = {
@@ -167,7 +170,7 @@ const OfferModel = ({
   };
 
   return (
-    <Modal title="Create Offer" visible={show} footer={null} closable onCancel={hide}>
+    <Modal title="Create Offer" open={show} footer={null} closable onCancel={hide}>
       <div className="m-4">
         <div className="d-flex flex-column">
           <div className="d-flex justify-content-between mb-2">

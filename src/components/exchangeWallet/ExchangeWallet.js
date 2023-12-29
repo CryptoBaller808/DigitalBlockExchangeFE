@@ -10,6 +10,7 @@ import OfferModel from "../offerModel";
 import Modal from "../Modal";
 import { Slider } from "antd";
 import WalletConnect from "../WalletConnect";
+import clsx from "clsx";
 
 const ExchangeWallet = ({ currencyData }) => {
   const [connectTokenTab, setConnectTokenTab] = useState("Limit");
@@ -61,6 +62,7 @@ const ExchangeWallet = ({ currencyData }) => {
       setLimitPrice(0);
     }
   }, [orderStatus]);
+
   const location = useLocation();
   const isWalletConnected = useSelector(state => state.authReducer.isWalletConnected);
 
@@ -74,6 +76,7 @@ const ExchangeWallet = ({ currencyData }) => {
   const paymentQR = useSelector(state => state.paymentQRCodeReducer?.paymentQRcode);
 
   const balance = accountInfo?.balance;
+  const accountStr = accountInfo?.account;
   const title = currencyData?.info?.title;
 
   const tempCurrency = title && title.split("/");
@@ -190,26 +193,38 @@ const ExchangeWallet = ({ currencyData }) => {
   };
 
   return (
-    <div className="connection-sec flex flex-col w-full">
+    <div className="connection-sec flex flex-col w-full ">
       <div className="connects-tabs flex">
-        <div className={`tabs-item ${connectTokenTab == "Limit" ? "active" : ""}`} onClick={e => setConnectTokenTab("Limit")}>
+        <div
+          className={clsx("tabs-item", {
+            active: connectTokenTab === "Limit",
+          })}
+          onClick={setConnectTokenTab.bind(this, "Limit")}>
           Limit
         </div>
-        <div className={`tabs-item ${connectTokenTab == "Market" ? "active" : ""}`} onClick={e => setConnectTokenTab("Market")}>
+        <div
+          className={clsx("tabs-item", {
+            active: connectTokenTab === "Market",
+          })}
+          onClick={setConnectTokenTab.bind(this, "Market")}>
           Market
         </div>
-        <div className={`tabs-item ${connectTokenTab == "Order" ? "active" : ""}`} onClick={e => setConnectTokenTab("Order")}>
+        <div
+          className={clsx("tabs-item", {
+            active: connectTokenTab === "Order",
+          })}
+          onClick={setConnectTokenTab.bind(this, "Order")}>
           Trigger Order
         </div>
       </div>
-      <div className="content">
+      <div className="content ">
         <div className="buy-side flex flex-col">
           {connectTokenTab === "Limit" ? (
             <>
               <div className="hdr flex items-center w-full justify-between">
                 <div className="le">Buy {baseCurrency}</div>
                 <div className="ri">
-                  {currentCurrency} Available:-- {balance}
+                  {currentCurrency} Available: {currentCurrency === "XLM" ? accountStr : balance}
                 </div>
               </div>
               <div className="input-data flex flex-col">
@@ -281,7 +296,7 @@ const ExchangeWallet = ({ currencyData }) => {
               <div className="hdr flex items-center w-full justify-between">
                 <div className="le">Buy {baseCurrency}</div>
                 <div className="ri">
-                  {currentCurrency} Available:-- {balance}
+                  {currentCurrency} Available: {currentCurrency === "XLM" ? accountStr : balance}
                 </div>
               </div>
               <div className="input-data flex flex-col">
@@ -346,7 +361,7 @@ const ExchangeWallet = ({ currencyData }) => {
               <div className="hdr flex items-center w-full justify-between">
                 <div className="le">Buy {baseCurrency}</div>
                 <div className="ri">
-                  {currentCurrency} Available: {balance}
+                  {currentCurrency} Available: {currentCurrency === "XLM" ? accountStr : balance}
                 </div>
               </div>
               <div className="input-data flex flex-col">
@@ -387,6 +402,7 @@ const ExchangeWallet = ({ currencyData }) => {
             </>
           ) : null}
         </div>
+
         <div className="sell-side flex flex-col">
           {connectTokenTab === "Limit" ? (
             <>
@@ -591,15 +607,16 @@ const ExchangeWallet = ({ currencyData }) => {
           ) : null}
         </div>
       </div>
+
       {open && (
         <Modal open={open} onClose={() => setOpen(false)}>
-        <WalletConnect network={network} open={open} setOpen={setOpen} />
-      </Modal>
+          <WalletConnect network={network} open={open} setOpen={setOpen} />
+        </Modal>
       )}
       {paymentModel && (
         <OfferModel
           show={paymentModel}
-          hide={() => setPaymentModel(false)}
+          hide={setPaymentModel.bind(this, false)}
           amount={amount}
           price={orderType === "Limit" ? limitPrice : price}
           total={totalPrice}
