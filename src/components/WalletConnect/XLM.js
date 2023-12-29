@@ -4,6 +4,7 @@ import { connectWallet } from "../../redux/actions";
 import { useDispatch } from "react-redux";
 import { useSocket } from "../../context/socket";
 import * as balanceAction from "../../redux/xummBalance/action";
+import { toast } from "react-toastify";
 
 const StellarWalletConnect = ({ setOpen }) => {
   const [uri, setUri] = useState(null);
@@ -18,7 +19,7 @@ const StellarWalletConnect = ({ setOpen }) => {
     });
 
     socket.on("connect-error", args => {
-      console.log("qr-app-response===>", args);
+      toast.error("Error in connect wallet.");
       setOpen(false);
     });
 
