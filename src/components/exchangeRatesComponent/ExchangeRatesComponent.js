@@ -197,7 +197,7 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
   );
 
   return (
-    <div className="left flex flex-col">
+    <div className="left flex flex-col  h-full ">
       {/* Left price bar start */}
       <div className="le-top flex flex-col">
         <div className="search-box flex items-center justify-between">
