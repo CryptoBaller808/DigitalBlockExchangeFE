@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { getTickersData } from "../../helper";
+import clsx from "clsx";
 
 const GraphHeadComponent = ({ currencyData2 }) => {
   const price = currencyData2?.info?.price;
   const title = currencyData2?.info?.title;
+  const stat = currencyData2?.info?.stat;
   const [tickersData, setTickersData] = useState(null);
   const tempCurrency = title && title.split("/");
   const currentCurrency = tempCurrency?.length && tempCurrency[0];
@@ -53,12 +55,24 @@ const GraphHeadComponent = ({ currencyData2 }) => {
         <div className="cnt_right flex">
           <div className="item flex items-center  justify-center flex-col">
             <div className="lbl">Price</div>
-            <div className="val">{parseFloat(price).toFixed(5)}</div>
+            <div
+              className={clsx("text-sm", {
+                "text-red-500": stat < 0,
+                "text-green-500": stat >= 0,
+              })}>
+              {parseFloat(price).toFixed(5)}
+            </div>
           </div>
-          {/* <div className="item flex items-center  justify-center flex-col">
+          <div className="item flex items-center  justify-center flex-col">
             <div className="lbl">24h Chg</div>
-            <div className="val">{Number(tickersData?.high_price - tickersData?.low_price)}</div>
-          </div> */}
+            <div
+              className={clsx("text-sm", {
+                "text-red-500": stat < 0,
+                "text-green-500": stat >= 0,
+              })}>
+              {stat}
+            </div>
+          </div>
           <div className="item flex items-center  justify-center flex-col">
             <div className="lbl">24h High</div>
             <div className="val">{Number(tickersData?.high_price || 0).toFixed(4) || 0}</div>
