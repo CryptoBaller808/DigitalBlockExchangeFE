@@ -26,6 +26,9 @@ module.exports = {
           60: "#D1D1D1",
           50: "#E8E8E8",
         },
+        green: {
+          DEFAULT: "#76b91b",
+        },
       },
       fontFamily: {
         serif: ["Helvetica"],

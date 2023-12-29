@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getTickersData } from "../../helper";
 import clsx from "clsx";
+import ThemeSwitch from "../theme-switch";
 
 const GraphHeadComponent = ({ currencyData2 }) => {
   const price = currencyData2?.info?.price;
@@ -49,22 +50,22 @@ const GraphHeadComponent = ({ currencyData2 }) => {
   }, [currencyData2]);
 
   return (
-    <div className="center-hdr flex items-center w-full">
-      <div className="content-side flex item-center">
-        <div className="cnt_left flex items-center">{title}</div>
-        <div className="cnt_right flex">
-          <div className="item flex items-center  justify-center flex-col">
-            <div className="lbl">Price</div>
+    <div className="p-2 border-1 border-green rounded-lg flex items-center w-full bg-white">
+      <div className=" flex w-full gap-4">
+        <div className="font-bold flex items-center">{title}</div>
+        <div className=" flex gap-4 text-grey-70 text-sm font-thin ">
+          <div className="item flex items-center justify-center flex-col">
+            <div>Price</div>
             <div
-              className={clsx("text-sm", {
+              className={clsx("", {
                 "text-red-500": stat < 0,
                 "text-green-500": stat >= 0,
               })}>
               {parseFloat(price).toFixed(5)}
             </div>
           </div>
-          <div className="item flex items-center  justify-center flex-col">
-            <div className="lbl">24h Chg</div>
+          <div className="item flex items-center justify-center flex-col">
+            <div>24h Chg</div>
             <div
               className={clsx("text-sm", {
                 "text-red-500": stat < 0,
@@ -74,22 +75,20 @@ const GraphHeadComponent = ({ currencyData2 }) => {
             </div>
           </div>
           <div className="item flex items-center  justify-center flex-col">
-            <div className="lbl">24h High</div>
-            <div className="val">{Number(tickersData?.high_price || 0).toFixed(4) || 0}</div>
+            <div>24h High</div>
+            <div className="text-black">{Number(tickersData?.high_price || 0).toFixed(4) || 0}</div>
+          </div>
+          <div className="item flex items-center justify-center flex-col">
+            <div>24h Vol({currentCurrency})</div>
+            <div className="text-black">{Number(tickersData?.volume || 0)?.toFixed(4) || 0}</div>
           </div>
           <div className="item flex items-center  justify-center flex-col">
-            <div className="lbl">24h Vol({currentCurrency})</div>
-            <div className="val">{Number(tickersData?.volume || 0)?.toFixed(4) || 0}</div>
-          </div>
-          <div className="item flex items-center  justify-center flex-col">
-            <div className="lbl">24h Vol({baseCurrency})</div>
-            <div className="val">{Number(tickersData?.inverted_volume || 0)?.toFixed(4) || 0}</div>
+            <div>24h Vol({baseCurrency})</div>
+            <div className="text-black">{Number(tickersData?.inverted_volume || 0)?.toFixed(4) || 0}</div>
           </div>
         </div>
       </div>
-      {/*<div className="icon cursor-pointer ml-3">
-        <SunIcon />
-      </div>*/}
+      <ThemeSwitch />
     </div>
   );
 };
