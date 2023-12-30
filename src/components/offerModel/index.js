@@ -49,7 +49,6 @@ const OfferModel = ({
 
   const handleConfirm = () => {
     toast.success(TOAST_MESSAGE[network]);
-    hide();
 
     if (offerType === "buy") {
       const buyOfferInfo = {
@@ -166,6 +165,18 @@ const OfferModel = ({
         toast.error(args.message);
         setOrderStatus(false);
       }
+    });
+
+    socket.on("payment-response-xlm", args => {
+      console.log("args===>", args);
+      toast.success("Offer added successfully,Please check console.");
+
+      hide();
+    });
+
+    socket.on("transaction-error", args => {
+      toast.error(args);
+      hide();
     });
   };
 

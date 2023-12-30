@@ -25,10 +25,17 @@ const StellarWalletConnect = ({ setOpen }) => {
 
     socket.on("account-response", args => {
       dispatch(balanceAction.setBalance(args));
+      toast.success("Wallet connected successfully.");
       if (args) {
         dispatch(connectWallet(true));
         setOpen(false);
       }
+    });
+
+    socket.on("wallet_disconnect", () => {
+      dispatch(balanceAction.setBalance(null));
+      dispatch(connectWallet(false));
+      toast.warning("Wallet disconnected.");
     });
 
     socket.on("connection");
