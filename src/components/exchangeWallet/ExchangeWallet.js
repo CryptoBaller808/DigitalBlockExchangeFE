@@ -13,6 +13,14 @@ import WalletConnect from "../WalletConnect";
 import clsx from "clsx";
 
 const ExchangeWallet = ({ currencyData }) => {
+  const price = currencyData?.info?.price;
+  const baseCurrent = currencyData?.info.curA ?? "XRP";
+  const title = currencyData?.info?.title;
+  const issuerB = currencyData?.info?.issuerB;
+  const issuerA = currencyData?.info?.issuerA;
+  const curA = currencyData?.info?.curA;
+  const curB = currencyData?.info?.curB;
+
   const [connectTokenTab, setConnectTokenTab] = useState("Limit");
   //from new update
   const [paymentModel, setPaymentModel] = useState(false);
@@ -23,9 +31,10 @@ const ExchangeWallet = ({ currencyData }) => {
   const [amount, setAmount] = useState();
   const [totalPrice, setTotalPrice] = useState();
   const [limitPrice, setLimitPrice] = useState();
-  const price = currencyData?.info?.price;
+  const isWalletConnected = useSelector(state => state.authReducer.isWalletConnected);
+  const accountInfo = useSelector(state => state.signInData?.balance);
   const network = useSelector(state => state.networkReducers.token);
-
+  const location = useLocation();
   const dispatch = useDispatch();
 
   const [marketVal, setMarketVal] = useState({
@@ -39,6 +48,22 @@ const ExchangeWallet = ({ currencyData }) => {
     buyPrice: price,
     sellPrice: price,
   });
+
+  const userCurrencies = accountInfo?.currencies?.filter(val => {
+    if (baseCurrent === "XLM") return val.asset_code === curB;
+
+    return val.account === issuerB && val.currency === curB;
+  });
+  const userCurrencyBalance = userCurrencies?.length && userCurrencies[0].balance;
+  const balance = accountInfo?.balance;
+  const accountStr = accountInfo?.account;
+  const tempCurrency = title && title.split("/");
+  const currentCurrency = tempCurrency?.length && tempCurrency[0];
+  const baseCurrency = tempCurrency?.length && tempCurrency[1];
+  const totalBuyPrice = marketVal.buyAmount * price;
+  const totalSellPrice = marketVal.sellAmount * price;
+  const totalBuyPriceLimit = limitVal.buyAmount * limitVal.buyPrice;
+  const totalSellPriceLimit = limitVal.sellAmount * limitVal.sellPrice;
 
   useEffect(() => {
     setLimitVal({
@@ -62,36 +87,6 @@ const ExchangeWallet = ({ currencyData }) => {
       setLimitPrice(0);
     }
   }, [orderStatus]);
-
-  const location = useLocation();
-  const isWalletConnected = useSelector(state => state.authReducer.isWalletConnected);
-
-  const accountInfo = useSelector(state => state.signInData?.balance);
-  const userCurrencies = accountInfo?.currencies?.filter(
-    val => val.account === currencyData?.info?.issuerB && val.currency === currencyData?.info?.curB,
-  );
-
-  const userCurrencyBalance = userCurrencies?.length && userCurrencies[0].balance;
-
-  const paymentQR = useSelector(state => state.paymentQRCodeReducer?.paymentQRcode);
-
-  const balance = accountInfo?.balance;
-  const accountStr = accountInfo?.account;
-  const title = currencyData?.info?.title;
-
-  const tempCurrency = title && title.split("/");
-
-  const currentCurrency = tempCurrency?.length && tempCurrency[0];
-
-  const baseCurrency = tempCurrency?.length && tempCurrency[1];
-
-  const totalBuyPrice = marketVal.buyAmount * price;
-
-  const totalSellPrice = marketVal.sellAmount * price;
-
-  const totalBuyPriceLimit = limitVal.buyAmount * limitVal.buyPrice;
-
-  const totalSellPriceLimit = limitVal.sellAmount * limitVal.sellPrice;
 
   const handleClickOpen = () => {
     if (location.pathname === "/exchange") {
@@ -623,8 +618,8 @@ const ExchangeWallet = ({ currencyData }) => {
           sellCurrency={currentCurrency}
           buyCurrency={baseCurrency}
           accountNo={accountInfo?.account}
-          buyIssuer={currencyData?.info?.issuerB}
-          sellIssuer={currencyData?.info?.issuerA}
+          buyIssuer={issuerB}
+          sellIssuer={issuerA}
           offerType={offerType}
           orderType={orderType}
           setOrderStatus={setOrderStatus}
