@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
-import { DropDownIcon, MenuIcon } from "../Icons";
+import React, { useState } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { MenuIcon } from "../Icons";
 import LogoHorizontal from "../assets/DBX-new.png";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Modal from "./Modal";
@@ -12,7 +12,6 @@ import NetworksSelection from "./Networks";
 
 const Header = ({ openSidebar, setOpenSidebar }) => {
   const dispatch = useDispatch();
-  const location = useLocation();
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("");
   const [modalShow, setModalShow] = useState(false);
@@ -20,21 +19,16 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
   const isWalletConnected = useSelector(state => state.authReducer.isWalletConnected);
   const balance = useSelector(state => state.signInData?.balance);
 
-  const [BalanceData, setBalanceData] = useState(balance);
   //prepring user id string
   const accountStr = balance?.account;
   let dottedStr = accountStr?.substr(0, 5) + "..." + accountStr?.substr(accountStr?.length - 4);
 
   const network = useSelector(state => state.networkReducers.token);
 
-  useEffect(() => {
-    if (balance == null) {
-      setBalanceData(balance);
-    }
-  }, []);
   const onHide = () => {
     setModalShow(false);
   };
+
   const handelDisconnect = () => {
     // dispatch(balanceAction.setBalanceEmpty());
     setModalShow(true);
@@ -92,7 +86,7 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
             ))}
           </div>
         </div>
-        <NetworksSelection network={network}/>
+        <NetworksSelection network={network} />
         <div className="hdr-right flex aic">
           {/* {!generalReducers?.isAuthenticated ? (
             <button className="btn button cleanbtn" onClick={e => setOpen(true)}>
