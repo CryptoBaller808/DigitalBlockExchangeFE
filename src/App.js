@@ -55,10 +55,15 @@ import Footer from "./components/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import Resale from "./Pages/Resale";
 import ThemeSwitch from "./components/theme-switch";
+import { useSocket } from "./context/socket";
+import * as balanceAction from "./redux/xummBalance/action";
+
 function App() {
   const [openSidebar, setOpenSidebar] = useState(false);
   const dispatch = useDispatch();
   const { isDarkMode } = useSelector(state => state.themeReducer);
+
+  const socket = useSocket();
 
   const gettokenlocalstorage = async () => {
     let data = JSON.parse(localStorage.getItem("nft_login"));
@@ -86,6 +91,12 @@ function App() {
   useEffect(() => {
     gettokenlocalstorage();
   }, []);
+
+  useEffect(() => {
+    socket.on("wallet-updated", args => {
+      dispatch(balanceAction.setBalance(args));
+    });
+  }, [dispatch, socket]);
 
   return (
     <div className="App">
