@@ -14,6 +14,8 @@ import getExchangeRate from "../../helper/api/exchangeRate";
 import { toast } from "react-toastify";
 import ExchangeDeleteModal from "../loader/ExchangeDeleteModal";
 import clsx from "clsx";
+import WalletConnect from "../WalletConnect";
+import Modal from "../Modal";
 
 const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
   const [orderTab, setOrderTab] = useState("open");
@@ -21,21 +23,18 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
   const [hisLoading, setHisLoading] = useState(true);
   const [isLoading, setisLoading] = useState(false);
   const network = useSelector(state => state.networkReducers.token);
-
-  //new update
   const balanceData = useSelector(state => state.signInData?.balance);
   const userAccount = network === "xrp" ? balanceData?.account : balanceData?.userToken;
-
   const dispatch = useDispatch();
   const accountOffer = useSelector(state => state.accountOffers?.accountOffer);
   const accountOfferProcessing = useSelector(state => state.accountOffers?.processing);
-
   const historyOffer = useSelector(state => state.historyOffers?.historyOffer);
   const historyOfferProcessing = useSelector(state => state.historyOffers?.processing);
-
+  const isWalletConnected = useSelector(state => state.authReducer.isWalletConnected);
   const [accountOfferData, setAccountOfferData] = useState(accountOffer);
   const [historyOfferData, setHistoryOfferData] = useState(historyOffer);
   const socket = useSocket();
+  const [isConnectModalVisible, setConnectModalVisible] = useState(false);
 
   useEffect(() => {
     setAccLoading(true);
@@ -56,23 +55,6 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
     setHistoryOfferData(historyOffer);
     setHisLoading(false);
   }, [historyOffer]);
-
-  //   useEffect(() => {
-  //     if (isWalletConnected) {
-  //       getBookOffers(submitBookOfferData, userAccount)
-  //         .then((res) => {
-  //           if (res.status === "success" && res.result?.offers.length) {
-  //             console.log("BookOffers", res);
-  //             dispatch(bookOfferAction.setBookOffers(res.result.offers));
-  //           }
-  //         })
-  //         .catch((err) => console.log("err", err));
-  //     } else {
-  //       dispatch(bookOfferAction.setBookOffers([]));
-  //     }
-  //   }, [paymentResponse]);
-
-  const isWalletConnected = useSelector(state => state.authReducer.isWalletConnected);
 
   useEffect(() => {
     if (isWalletConnected) {
@@ -155,7 +137,7 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
       title: "Action",
       dataIndex: "action",
       key: "action",
-      render: (text, record) => {
+      render: (_, record) => {
         return (
           <Space size="middle">
             <Button danger type="text" onClick={e => onDelete(record.key, e)}>
@@ -322,130 +304,114 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
     <>
       {isLoading && <ExchangeDeleteModal />}
       <div className="orders-sec flex flex-col">
+        {/* Tab component */}
         <div className="tabs-sec flex aic">
-          <div className={`i-tab ${orderTab === "open" ? "active" : ""}`} onClick={e => setOrderTab("open")}>
+          <div
+            className={clsx("i-tab", {
+              active: orderTab === "open",
+            })}
+            onClick={setOrderTab.bind(this, "open")}>
             Open orders
           </div>
-          <div className={`i-tab ${orderTab === "history" ? "active" : ""}`} onClick={e => setOrderTab("history")}>
+          <div
+            className={clsx("i-tab", {
+              active: orderTab === "history",
+            })}
+            onClick={setOrderTab.bind(this, "history")}>
             24h Order History (Last 50)
           </div>
         </div>
+
+        {/* Table component */}
         <div className="table-block flex overflow-scroll">
           <div className="tbl-sec flex flex-col">
+            {/* Table Columns component */}
             <div className="tbl-row flex">
-              {orderTab === "open" ? (
-                <>
-                  {columns.map(obj => {
-                    return (
-                      <div className="tbl-col" key={obj.key}>
-                        {obj.title}
-                      </div>
-                    );
-                  })}
-                </>
-              ) : (
-                <>
-                  {filteredColumns?.map(obj => {
-                    return (
-                      <div className="tbl-col" key={obj.key}>
-                        {obj.title}
-                      </div>
-                    );
-                  })}
-                </>
-              )}
-              {/* <div className="tbl-col">Date</div>
-            <div className="tbl-col">Pair</div>
-            <div className="tbl-col">Type</div>
-            <div className="tbl-col">Side</div>
-            <div className="tbl-col">Price</div>
-            <div className="tbl-col">Amount</div>
-            <div className="tbl-col">Filled</div>
-            <div className="tbl-col">Filled%</div>
-            <div className="tbl-col">Total</div>
-            <div className="tbl-col">Trigger rule</div>
-            <div className="tbl-col">Action</div> */}
+              ;
+              {orderTab === "open" &&
+                columns.map(obj => {
+                  return (
+                    <div className="tbl-col" key={obj.key}>
+                      {obj.title}
+                    </div>
+                  );
+                })}
+              {orderTab === "history" &&
+                filteredColumns?.map(obj => {
+                  return (
+                    <div className="tbl-col" key={obj.key}>
+                      {obj.title}
+                    </div>
+                  );
+                })}
             </div>
-            {/* {accLoading && <Loader />} */}
-            {isWalletConnected ? (
-              orderTab === "open" ? (
-                !accLoading ? (
-                  dataSource.length > 0 ? (
-                    dataSource.map((item, index) => {
-                      let total = (Number(item?.price) * Number(item?.amount)).toFixed(4);
-                      return (
-                        <div className="tbl-row flex" key={index}>
-                          <div className="tbl-col">{item.date}</div>
-                          <div className="tbl-col">{item.pair}</div>
-                          <div className="tbl-col">{item.offerType}</div>
-                          <div className={`tbl-col ${item.side == "Buy" ? "green" : "red"}`}>{item.side}</div>
 
-                          <div className="tbl-col">{item.price}</div>
-                          <div className="tbl-col">{item?.amount}</div>
-                          <div className="tbl-col">{total}</div>
-                          {/* <div className="tbl-col">{item.filled2}</div>
-                      <div className="tbl-col">{item.total}</div>
-                      <div className="tbl-col">{item.rule}</div> */}
-                          {/* class of below : ${
-                  item.action == "Cancel" ? "blue" : item.action == "Cancelled" ? "red" : item.history.status == "Filled" ? "green" : ""
-                } */}
-                          <div onClick={e => onDelete(item.action, e)} className={`tbl-col cursor-pointer red`}>
-                            Delete
-                            {/* {orderTab === "history" ? <> {item.history.status}</> : <>{item.action}</>} */}
-                          </div>
+            {isWalletConnected && orderTab === "open" && (
+              <>
+                {accLoading && <Loader />}
+                {!accLoading && dataSource.length > 0 ? (
+                  dataSource.map((item, index) => {
+                    let total = (Number(item?.price) * Number(item?.amount)).toFixed(4);
+                    return (
+                      <div className="tbl-row flex" key={index}>
+                        <div className="tbl-col">{item.date}</div>
+                        <div className="tbl-col">{item.pair}</div>
+                        <div className="tbl-col">{item.offerType}</div>
+                        <div className={`tbl-col ${item.side === "Buy" ? "green" : "red"}`}>{item.side}</div>
+
+                        <div className="tbl-col">{item.price}</div>
+                        <div className="tbl-col">{item?.amount}</div>
+                        <div className="tbl-col">{total}</div>
+                        <div onClick={e => onDelete(item.action, e)} className={`tbl-col cursor-pointer red`}>
+                          Delete
                         </div>
-                      );
-                    })
-                  ) : (
-                    <>
-                      <div className="flex items-center justify-center no-result">No result found</div>
-                    </>
-                  )
+                      </div>
+                    );
+                  })
                 ) : (
-                  <Loader />
-                )
-              ) : !hisLoading ? (
-                dataSourceHistory.length > 0 ? (
+                  <>
+                    <div className="flex items-center justify-center no-result">No result found</div>
+                  </>
+                )}
+              </>
+            )}
+
+            {isWalletConnected && orderTab === "history" && (
+              <>
+                {hisLoading && <Loader />}
+                {!hisLoading && dataSourceHistory.length > 0 ? (
                   dataSourceHistory.map((item, index) => (
                     <div className="tbl-row flex" key={index}>
                       <div className="tbl-col">{item.date}</div>
                       <div className="tbl-col">{item.pair}</div>
                       <div className="tbl-col">{item.offerType}</div>
-                      <div className={`tbl-col ${item.side == "Buy" ? "green" : "red"}`}>{item.side}</div>
+                      <div className={`tbl-col ${item.side === "Buy" ? "green" : "red"}`}>{item.side}</div>
 
                       <div className="tbl-col">{item.amount}</div>
                       <div className="tbl-col">{item.price}</div>
                       <div className="tbl-col">{item.total}</div>
-                      {/* <div className="tbl-col">{item.filled2}</div>
-                      <div className="tbl-col">{item.total}</div>
-                      <div className="tbl-col">{item.rule}</div> */}
-                      {/* class of below : ${
-                  item.action == "Cancel" ? "blue" : item.action == "Cancelled" ? "red" : item.history.status == "Filled" ? "green" : ""
-                } */}
-                      {/* <div
-                        onClick={(e) => onDelete(item, e)}
-                        className={`tbl-col cursor-pointer red`}
-                      >
-                        Delete
-                        {/* {orderTab === "history" ? <> {item.history.status}</> : <>{item.action}</>} 
-                      </div> */}
                     </div>
                   ))
                 ) : (
                   <>
                     <div className="flex items-center justify-center no-result">No result found</div>
                   </>
-                )
-              ) : (
-                <Loader />
-              )
-            ) : (
-              <>
-                <div className="flex items-center justify-center no-result">connect wallet</div>
+                )}
               </>
+            )}
+
+            {!isWalletConnected && (
+              <div className="btn button w-52 self-center" onClick={setConnectModalVisible.bind(this, true)}>
+                connect wallet
+              </div>
             )}
           </div>
         </div>
+        {isConnectModalVisible && (
+          <Modal open={isConnectModalVisible} onClose={setConnectModalVisible.bind(this, false)}>
+            <WalletConnect network={network} open={isConnectModalVisible} setOpen={setConnectModalVisible} />
+          </Modal>
+        )}
       </div>
     </>
   );
