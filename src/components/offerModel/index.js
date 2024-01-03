@@ -168,8 +168,26 @@ const OfferModel = ({
     });
 
     socket.on("payment-response-xlm", args => {
-      console.log("args===>", args);
       toast.success("Offer added successfully,Please check console.");
+
+      getFullAccountOffers({ accountNo: accountNo, network })
+        .then(res => {
+          if (res.data.success) {
+            let offerResult = res.data.data;
+            dispatch(accountOfferAction.setAccountOffers(offerResult));
+          }
+        })
+        .catch(err => console.log("err", err));
+
+      getOrderHistory(accountNo)
+        .then(res => {
+          if (res.data.success) {
+            dispatch(historyOfferAction.setHistoryOffersProcessing());
+            dispatch(historyOfferAction.setHistoryOffers(res.data.data));
+            dispatch(historyOfferAction.setStopHistoryOffersProcessing());
+          }
+        })
+        .catch(err => console.log("err", err));
 
       hide();
     });

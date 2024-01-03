@@ -617,7 +617,7 @@ const ExchangeWallet = ({ currencyData }) => {
           total={totalPrice}
           sellCurrency={currentCurrency}
           buyCurrency={baseCurrency}
-          accountNo={accountInfo?.account}
+          accountNo={network === "xrp" ? accountInfo?.account : accountInfo?.userToken}
           buyIssuer={issuerB}
           sellIssuer={issuerA}
           offerType={offerType}

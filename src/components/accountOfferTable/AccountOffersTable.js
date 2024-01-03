@@ -17,6 +17,11 @@ import clsx from "clsx";
 import WalletConnect from "../WalletConnect";
 import Modal from "../Modal";
 
+const DELETE_EVENTS = {
+  xlm: "xlm-delete-offers",
+  xrp: "delete-offers",
+};
+
 const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
   const [orderTab, setOrderTab] = useState("open");
   const [accLoading, setAccLoading] = useState(true);
@@ -152,19 +157,18 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
   const filteredColumns = columns?.filter(col => col.title !== "Action");
 
   const onDelete = (val, e) => {
-    console.log("inside delete");
     e.preventDefault();
-    // const data = bookOffer.filter(item => item.key !== key);
     const accInfo = {
       account: balanceData?.account,
       userToken: balanceData?.userToken,
-      tx_id: val?.txId,
+      tx_id: val?.txId ?? val?.id,
+      offerType: val?.offerType,
     };
 
     setisLoading(true);
     // socket.on("payment-response", args => {
     // })
-    socket.emit("delete-offers", accInfo);
+    socket.emit(DELETE_EVENTS[network], accInfo);
 
     socket.on("delete-offers-response", args => {
       setisLoading(false);
@@ -302,7 +306,7 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
 
   return (
     <>
-      {isLoading && <ExchangeDeleteModal />}
+      {isLoading && <ExchangeDeleteModal network={network} />}
       <div className="orders-sec flex flex-col">
         {/* Tab component */}
         <div className="tabs-sec flex aic">
