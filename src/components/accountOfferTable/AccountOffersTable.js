@@ -13,6 +13,7 @@ import { getFullAccountOffers, getOrderHistory, getTickersData } from "../../hel
 import getExchangeRate from "../../helper/api/exchangeRate";
 import { toast } from "react-toastify";
 import ExchangeDeleteModal from "../loader/ExchangeDeleteModal";
+import clsx from "clsx";
 
 const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
   const [orderTab, setOrderTab] = useState("open");
@@ -26,7 +27,6 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
   const userAccount = network === "xrp" ? balanceData?.account : balanceData?.userToken;
 
   const dispatch = useDispatch();
-  const bookOffer = useSelector(state => state.bookOffers?.bookOffer);
   const accountOffer = useSelector(state => state.accountOffers?.accountOffer);
   const accountOfferProcessing = useSelector(state => state.accountOffers?.processing);
 
@@ -35,13 +35,10 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
 
   const [accountOfferData, setAccountOfferData] = useState(accountOffer);
   const [historyOfferData, setHistoryOfferData] = useState(historyOffer);
-  const [tokenTabSelected, setTokenTabSelected] = useState("XRP");
-
   const socket = useSocket();
 
   useEffect(() => {
     setAccLoading(true);
-
     socket.on("drops-val", args => {
       const drops = Number(args);
       setDropVal(drops);
@@ -59,8 +56,6 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
     setHistoryOfferData(historyOffer);
     setHisLoading(false);
   }, [historyOffer]);
-
-  const paymentResponse = useSelector(state => state.paymentResponseReducer?.paymentResponse);
 
   //   useEffect(() => {
   //     if (isWalletConnected) {
@@ -85,34 +80,16 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
       getFullAccountOffers({ accountNo: userAccount, network })
         .then(res => {
           if (res.data.success) {
-            // setAccLoading(true);
-            let offerResult = res.data.data;
-
-            // offerResult = _.orderBy(offerResult, ["seq"], ["desc"]);
+            const offerResult = res.data.data;
             dispatch(accountOfferAction.setAccountOffersProcessing(true));
             dispatch(accountOfferAction.setAccountOffers(offerResult));
           } else {
             dispatch(accountOfferAction.setAccountOffers([]));
           }
         })
-        .catch(err => console.log("err", err));
+        .catch(err => console.log("getFullAccountOffers.error", err));
       dispatch(accountOfferAction.setAccountOffersProcessing(false));
 
-      // getAccountOffers(userAccount)
-      //   .then(res => {
-      //     if (res.status === "success") {
-      //       // setAccLoading(true);
-      //       console.log("-------------getAccountOffers OFF------------------");
-      //       let offerResult = res.result.offers;
-      //       console.log("getAccountOffers res", res);
-      //       offerResult = _.orderBy(offerResult, ["seq"], ["desc"]);
-
-      //       // dispatch(accountOfferAction.setAccountOffersProcessing());
-      //       // dispatch(accountOfferAction.setAccountOffers(offerResult));
-      //       // dispatch(accountOfferAction.setStopAccountOffersProcessing());
-      //     }
-      //   })
-      //   .catch(err => console.log("err", err));
       getOrderHistory(userAccount)
         .then(res => {
           // console.log("getOrderHistory res----------->", res);
@@ -178,16 +155,15 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
       title: "Action",
       dataIndex: "action",
       key: "action",
-      //   render: (text, record) => {
-      //     // console.log("record", record);
-      //     return (
-      //       <Space size="middle">
-      //         <Button danger type="text" onClick={e => onDelete(record.key, e)}>
-      //           Delete
-      //         </Button>
-      //       </Space>
-      //     );
-      //   },
+      render: (text, record) => {
+        return (
+          <Space size="middle">
+            <Button danger type="text" onClick={e => onDelete(record.key, e)}>
+              Delete
+            </Button>
+          </Space>
+        );
+      },
     },
   ];
 
@@ -251,11 +227,8 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
   };
 
   const dataSource = accountOfferData.map((obj, indx) => {
-    // const price = typeof obj.taker_gets === "string" ? dropVal * Number(obj.quality) : Number(obj.quality);
-    // const amount = Number(obj?.taker_pays?.value).toFixed(5);
     const total = (obj.price * obj.amount).toFixed(5);
     const crrPair = obj.pair;
-
     const totalCurrency = crrPair.split("/");
 
     return {
@@ -282,13 +255,9 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
   }, [accountOfferProcessing]);
 
   //history offers data
-  // console.log("historyOfferData", historyOfferData);
   const dataSourceHistory = historyOfferData.map((obj, indx) => {
-    // const price = typeof obj.taker_gets === "string" ? dropVal * Number(obj.quality) : Number(obj.quality);
-    // const amount = Number(obj?.taker_pays?.value).toFixed(5);
     const total = (obj.price * obj.amount).toFixed(5);
     const crrPair = obj.pair;
-
     const totalCurrency = crrPair.split("/");
 
     return {
@@ -303,6 +272,7 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
       // action: obj,
     };
   });
+
   useEffect(() => {
     if (historyOfferProcessing) {
       setHisLoading(true);
@@ -314,7 +284,6 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
   }, [historyOfferProcessing]);
 
   //get current A and B currency and it's issuer
-
   useEffect(() => {
     async function fetchData() {
       if (currencyData2?.info) {
@@ -348,6 +317,7 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
     }
     fetchData();
   }, [currencyData2]);
+
   return (
     <>
       {isLoading && <ExchangeDeleteModal />}
