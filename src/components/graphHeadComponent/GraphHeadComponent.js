@@ -71,7 +71,7 @@ const GraphHeadComponent = ({ currencyData2 }) => {
                 "text-red-500": stat < 0,
                 "text-green-500": stat >= 0,
               })}>
-              {stat}
+              {stat?.toFixed(3)}%
             </div>
           </div>
           <div className="item flex items-center  justify-center flex-col">

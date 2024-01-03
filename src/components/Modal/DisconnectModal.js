@@ -9,7 +9,6 @@ import * as historyOfferAction from "../../redux/historyOffers/action";
 import { useNavigate } from "react-router-dom";
 
 const DisconnectModal = props => {
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const disconnectWallet = () => {
@@ -18,16 +17,16 @@ const DisconnectModal = props => {
     dispatch(connectWallet(false));
     //clear acc offers content
 
-    dispatch(accountOfferAction.setAccountOffersProcessing());
+    dispatch(accountOfferAction.setAccountOffersProcessing(true));
     dispatch(accountOfferAction.setAccountOffers([]));
-    dispatch(accountOfferAction.setStopAccountOffersProcessing());
+    dispatch(accountOfferAction.setAccountOffersProcessing(false));
     //clear history content
     dispatch(historyOfferAction.setHistoryOffersProcessing());
     dispatch(historyOfferAction.setHistoryOffers([]));
     dispatch(historyOfferAction.setStopHistoryOffersProcessing());
     localStorage.removeItem("nft_login");
-    dispatch(logoutUser())
-    navigate('/');
+    dispatch(logoutUser());
+    navigate("/");
     props.onHide();
   };
 

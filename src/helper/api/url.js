@@ -11,3 +11,5 @@ export const GET_STELLAR_TVCHART_DATA = "xlm/get-chart-data";
 export const GET_STELLAR_LIVE_PRICES = "xlm/get-live-prices";
 export const GET_STELLAR_TRADES_DATA = "xlm/get-trades-data";
 export const GET_STELLAR_ORDER_BOOK = "xlm/getorderbooks";
+export const GET_STELLAR_ACC_OFFERS = "xlm/get-account-offers";
+

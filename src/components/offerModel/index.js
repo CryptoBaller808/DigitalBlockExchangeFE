@@ -112,7 +112,7 @@ const OfferModel = ({
           .catch(err => console.log("err", err));
         //update Account offer data
 
-        getFullAccountOffers(accountNo)
+        getFullAccountOffers({ accountNo: accountNo, network })
           .then(res => {
             // console.log("AccountOffers", res);
             if (res.data.success) {
