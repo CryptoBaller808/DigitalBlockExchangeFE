@@ -123,7 +123,7 @@ const OfferModel = ({
           .catch(err => console.log("err", err));
         //account history offers
 
-        getOrderHistory(accountNo)
+        getOrderHistory({ accountNo, network })
           .then(res => {
             console.log("getOrderHistory res----------->", res);
 
@@ -179,7 +179,7 @@ const OfferModel = ({
         })
         .catch(err => console.log("err", err));
 
-      getOrderHistory(accountNo)
+      getOrderHistory({ accountNo, network })
         .then(res => {
           if (res.data.success) {
             dispatch(historyOfferAction.setHistoryOffersProcessing());

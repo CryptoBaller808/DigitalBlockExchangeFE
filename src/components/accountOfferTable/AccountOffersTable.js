@@ -77,14 +77,9 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
         .catch(err => console.log("getFullAccountOffers.error", err));
       dispatch(accountOfferAction.setAccountOffersProcessing(false));
 
-      getOrderHistory(userAccount)
+      getOrderHistory({ accountNo: userAccount, network })
         .then(res => {
-          // console.log("getOrderHistory res----------->", res);
-
           if (res.data.success) {
-            // setAccLoading(true);
-            // console.log("-------------HISTORY OFF------------------");
-
             dispatch(historyOfferAction.setHistoryOffersProcessing());
             dispatch(historyOfferAction.setHistoryOffers(res.data.data));
             dispatch(historyOfferAction.setStopHistoryOffersProcessing());
@@ -194,7 +189,7 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
         dispatch(accountOfferAction.setAccountOffersProcessing(false));
 
         //get offer history
-        getOrderHistory(userAccount)
+        getOrderHistory({ accountNo: userAccount, network })
           .then(res => {
             // console.log("getOrderHistory res----------->", res);
 

@@ -67,6 +67,7 @@ function App() {
 
   const gettokenlocalstorage = async () => {
     let data = JSON.parse(localStorage.getItem("nft_login"));
+    if (!data) return;
     console.log("login_cred", data);
     const res2 = await axios.get(`${process.env.REACT_APP_API_URL}/profiles/getuserProfile/${data?.id}`);
     console.log("res22", res2);

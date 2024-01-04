@@ -11,6 +11,7 @@ import {
   GET_STELLAR_TVCHART_DATA,
   GET_STELLAR_TRADES_DATA,
   GET_STELLAR_ACC_OFFERS,
+  GET_STELLAR_HIS_OFFERS,
 } from "./api/url";
 // import { store } from "../redux/store";
 
@@ -101,12 +102,15 @@ export const getFullAccountOffers = ({ accountNo, network }) => {
       .catch(reject);
   });
 };
-export const getOrderHistory = accNo => {
+export const getOrderHistory = ({ accountNo, network }) => {
   let data = {
-    accountNo: accNo,
+    accountNo,
   };
+
+  const API_URL = network === "xlm" ? GET_STELLAR_HIS_OFFERS : GET_HIS_OFFERS;
+
   return new Promise((resolve, reject) => {
-    ApiCall(GET_HIS_OFFERS, "post", data)
+    ApiCall(API_URL, "post", data)
       .then(res => resolve(res))
       .catch(reject);
   });
