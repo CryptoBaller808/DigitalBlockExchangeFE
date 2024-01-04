@@ -271,7 +271,7 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
         let tickersInput = {
           symbols: [`${currencyData2.info.curA}/${currencyData2.info.curB}+${currencyData2.info.issuerB}`],
         };
-        getTickersData(tickersInput)
+        getTickersData({ acc: tickersInput, network })
           .then(res => {
             if (res.data.success) {
               const apiResult = res.data.data;

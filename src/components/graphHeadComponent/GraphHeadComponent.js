@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getTickersData } from "../../helper";
 import clsx from "clsx";
 import ThemeSwitch from "../theme-switch";
+import { useSelector } from "react-redux";
 
 const GraphHeadComponent = ({ currencyData2 }) => {
   const price = currencyData2?.info?.price;
@@ -11,6 +12,7 @@ const GraphHeadComponent = ({ currencyData2 }) => {
   const tempCurrency = title && title.split("/");
   const currentCurrency = tempCurrency?.length && tempCurrency[0];
   const baseCurrency = tempCurrency?.length && tempCurrency[1];
+  const network = useSelector(state => state.networkReducers.token);
 
   useEffect(() => {
     async function fetchData() {
@@ -18,7 +20,7 @@ const GraphHeadComponent = ({ currencyData2 }) => {
         let tickersInput = {
           symbols: [`${currencyData2.info.curA}/${currencyData2.info.curB}+${currencyData2.info.issuerB}`],
         };
-        getTickersData(tickersInput)
+        getTickersData({ acc: tickersInput, network })
           .then(res => {
             if (res.data.success) {
               const apiResult = res.data.data;

@@ -12,6 +12,7 @@ import {
   GET_STELLAR_TRADES_DATA,
   GET_STELLAR_ACC_OFFERS,
   GET_STELLAR_HIS_OFFERS,
+  GET_STELLAR_TICKERS,
 } from "./api/url";
 // import { store } from "../redux/store";
 
@@ -128,12 +129,14 @@ export const getTradesData = acc => {
   });
 };
 
-export const getTickersData = acc => {
+export const getTickersData = ({ acc, network }) => {
   let data = {
     acc,
   };
+
+  const URL = network === "xlm" ? GET_STELLAR_TICKERS : GET_TICKERS;
   return new Promise((resolve, reject) => {
-    ApiCall(GET_TICKERS, "post", data)
+    ApiCall(URL, "post", data)
       .then(res => resolve(res))
       .catch(reject);
   });
