@@ -89,10 +89,6 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
       getData(currencyData[0]);
       setLoadingData(false);
       setCurrencyDataLoaded(true);
-    } else {
-      getAllCurrencyData().then(val => {
-        setCurrencyData(val);
-      });
     }
   }, [currencyData]);
 
