@@ -4,7 +4,7 @@ import Modal from "../components/Modal";
 import WalletConnect from "../components/WalletConnect";
 import Select from "react-select";
 import currency from "../helper/currencies";
-import { useSocket } from '../context/socket';
+import { useSocket } from "../context/socket";
 import { setModalOpen, connectWallet } from "../redux/actions";
 import * as balanceAction from "../redux/xummBalance/action";
 import * as QRCodeAction from "../redux/xummQRCode/action";
@@ -91,10 +91,10 @@ const Swap = () => {
       socket.emit("get-available-swap-path", item);
 
       socket.on("available-path", args => {
-        console.log("availabkle path",args);
-        if(args.alternatives?.length === 0){
-          setError("XRP does not have any Swap value for the current pair, please try after sometime.")
-        }else {
+        console.log("availabkle path", args);
+        if (args.alternatives?.length === 0) {
+          setError("XRP does not have any Swap value for the current pair, please try after sometime.");
+        } else {
           setAccountData(args.alternatives);
         }
       });
@@ -103,29 +103,28 @@ const Swap = () => {
         console.log("error", args);
         let error = args;
 
-        if(typeof error === "string"){
+        if (typeof error === "string") {
           setError(args);
-        }else if(typeof error === "object"){
+        } else if (typeof error === "object") {
           setError("XRP Node is facing some issue, please check after sometime");
         }
       });
 
-      socket.emit('get-all-user-currencies', {...balance, accountInfo: balance.account});
+      socket.emit("get-all-user-currencies", { ...balance, accountInfo: balance.account });
 
-      socket.on('get-all-user-currencies-response', args => {
-        console.log('get all user currency', args);
-        let accountCurrenciesItem = args.accountCurrencies?.find(item => swapTo.issuer === item?.issuer_address && swapTo.currency === item?.currency);
+      socket.on("get-all-user-currencies-response", args => {
+        console.log("get all user currency", args);
+        let accountCurrenciesItem = args.accountCurrencies?.find(
+          item => swapTo.issuer === item?.issuer_address && swapTo.currency === item?.currency,
+        );
         let currencyListItem = args.currencyList[0];
         setSwapFromBalance(currencyListItem);
         setSwapToBalance(accountCurrenciesItem);
-
       });
-      socket.on('get-all-user-currencies-error', args => console.log(args));
-
-    }else {
+      socket.on("get-all-user-currencies-error", args => console.log(args));
+    } else {
       setError("Please connect Wallet for SWAP ");
     }
-
   };
 
   // handle clean state
@@ -185,15 +184,13 @@ const Swap = () => {
   };
 
   useEffect(() => {
-
-
     const find = accountData?.map(data => {
       if (typeof data?.source_amount === "object") {
         // source_amount is an object
 
         if (data?.destination_amount?.currency === swapTo.currency && data?.source_amount?.currency === swapFrom.currency) {
           let localExchangeRate = getExchangeRate(data?.source_amount?.value, data?.destination_amount?.value);
-          setLocalExchangeRate(localExchangeRate)
+          setLocalExchangeRate(localExchangeRate);
           let finalrate = Number(localExchangeRate * swapFrom.value)?.toFixed(4);
           setSwapTo(swapTo => ({ ...swapTo, value: finalrate }));
           setExchangeRate(exchangeRate => ({
@@ -211,7 +208,7 @@ const Swap = () => {
         if (data?.destination_amount?.currency === swapTo.currency) {
           let XRPValue = parseInt(data?.source_amount) / 1000000;
           let localExchangeRate = getExchangeRate(XRPValue, data?.destination_amount?.value);
-          setLocalExchangeRate(localExchangeRate)
+          setLocalExchangeRate(localExchangeRate);
           let finalrate = Number(localExchangeRate * swapFrom.value)?.toFixed(4);
           setSwapTo(swapTo => ({ ...swapTo, value: finalrate }));
           setExchangeRate(exchangeRate => ({
@@ -290,14 +287,13 @@ const Swap = () => {
 
   useEffect(() => {
     console.log("swapfrom", swapFrom);
-  }, [swapFrom])
+  }, [swapFrom]);
 
   useEffect(() => {
-    if(currencies?.length){
-      setSwapTo(swapTo => ({ ...swapTo, id: 5, issuer: "rBZJzEisyXt2gvRWXLxHftFRkd1vJEpBQP", currency: 'USD'}))
+    if (currencies?.length) {
+      setSwapTo(swapTo => ({ ...swapTo, id: 5, issuer: "rBZJzEisyXt2gvRWXLxHftFRkd1vJEpBQP", currency: "USD" }));
     }
-  }, [currencies])
-
+  }, [currencies]);
 
   return (
     <div className="swap-page flex">
@@ -388,11 +384,13 @@ const Swap = () => {
                         ref={swapFromRef}
                       /> */}
                       <select className="form-control" value={swapFrom.id} onChange={handleSetSwapFrom}>
-                        <option value="-1" selected>Select</option>
+                        <option value="-1" selected>
+                          Select
+                        </option>
                         {currencies &&
                           currencies.map(c => {
                             return (
-                              <option value={c.id} issuer={c.asset_issuer} key={c.id} >
+                              <option value={c.id} issuer={c.asset_issuer} key={c.id}>
                                 {c.asset_code}
                               </option>
                             );
@@ -414,7 +412,9 @@ const Swap = () => {
                 </div>
 
                 <div className="balance-field">
-                    <p className="current-balance">Balance: {Number(swapFromBalance?.balance?.balance || 0)?.toFixed(4)} {swapFromBalance?.currency}</p>
+                  <p className="current-balance">
+                    Balance: {Number(swapFromBalance?.balance?.balance || 0)?.toFixed(4)} {swapFromBalance?.currency}
+                  </p>
                 </div>
               </div>
             </div>
@@ -443,7 +443,9 @@ const Swap = () => {
                         disabled={!currencies ? true : false}
                       /> */}
                       <select className="form-control" value={swapTo.id} onChange={handleSetSwapTo} ref={swapToRef}>
-                        <option value="-1" selected>Select</option>
+                        <option value="-1" selected>
+                          Select
+                        </option>
                         {currencies &&
                           currencies.map(c => {
                             return (
@@ -460,7 +462,9 @@ const Swap = () => {
                   <input type="text" className="txt cleanbtn" value={swapTo.value} placeholder="Swap amount" disabled />
                 </div>
                 <div className="balance-field">
-                    <p className="current-balance">Balance: {Number(swapToBalance?.balance || 0)?.toFixed(4)} {swapToBalance?.currency}</p>
+                  <p className="current-balance">
+                    Balance: {Number(swapToBalance?.balance || 0)?.toFixed(4)} {swapToBalance?.currency}
+                  </p>
                 </div>
               </div>
             </div>
@@ -468,11 +472,13 @@ const Swap = () => {
 
           <div className="exchange-box-wrapper">
             <div className="exchange-box">
-                  <h3>Exchange Rate</h3>
-                  <div className="exchange-box-currency">
-                    <p>1 {swapFromBalance?.currency} = {localExchangeRate?.toFixed(4)} {swapToBalance?.currency}</p>
-                    <ExchangeArrowIcon />
-                  </div>
+              <h3>Exchange Rate</h3>
+              <div className="exchange-box-currency">
+                <p>
+                  1 {swapFromBalance?.currency} = {localExchangeRate?.toFixed(4)} {swapToBalance?.currency}
+                </p>
+                <ExchangeArrowIcon />
+              </div>
             </div>
           </div>
           <div className="action">

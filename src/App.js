@@ -57,12 +57,13 @@ import Resale from "./Pages/Resale";
 import ThemeSwitch from "./components/theme-switch";
 import { useSocket } from "./context/socket";
 import * as balanceAction from "./redux/xummBalance/action";
+import XLMSwap from "./Pages/xlm-swap";
 
 function App() {
   const [openSidebar, setOpenSidebar] = useState(false);
   const dispatch = useDispatch();
   const { isDarkMode } = useSelector(state => state.themeReducer);
-
+  const network = useSelector(state => state.networkReducers.token);
   const socket = useSocket();
 
   const gettokenlocalstorage = async () => {
@@ -110,7 +111,7 @@ function App() {
           <Route path="/buysell" element={<BuySell />} exact />
           <Route path="/orders/*" element={<Orders />} exact />
           <Route path="/nft" element={<Main />} exact />
-          <Route path="/swap" element={<Swap />} exact />
+          <Route path="/swap" element={network === "xlm" ? <XLMSwap /> : <Swap />} exact />
           <Route path="/exchange" element={<Exchange isDarkMode={isDarkMode} />} exact />
           <Route path="/profile-edit" element={<EditProfile />} exact />
           <Route path="/nft-detail" element={<NftDetail />} exact />
