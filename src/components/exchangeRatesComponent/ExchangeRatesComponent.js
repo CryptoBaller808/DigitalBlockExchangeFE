@@ -13,7 +13,7 @@ import moment from "moment";
 const dateFormat = "YYYY/MM/DD";
 
 const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal }) => {
-  console.log("currencyData2", currencyData2);
+
   const [tokenTabSelected, setTokenTabSelected] = useState("XRP");
   const [currencyData, setCurrencyData] = useState([]);
   const [rowData, setRowData] = useState(null);
@@ -172,9 +172,6 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
           <input type="text" className="txt cleanbtn w-full" placeholder="Search" />
         </div>
         <div className="token_tabs flex">
-          <div className={`item ${tokenTabSelected === "DBX" ? "active" : ""}`} onClick={e => setTokenTabSelected("DBX")}>
-            DBX
-          </div>
           <div
             className={`item ${tokenTabSelected === "XRP" ? "active" : ""}`}
             onClick={e => {
@@ -182,6 +179,13 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
             }}>
             XRP
           </div>
+          <div className={`item ${tokenTabSelected === "XLM" ? "active" : ""}`} onClick={e => setTokenTabSelected("XLM")}>
+            XLM
+          </div>
+          {/* <div className={`item ${tokenTabSelected === "DBX" ? "active" : ""}`} onClick={e => setTokenTabSelected("DBX")}>
+            DBX
+          </div>
+          */}
           {/* <div className={`item ${tokenTabSelected === "USDC" ? "active" : ""}`} onClick={e => setTokenTabSelected("USDC")}>
             USDC
           </div>

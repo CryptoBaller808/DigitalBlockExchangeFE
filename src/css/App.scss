@@ -50,7 +50,7 @@ body {
   width: 1200px;
   margin: 0 auto;
   @include media("<=xlarge") {
-    width: 900px;
+    width: 1200px;
     margin: 0 auto;
   }
   @include media("<=large") {
@@ -429,25 +429,24 @@ body {
           /*height: 36px;*/
         }
         @include media(">=phone", "<=991px") {
-        .menu-icon {
-          cursor: pointer;
-          display: flex;
+          .menu-icon {
+            cursor: pointer;
+            display: flex;
+          }
         }
-      }
       }
     }
     .hdr-center {
       flex: 1;
-      
       .nav-list {
+        gap: 28px;
         .li-item {
-          font-family: "Sofia Pro";
+          font-family: "Sofia Sans Condensed";
           font-style: normal;
           font-weight: 400;
-          font-size: 18px;
+          font-size: 22px;
           line-height: 18px;
           color: #ffffff !important;
-          margin-right: 22px;
           cursor: pointer;
           @include anim;
           &:hover {
@@ -470,24 +469,71 @@ body {
             // }
           }
           @include media("<=xlarge") {
-            font-size: 14px;
-            margin-right: 18px;
+            font-size: 22px;
           }
           @include media("<=desktop") {
             font-size: 14px;
-            margin-right: 18px;
           }
         }
       }
-      @media screen and (max-width:991px) {
+      @media screen and (max-width: 991px) {
         display: none;
       }
     }
     .hdr-right {
-      flex: 0.2;
-      justify-content: center;
       @include media(">=phone", "<=480px") {
         padding: 4px 0;
+      }
+      .token-selection {
+        .dropDown {
+          .category {
+            .cbox {
+              min-width: 220px;
+              border-radius: 30px;
+              border: 2px solid #a7d63f;
+              background: rgba(217, 217, 217, 0.5);
+              .slt {
+                .unit-name {
+                  .unit-eng {
+                    color: #000;
+                    text-align: center;
+                    font-size: 18px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: normal;
+                  }
+                }
+              }
+              .arrow-icon {
+                height: 24px;
+                width: 24px;
+                border-radius: 50%;
+                background: #fff;
+                svg {
+                  path {
+                    // fill: transparent;
+                    // stroke: transparent;
+                  }
+                }
+              }
+            }
+          }
+          .block {
+            padding: 12px 0;
+            border-radius: 16px;
+            border: 1px solid #76b91b;
+            background: #fff;
+            box-shadow: 0px 27px 65px 0px rgba(65, 62, 62, 0.08);
+            .manue {
+              .slt {
+                padding: 10px 20px;
+                &:hover {
+                  background: rgba(231, 232, 234, 0.3);
+                }
+              }
+            }
+          }
+        }
       }
       .btn {
         border-radius: 30px;
@@ -676,7 +722,11 @@ body {
         @include media(">=phone", "<=480px") {
           height: 120%;
         }
-
+        .swiper {
+          height: 100%;
+          width: 100%;
+        }
+      
         .slick-slider {
           height: 480px !important;
         }
@@ -3020,12 +3070,12 @@ body {
         // margin-top: 20px;
         justify-content: center;
         width: 270px;
+        gap: 14px;
         .icon {
           height: 24px;
           width: 24px;
           padding: 4px;
           cursor: pointer;
-          margin-right: 15px;
           border-radius: 50%;
           background-color: #1da1f2;
         }
@@ -3043,22 +3093,22 @@ body {
           padding: 15px 0;
         }
         .tag {
-          font-family: "Sofia Pro";
+          font-family: "Sofia Sans Condensed", sans-serif;
           font-style: normal;
-          font-weight: 700;
-          font-size: 18px;
+          font-weight: 500;
+          font-size: 28px;
           line-height: 24px;
           margin-bottom: 30px;
           color: #ffffff;
         }
         .lbl {
-          font-family: "Sofia Pro";
+          font-family: "Sofia Sans Condensed", sans-serif;
           font-style: normal;
-          font-weight: 400;
-          font-size: 14px;
+          font-weight: 200;
+          font-size: 26px;
           line-height: 27px;
           color: #8f8f8f !important;
-          margin-bottom: 5px;
+          text-decoration: underline;
         }
       }
     }

@@ -8,8 +8,9 @@ import WalletConnect from "./WalletConnect";
 import { useSelector, useDispatch } from "react-redux";
 import { setModalOpen } from "../redux/actions";
 import DisconnectModal from "./Modal/DisconnectModal";
+import TokenListDropDown from "./TokenListDropDown";
 
-const Header = ({ openSidebar, setOpenSidebar }) => {
+const Header = ({ openSidebar, setOpenSidebar, tokenList, selectedToken, setSelectedToken }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [open, setOpen] = useState(false);
@@ -44,21 +45,21 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
     { id: 3, title: "Exchange", slug: "/exchange", icon: "" },
     { id: 4, title: "Swap", slug: "/swap", icon: "" },
     { id: 5, title: "NFT", slug: "/nft", icon: "" },
-   {/*} { id: 5, title: "NFT", slug: "/nft", icon: "" },
+    {/*} { id: 5, title: "NFT", slug: "/nft", icon: "" },
     { id: 6, title: "Orders", slug: "/orders", icon: <DropDownIcon /> },
     { id: 7, title: "DBX Coin", slug: "/dbx_coin", icon: "" },
   { id: 8, title: "DBX Card", slug: "/dbx_card", icon: "" },*/}
   ];
   const handleClickOpen = () => {
     //if (location.pathname === "/exchange") {
-      dispatch(setModalOpen(true));
-      setOpen(true);
+    dispatch(setModalOpen(true));
+    setOpen(true);
     //}
   };
   return (
-    <div className="header-cmp flex aic">
-      <div className="wrapWidth wrap flex aic">
-        <div className="hdr-left flex aic">
+    <div className="header-cmp flex items-center">
+      <div className="wrapWidth wrap flex items-center">
+        <div className="hdr-left flex items-center">
           <Link to="/">
             <img src={LogoHorizontal} className="logo-img" />
           </Link>
@@ -71,7 +72,7 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
             <MenuIcon />
           </div>
         </div>
-        <div className="hdr-center flex aic jc">
+        <div className="hdr-center flex items-center justify-center">
           <div className="nav-list flex aic">
             {navList.map((item, index) => (
               <NavLink
@@ -86,7 +87,7 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
             ))}
           </div>
         </div>
-        <div className="hdr-right flex aic">
+        <div className="hdr-right flex items-center justify-center gap-3">
           {/* {!generalReducers?.isAuthenticated ? (
             <button className="btn button cleanbtn" onClick={e => setOpen(true)}>
               Connect Wallet
@@ -94,6 +95,9 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
           ) : (
             <h1 style={{ color: "white" }}>{user?.firstname ? user?.firstname : "No name"}</h1>
           )} */}
+          <div className="token-selection flex items-center">
+            <TokenListDropDown dropDownList={tokenList} selectedValue={selectedToken} setSelectedValue={setSelectedToken} />
+          </div>
           {isWalletConnected ? (
             balance?.success ? (
               <>
