@@ -85,6 +85,7 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
   useEffect(() => {
     setLoadingData(true);
     getAllCurrencyData().then(val => {
+      console.log("currency data", val);
       setCurrencyData(val);
     });
     setLoadingData(false);
@@ -121,7 +122,7 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
       if (currencyData2?.info) {
         const acc = {
           curA: currencyData2?.info?.curA,
-          curB: currencyData2?.info?.curB,
+          curB: currencyData2?.info?.curB === "SOLO" ? "534F4C4F00000000000000000000000000000000" : currencyData2?.info?.curB,
           issuerB: currencyData2?.info?.issuerB,
         };
         await getTradesData(acc)
@@ -159,8 +160,8 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
   const fixed4 = number => {
     return number?.toFixed(4);
   };
-  console.log("currencyData", currencyData);
-  console.log("dataSource", dataSource);
+  // console.log("currencyData", currencyData);
+  // console.log("dataSource", dataSource);
   return (
     <div className="left flex flex-col">
       {/* Left price bar start */}
@@ -208,18 +209,21 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
             {loadingData ? (
               <Loader />
             ) : (
-              currencyData.map((item, i) => (
-                <div className="tbl-row flex" key={i} onClick={() => handleRow(item)}>
-                  <div className="row-item flex items-center ps-2">
-                    <span className="name1">{item.title}</span>
-                    {/* /<span className="name2">{tokenTabSelected}</span> */}
-                  </div>
-                  <div className="row-item text-center"> {parseFloat(item.price).toFixed(3)}</div>
-                  {/* <div className={`row-item flex items-center justify-end ${item.stat < 0 ? "red" : "green"}`}>
+              currencyData.map((item, i) => {
+                let price = parseFloat(item?.price).toFixed(3);
+                return (
+                  <div className="tbl-row flex" key={i} onClick={() => handleRow(item)}>
+                    <div className="row-item flex items-center ps-2">
+                      <span className="name1">{item.title}</span>
+                      {/* /<span className="name2">{tokenTabSelected}</span> */}
+                    </div>
+                    <div className="row-item text-center"> {price === "NaN" ? 0 : price}</div>
+                    {/* <div className={`row-item flex items-center justify-end ${item.stat < 0 ? "red" : "green"}`}>
                     {parseFloat(item.stat).toFixed(3)}
                   </div> */}
-                </div>
-              ))
+                  </div>
+                )
+              })
             )}
           </div>
         </div>

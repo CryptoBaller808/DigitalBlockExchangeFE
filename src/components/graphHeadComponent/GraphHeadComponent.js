@@ -17,7 +17,7 @@ const GraphHeadComponent = ({ currencyData2 }) => {
     async function fetchData() {
       if (currencyData2?.info) {
         let tickersInput = {
-          symbols: [`${currencyData2.info.curA}/${currencyData2.info.curB}+${currencyData2.info.issuerB}`],
+          symbols: [`${currencyData2.info.curA}/${currencyData2.info.curB === "SOLO" ? "534F4C4F00000000000000000000000000000000" : currencyData2.info.curB}+${currencyData2.info.issuerB}`],
         };
         getTickersData(tickersInput)
           .then(res => {
@@ -33,7 +33,7 @@ const GraphHeadComponent = ({ currencyData2 }) => {
           .catch(err => console.log("FROM SERVER CHART HEAD ERR", err));
         const acc = {
           curA: currencyData2?.info?.curA,
-          curB: currencyData2?.info?.curB,
+          curB: currencyData2?.info?.curB === "SOLO" ? "534F4C4F00000000000000000000000000000000" : currencyData2?.info?.curB,
           issuerB: currencyData2?.info?.issuerB,
         };
         // await getTradesData(acc)
