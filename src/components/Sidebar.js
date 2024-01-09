@@ -21,30 +21,30 @@ const Sidebar = ({ openSidebar, setOpenSidebar }) => {
     { lbl: "Create", icon: "./images/menuIcon4.svg", slug: "/nft-create" },
   ];
 
-  useEffect(async () => {
-    document.body.addEventListener("click", () => {
-      document.body.style.overflowY = "auto";
-      setOpenSidebar(false);
-    });
-  }, []);
+  useEffect(() => {
+    const fun = async () => {
+      document.body.addEventListener("click", () => {
+        document.body.style.overflowY = "auto";
+        setOpenSidebar(false);
+      });
+    };
+
+    fun();
+  }, [setOpenSidebar]);
 
   return (
-    <div
-      className={`sidebar-s fixed rel anim ${openSidebar ? "show" : "hide"}`}
-    >
+    <div className={`sidebar-s fixed rel anim ${openSidebar ? "show" : "hide"}`}>
       <div
         className={`side-block flex col anim ${openSidebar ? "show" : "hide"}`}
-        onClick={(e) => {
+        onClick={e => {
           e.stopPropagation();
-        }}
-      >
+        }}>
         <div className="hdr flex">
           <div
             className="icon-close "
-            onClick={(e) => {
+            onClick={e => {
               setOpenSidebar(false);
-            }}
-          >
+            }}>
             <CrossIcon />
           </div>
         </div>
@@ -56,10 +56,9 @@ const Sidebar = ({ openSidebar, setOpenSidebar }) => {
                 exact
                 to={`${item.slug}`}
                 className={`list-item flex `}
-                onClick={(e) => {
+                onClick={e => {
                   setOpenSidebar(false);
-                }}
-              >
+                }}>
                 <img src={item.icon} className="lbl-icon mr-8" />
                 <div className="li cfff font">{item.lbl}</div>
               </NavLink>
