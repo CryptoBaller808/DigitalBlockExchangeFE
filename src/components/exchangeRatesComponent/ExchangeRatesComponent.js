@@ -218,9 +218,9 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
               <div className="row-item text-center">Price</div>
               <div className="row-item flex items-center justify-end">
                 24h Chg
-                <spna className="ml-[2px]">
+                <span className="ml-[2px]">
                   <ExchangeIcon />
-                </spna>
+                </span>
               </div>
             </div>
             {loadingData ? (
