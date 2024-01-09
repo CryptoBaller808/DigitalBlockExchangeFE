@@ -9,6 +9,6 @@ export function useSocket() {
 }
 
 export function SocketProvider({ children }) {
-  const socket = io(LOCAL_SOCKET_SERVER, { transports: ["websocket"] });
+  const socket = io(LOCAL_SOCKET_SERVER, { transports: ["websocket"], secure: true });
   return <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>;
 }
