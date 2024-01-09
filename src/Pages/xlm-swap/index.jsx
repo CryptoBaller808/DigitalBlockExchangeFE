@@ -15,6 +15,9 @@ import { toast } from "react-toastify";
 
 let timeout = null;
 
+const DEFAULT_SWAP_VALS = { currency: "", issuer: "", id: -1, value: "" };
+const DEFAULT_SWAP_BALS = { currency: "", balance: "0.00000" };
+
 const XLMSwap = () => {
   const socket = useSocket();
   const [error, setError] = useState("");
@@ -22,21 +25,18 @@ const XLMSwap = () => {
   const [show, setShow] = useState(false);
   const [isTransaction, setIsTransaction] = useState(false);
   const [success, setSuccess] = useState("");
-  const [swapFromBalance, setSwapFromBalance] = useState({ currency: "", balance: "0.00000" });
-  const [swapToBalance, setSwapToBalance] = useState({ currency: "", balance: "0.00000" });
+  const [swapFromBalance, setSwapFromBalance] = useState(DEFAULT_SWAP_BALS);
+  const [swapToBalance, setSwapToBalance] = useState(DEFAULT_SWAP_BALS);
   const [localExchangeRate, setLocalExchangeRate] = useState(0);
   const network = useSelector(state => state.networkReducers.token);
   const [loading, setLoading] = useState(false);
   const balance = useSelector(state => state.signInData?.balance);
   const userCurrencies = useMemo(() => balance?.currencies ?? [], [balance?.currencies]);
   const isWalletConnected = useSelector(state => state.authReducer.isWalletConnected);
-  const [swapFrom, setSwapFrom] = useState({ currency: "", issuer: "", id: -1, value: "" });
-  const [swapTo, setSwapTo] = useState({ currency: "", issuer: "", value: "", id: -1 });
+  const [swapFrom, setSwapFrom] = useState(DEFAULT_SWAP_VALS);
+  const [swapTo, setSwapTo] = useState(DEFAULT_SWAP_VALS);
   const [finalExchangeRate, setFinalExchangeRate] = useState("");
-  const [destAmount, setDestAmount] = useState("");
-
   const [currencies, setCurrencies] = useState();
-  const swapToRef = useRef();
   const [allowSwap, setAllowSwap] = useState(false);
 
   // fetch currencies
@@ -46,6 +46,14 @@ const XLMSwap = () => {
       setCurrencies(response.data.data);
     };
     fetchCurrency();
+  }, []);
+
+  const handleCleanForm = useCallback(() => {
+    setSwapFrom(DEFAULT_SWAP_VALS);
+    setSwapTo(DEFAULT_SWAP_VALS);
+    setSwapFromBalance(DEFAULT_SWAP_BALS);
+    setSwapToBalance(DEFAULT_SWAP_BALS);
+    setFinalExchangeRate("");
   }, []);
 
   // handleSetSwap
@@ -89,12 +97,21 @@ const XLMSwap = () => {
   );
 
   useEffect(() => {
+    let currencyBalance = 0.0;
+
     if (swapFrom.currency === "XLM") {
+      currencyBalance = Number(balance?.account ?? "0.00000");
       setSwapFromBalance({ currency: "XLM", balance: balance?.account });
     } else {
       const exist = userCurrencies.find(urCur => urCur.asset_issuer === swapFrom.issuer);
+      currencyBalance = Number(exist?.balance ?? "0.00000");
+
       setSwapFromBalance({ currency: swapFrom.currency, balance: exist?.balance ?? "0.00000" });
     }
+
+    const val = Number(swapFrom?.value ?? "0.00000");
+    if (!isNaN(val) && val > currencyBalance) setError("Insufficient funds.");
+    else setError("");
   }, [swapFrom, balance, userCurrencies]);
 
   useEffect(() => {
@@ -159,11 +176,14 @@ const XLMSwap = () => {
     socket.on("payment-response-xlm", args => {
       console.log("args===>", args);
 
+      toast.success("Trade successfull.");
+      handleCleanForm();
       setIsTransaction(false);
     });
 
     socket.on("transaction-error", args => {
       toast.error(args);
+      setIsTransaction(false);
     });
   };
 
@@ -205,7 +225,7 @@ const XLMSwap = () => {
             style={{ backgroundColor: "#f1f1f1" }}>
             <p className="mb-0">Rate</p>
             <p className="mb-0">
-              1 {swapFrom.currency} = {localExchangeRate.toFixed(5)} {swapTo.currency}
+              1 {swapFrom.currency} = {localExchangeRate?.toFixed(5)} {swapTo.currency}
             </p>
           </div>
         </div>
@@ -285,7 +305,7 @@ const XLMSwap = () => {
                   <div className="token-info flex w-full">
                     <div className="about-token flex flex-col w-full mb-4">
                       <div className="lbl mb-2">Swap To:</div>
-                      <select className="form-control" value={swapTo.id} onChange={handleSetSwapTo} ref={swapToRef}>
+                      <select className="form-control" value={swapTo.id} onChange={handleSetSwapTo}>
                         <option value="-1" selected>
                           Select
                         </option>
@@ -322,8 +342,8 @@ const XLMSwap = () => {
           <div className="action">
             {isWalletConnected ? (
               <button
-                disabled={loading || isNaN(localExchangeRate) || !allowSwap}
-                className="btn button disabled:bg-red-500 items-center"
+                disabled={loading || isNaN(localExchangeRate) || !allowSwap || error}
+                className="btn button items-center"
                 onClick={setShow.bind(this, true)}>
                 {loading && (
                   <div className="p-2">
