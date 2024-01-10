@@ -54,7 +54,7 @@ const GraphHeadComponent = ({ currencyData2 }) => {
   return (
     <div className="p-2 border-1 border-green rounded-lg flex items-center w-full bg-white">
       <div className=" flex w-full gap-4">
-        <div className="font-bold flex items-center">{title}</div>
+        <div className="font-bold flex items-center text-black">{title}</div>
         <div className=" flex gap-4 text-grey-70 text-sm font-thin ">
           <div className="item flex items-center justify-center flex-col">
             <div>Price</div>
