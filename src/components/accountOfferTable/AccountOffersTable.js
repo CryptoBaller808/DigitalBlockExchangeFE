@@ -326,7 +326,6 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
           <div className="tbl-sec flex flex-col">
             {/* Table Columns component */}
             <div className="tbl-row flex">
-              ;
               {orderTab === "open" &&
                 columns.map(obj => {
                   return (

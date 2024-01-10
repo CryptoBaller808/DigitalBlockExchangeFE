@@ -39,6 +39,7 @@ const OfferModel = ({
   sellIssuer,
   orderType,
   setOrderStatus,
+  clearForms
 }) => {
   const dispatch = useDispatch();
   const accountInfo = useSelector(state => state?.signInData?.balance);
@@ -49,6 +50,7 @@ const OfferModel = ({
 
   const handleConfirm = () => {
     toast.success(TOAST_MESSAGE[network]);
+    clearForms()
 
     if (offerType === "buy") {
       const buyOfferInfo = {
@@ -199,7 +201,7 @@ const OfferModel = ({
   };
 
   return (
-    <Modal title="Create Offer" open={show} footer={null} closable onCancel={hide}>
+    <Modal title={<span className="text-2xl">Create Offer</span>} open={show} footer={null} closable onCancel={hide}>
       <div className="m-4">
         <div className="d-flex flex-column">
           <div className="d-flex justify-content-between mb-2">
