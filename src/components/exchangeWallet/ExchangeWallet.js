@@ -28,9 +28,9 @@ const ExchangeWallet = ({ currencyData }) => {
   const [open, setOpen] = useState(false);
   const [orderType, setOrderType] = useState("");
   const [orderStatus, setOrderStatus] = useState(false);
-  const [amount, setAmount] = useState();
-  const [totalPrice, setTotalPrice] = useState();
-  const [limitPrice, setLimitPrice] = useState();
+  const [amount, setAmount] = useState("");
+  const [totalPrice, setTotalPrice] = useState("");
+  const [limitPrice, setLimitPrice] = useState("");
   const isWalletConnected = useSelector(state => state.authReducer.isWalletConnected);
   const accountInfo = useSelector(state => state.signInData?.balance);
   const network = useSelector(state => state.networkReducers.token);
