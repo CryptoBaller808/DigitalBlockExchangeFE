@@ -163,7 +163,7 @@ const CollectionNft = () => {
               <div className="r-lbl flex flex-col">
                 <div className="lbl-1">
                   Logo Image
-                  <spna className="star">*</spna>
+                  <span className="star">*</span>
                 </div>
                 <div className="lbl-2">This image will also be used for navigation. 350 x 350 recommended.</div>
               </div>
@@ -197,7 +197,7 @@ const CollectionNft = () => {
               <div className="r-lbl flex flex-col">
                 <div className="lbl-1">
                   Featured Image
-                  <spna className="star"></spna>
+                  <span className="star"></span>
                 </div>
                 <div className="lbl-2">
                   This image will be used for featuring your collection on the homepage, category pages, or other promotional areas of
@@ -233,7 +233,7 @@ const CollectionNft = () => {
               <div className="r-lbl flex flex-col">
                 <div className="lbl-1">
                   Banner Image
-                  <spna className="star"></spna>
+                  <span className="star"></span>
                 </div>
                 <div className="lbl-2">
                   This image will appear at the top of your collection page. Avoid including too much text in this banner image, as the
@@ -269,7 +269,7 @@ const CollectionNft = () => {
               <div className="r-lbl flex flex-col">
                 <div className="lbl-1">
                   Name
-                  <spna className="star">*</spna>
+                  <span className="star">*</span>
                 </div>
               </div>
               <input
@@ -303,7 +303,7 @@ const CollectionNft = () => {
               <div className="r-lbl flex flex-col">
                 <div className="lbl-1">
                   Description
-                  <spna className="star"></spna>
+                  <span className="star"></span>
                 </div>
                 <div className="lbl-2">0 of 1000 characters used.</div>
               </div>
@@ -319,7 +319,7 @@ const CollectionNft = () => {
               <div className="r-lbl flex flex-col">
                 <div className="lbl-1">
                   Category
-                  <spna className="star"></spna>
+                  <span className="star"></span>
                 </div>
                 <div className="lbl-2">
                   Select the category. Adding a category will make the item
@@ -407,7 +407,7 @@ const CollectionNft = () => {
                 <div className="r-lbl flex flex-col">
                   <div className="lbl-1">
                     Your payout wallet address
-                    <spna className="star">*</spna>
+                    <span className="star">*</span>
                   </div>
                 </div>
                 <input type="text" className="txt cleanbtn w-1/2" placeholder=" Your payout wallet address" />

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Web3 from "web3";
 import axios from "axios";
@@ -63,8 +63,11 @@ function App() {
   const [openSidebar, setOpenSidebar] = useState(false);
   const dispatch = useDispatch();
   const { isDarkMode } = useSelector(state => state.themeReducer);
-  const network = useSelector(state => state.networkReducers.token);
+  const balanceData = useSelector(state => state.signInData?.balance);
+  const userToken = useMemo(() => balanceData?.userToken ?? "", [balanceData]);
+
   const socket = useSocket();
+  const network = useSelector(state => state.networkReducers.token);
 
   const gettokenlocalstorage = async () => {
     let data = JSON.parse(localStorage.getItem("nft_login"));
@@ -94,11 +97,16 @@ function App() {
     gettokenlocalstorage();
   }, []);
 
-  useEffect(() => {
+  const walletSync = useCallback(async () => {
+    socket.emit("xlm-fetch-wallet", userToken);
     socket.on("wallet-updated", args => {
       dispatch(balanceAction.setBalance(args));
     });
-  }, [dispatch, socket]);
+  }, [dispatch, socket, userToken]);
+
+  useEffect(() => {
+    walletSync();
+  }, [dispatch, walletSync]);
 
   return (
     <div className="App">
