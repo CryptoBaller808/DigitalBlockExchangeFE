@@ -16,6 +16,7 @@ import ExchangeDeleteModal from "../loader/ExchangeDeleteModal";
 import clsx from "clsx";
 import WalletConnect from "../WalletConnect";
 import Modal from "../Modal";
+import emptyFolder from "../../assets/open-folder.png";
 
 const DELETE_EVENTS = {
   xlm: "xlm-delete-offers",
@@ -346,7 +347,11 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
 
             {isWalletConnected && orderTab === "open" && (
               <>
-                {accLoading && <Loader />}
+                {accLoading && (
+                  <div className="flex items-center justify-center">
+                    <Loader />
+                  </div>
+                )}
                 {!accLoading && dataSource.length > 0 ? (
                   dataSource.map((item, index) => {
                     let total = (Number(item?.price) * Number(item?.amount)).toFixed(4);
@@ -368,7 +373,10 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
                   })
                 ) : (
                   <>
-                    <div className="flex items-center justify-center no-result">No result found</div>
+                    <div className="flex items-center justify-center ">
+                      <img src={emptyFolder} alt="" />
+                      <span className="text-2xl text-gray-300 font-semibold ">No Records</span>
+                    </div>
                   </>
                 )}
               </>
