@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { SearchIcon, ExchangeIcon } from "../../Icons";
+import { SearchIcon, ExchangeIcon, SortIcon } from "../../Icons";
 //new updateimport getExchangeRate from "../../helper/api/exchangeRate";
 import currency from "../../helper/currencies";
 import getExchangeRate from "../../helper/api/exchangeRate";
@@ -213,14 +213,30 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
 
         <div className="token-table flex">
           <div className="table-block flex flex-col w-full">
-            <div className="tbl-row flex">
-              <div className="row-item ps-2">Pair</div>
-              <div className="row-item text-center">Price</div>
-              <div className="row-item flex items-center justify-end">
+            {/* <Table
+              className="text-xs p-0"
+              columns={[
+                { dataIndex: "1", key: "1", title: "Pair" },
+                { dataIndex: "2", key: "2", title: "Price" },
+                {
+                  dataIndex: "3",
+                  key: "3",
+                  title: (
+                    <span>
+                      24h Chg <ExchangeIcon />
+                    </span>
+                  ),
+                },
+              ]}
+            /> */}
+            <div className="tbl-row flex text-xs ">
+              <div className="row-item flex items-center">
+                Pair <SortIcon />
+              </div>
+              <div className="row-item text-center flex items-center">Price</div>
+              <div className="row-item flex items-center">
                 24h Chg
-                <span className="ml-[2px]">
-                  <ExchangeIcon />
-                </span>
+                <ExchangeIcon />
               </div>
             </div>
             {loadingData ? (

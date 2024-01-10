@@ -34,6 +34,14 @@ import HomeIcon from "./HomeIcon";
 import EditIcon from "./EditIcon";
 import InstagramIcon from "./InstagramIcon";
 import LanguageIcon from "./LanguageIcon";
+
+export const SortIcon = props => (
+  <svg width={15} height={12} viewBox="0 0 15 12" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <path d="M3.79904 6.66698L7.79904 10.0003L11.799 6.66698H3.79904Z" fill="#333539" />
+    <path d="M11.7989 5.333L7.79889 1.99966L3.79889 5.333L11.7989 5.333Z" fill="#333539" />
+  </svg>
+);
+
 export {
   HomeIcon,
   InstagramIcon,

@@ -56,7 +56,7 @@ const Chart = ({ currencyData, isDarkMode }) => {
     if (!selectedAsset) return;
     tvWidget?.onChartReady?.(() => {
       if (isDarkMode) {
-        tvWidget?.applyOverrides({
+        tvWidget?.applyOverrides?.({
           "paneProperties.background": "#1f1f1f",
           "paneProperties.backgroundType": "solid",
           "paneProperties.vertGridProperties.color": "hotpink",
@@ -69,7 +69,7 @@ const Chart = ({ currencyData, isDarkMode }) => {
       tvWidget?.activeChart()?.setSymbol(selectedAsset);
       if (dev) console.log("[onChartReady].[useEffect] selectedAsset changed to: ", selectedAsset);
     });
-  }, [isDarkMode, selectedAsset, tvWidget]);
+  }, [selectedAsset, tvWidget]);
 
   return <div id="tv_chart_container" className="w-full h-full"></div>;
 };
