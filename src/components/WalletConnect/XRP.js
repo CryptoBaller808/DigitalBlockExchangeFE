@@ -7,10 +7,11 @@ import { setModalOpen, connectWallet } from "../../redux/actions";
 import * as balanceAction from "../../redux/xummBalance/action";
 import * as QRCodeAction from "../../redux/xummQRCode/action";
 // import setAuthToken from "../../redux/actions/setHeaderToken";
-import { useSocket } from '../../context/socket';
+import { useSocket } from "../../context/socket";
 import XummLogo from "../../Images/XummLogo.png";
 import LegerLogo from "../../Images/XRPLLogo.png";
 import setAuthToken from "../../redux/actions/setHeaderToken";
+import { toast } from "react-toastify";
 const WalletConnect = ({ open, setOpen }) => {
   const socket = useSocket();
   const dispatch = useDispatch();
@@ -41,21 +42,27 @@ const WalletConnect = ({ open, setOpen }) => {
     }
 
     socket.on("qr-app-response", args => {
-      console.log('qr app resp', args);
-      const decodedPayload = decodeURIComponent(args)
+      console.log("qr app resp", args);
+      const decodedPayload = decodeURIComponent(args);
       setXummUrlMobile(decodedPayload);
-      console.log("decoded payload",decodedPayload);
-    })
+      console.log("decoded payload", decodedPayload);
+    });
 
     socket.on("account-response", args => {
       console.log("account-responsee", args);
-      dispatch(balanceAction.setBalance(args));
-      setxumppres(args);
-      Verifywallet(args.account, args?.userToken);
-      if (args) {
-        dispatch(connectWallet(true));
-        setOpen(false);
+
+      if (args?.success) {
+        dispatch(balanceAction.setBalance(args));
+        setxumppres(args);
+        Verifywallet(args.account, args?.userToken);
+        if (args) {
+          dispatch(connectWallet(true));
+        }
+      } else {
+        toast.error("Wallet connect request rejected.");
       }
+
+      setOpen(false);
     });
 
     socket.on("connection");
@@ -92,7 +99,7 @@ const WalletConnect = ({ open, setOpen }) => {
         });
         setOpen(false);
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   return (
@@ -142,13 +149,20 @@ const WalletConnect = ({ open, setOpen }) => {
             <div className="desc headss">Select a Wallet</div>
             <div className="action flex flex-col">
               <div className="avil-wallet flex flex-col aic jc">
-                <div class="field flex input-search"><input type="text" class="txt search" placeholder="Search name or paste address" value="" /></div>
+                <div class="field flex input-search">
+                  <input type="text" class="txt search" placeholder="Search name or paste address" value="" />
+                </div>
                 <div
                   onClick={() => {
                     connectXumppwallet();
                   }}
                   className="btn flex aic jc">
-                  <img src={XummLogo} className="img flex aic" alt="xumm logo" style={{ width: "40px", height: "40px", marginRight: "5px" }} />
+                  <img
+                    src={XummLogo}
+                    className="img flex aic"
+                    alt="xumm logo"
+                    style={{ width: "40px", height: "40px", marginRight: "5px" }}
+                  />
                   <p className="lbl  aic">
                     {loading ? "loading..." : "XUMM App"}
                     {/*<small>XUMM App</small>*/}
@@ -173,4 +187,3 @@ const WalletConnect = ({ open, setOpen }) => {
 };
 
 export default WalletConnect;
-
