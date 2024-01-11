@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Web3 from "web3";
+// import Web3 from "web3";
 import axios from "axios";
 
 import "./App.css";
@@ -11,7 +11,7 @@ import "./css/App.scss";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import Main from "./Pages/Main";
 import Exchange from "./Pages/Exchange";
 import BuySell from "./Pages/BuySell";
@@ -54,7 +54,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import Resale from "./Pages/Resale";
-import ThemeSwitch from "./components/theme-switch";
+// import ThemeSwitch from "./components/theme-switch";
 import { useSocket } from "./context/socket";
 import * as balanceAction from "./redux/xummBalance/action";
 import XLMSwap from "./Pages/xlm-swap";
@@ -140,9 +140,9 @@ function App() {
         <Footer />
       </BrowserRouter>
 
-      <div className="color-toggle">
+      {/* <div className="color-toggle">
         <ThemeSwitch />
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./style.css";
 
 import { useSelector } from "react-redux";
@@ -26,7 +26,7 @@ const ExchangeWallet = ({ currencyData }) => {
   const [paymentModel, setPaymentModel] = useState(false);
   const [offerType, setOfferType] = useState("");
   const [open, setOpen] = useState(false);
-  const [orderType, setOrderType] = useState("");
+  const [orderType, setOrderType] = useState("Limit");
   const [orderStatus, setOrderStatus] = useState(false);
   const [amount, setAmount] = useState("");
   const [totalPrice, setTotalPrice] = useState("");
@@ -48,6 +48,11 @@ const ExchangeWallet = ({ currencyData }) => {
     buyPrice: price,
     sellPrice: price,
   });
+
+  const clearForms = useCallback(() => {
+    setLimitVal(pre => ({ ...pre, buyAmount: "", sellAmount: "" }));
+    setMarketVal({ buyAmount: "", sellAmount: "" });
+  }, []);
 
   const userCurrencies = accountInfo?.currencies?.filter(val => {
     if (baseCurrent === "XLM") return val.asset_code === curB;
@@ -186,6 +191,10 @@ const ExchangeWallet = ({ currencyData }) => {
       sellAmount: amount,
     });
   };
+
+  useEffect(() => {
+    clearForms();
+  }, [connectTokenTab, clearForms]);
 
   return (
     <div className="connection-sec flex flex-col w-full ">
@@ -623,6 +632,7 @@ const ExchangeWallet = ({ currencyData }) => {
           offerType={offerType}
           orderType={orderType}
           setOrderStatus={setOrderStatus}
+          clearForms={clearForms}
         />
       )}
     </div>

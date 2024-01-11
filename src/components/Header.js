@@ -62,15 +62,18 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
           <Link to="/">
             <img src={LogoHorizontal} className="logo-img" />
           </Link>
+
           <div
             className="menu-icon"
             onClick={e => {
               setOpenSidebar(!openSidebar);
               e.stopPropagation();
             }}>
+            <NetworksSelection network={network} />
             <MenuIcon />
           </div>
         </div>
+
         <div className="hdr-center flex aic jc">
           <div className="nav-list flex aic">
             {navList.map((item, index) => (
@@ -86,7 +89,10 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
             ))}
           </div>
         </div>
-        <NetworksSelection network={network} />
+        <div className="hidden lg:flex">
+          <NetworksSelection network={network} />
+        </div>
+
         <div className="hdr-right flex aic">
           {/* {!generalReducers?.isAuthenticated ? (
             <button className="btn button cleanbtn" onClick={e => setOpen(true)}>

@@ -80,7 +80,7 @@ const NetworkSelector = ({ network }) => {
     <Popover open={open} placement="bottom" title={text} content={content} arrow={false}>
       <div
         onClick={() => setOpen(true)}
-        className="w-[200px] h-[44px] bg-[#8F8F8F] px-1 border-4 border-[#39B54A] flex rounded-3xl items-center justify-between font-semibold mx-3 cursor-pointer">
+        className="w-[200px] h-[44px] bg-[#8F8F8F] px-1 border-4 border-[#39B54A] flex rounded-full items-center justify-between font-semibold mx-3 cursor-pointer">
         <span className="flex items-center">
           {getImage(selected.icon, selected.label)}&nbsp;&nbsp;
           {selected.label}
