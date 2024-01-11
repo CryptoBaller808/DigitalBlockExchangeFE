@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import * as TradingView from "../../public/charting_library";
 import Datafeed from "./data/datafeed.js";
 import { dev } from "./data/helpers";
+import { useSelector } from "react-redux";
 
 const overrides = {
   "symbolWatermarkProperties.visibility": false,
@@ -14,6 +15,7 @@ const Chart = ({ currencyData, isDarkMode }) => {
   if (!selectedAsset) {
     setSelectedAsset("XLM/USD/GDXZAO4JZ7YIBZKOJHOFWTZWMVVRYS3YSG64K5ZUFGSMGOCTZCJKVF2S");
   }
+  const network = useSelector(state => state.networkReducers.token);
 
   useEffect(() => {
     console.log("charts: currencyData update: ", currencyData);
@@ -28,7 +30,7 @@ const Chart = ({ currencyData, isDarkMode }) => {
         interval: "1D", // default interval
         fullscreen: false, // displays the chart in the fullscreen mode
         container: "tv_chart_container",
-        datafeed: Datafeed,
+        datafeed: Datafeed(network),
         library_path: "/charting_library/",
         autosize: true,
         // debug: true,

@@ -1,9 +1,11 @@
 import { configurationData, dev, getIBCompatibleTimeframe } from "./helpers.js";
 import axios from "axios";
 import { getTVChartData } from "../../../helper";
+import { GET_STELLAR_TVCHART_DATA } from "../../../helper/api/url.js";
+import { BASE_URL } from "../../../config/index.js";
 
 let lookback = 0;
-const Datafeed = {
+const Datafeed = (network = "xrp") => ({
   onReady: callback => {
     // console.log('[onReady]: Method call');
     setTimeout(() => callback(configurationData));
@@ -29,7 +31,7 @@ const Datafeed = {
       timezone: "Etc/UTC",
       exchange: "",
       minmov: 1,
-      pricescale: 10000000000000000,
+      pricescale: 1000000000000000,
       visible_plots_set: "ohlcv",
       has_intraday: true,
       has_weekly_and_monthly: false,
@@ -49,20 +51,50 @@ const Datafeed = {
       to = Math.round(new Date().getTime() / 1000);
     }
 
+    const countBack = periodParams.countBack;
+
     console.log("[getBars]: Method call", symbolInfo, resolution, periodParams, resolution);
     const curA = symbolInfo.ticker.split("/")[0];
     const curB = symbolInfo.ticker.split("/")[1];
     const issuerB = symbolInfo.ticker.split("/")[2];
 
     // axios({
-    //   method: "get",
+    //   method: "post",
     //   url: `https://api.sologenic.org/api/v1/ohlc?symbol=${curA}%2F${curB}%2B${issuerB}&from=${from}&to=${to}&period=${getIBCompatibleTimeframe(
     //     resolution,
     //   )}`,
     //   withCredentials: false,
     // })
 
-    getTVChartData({ curA: curA, curB: curB, issuerB: issuerB, period: getIBCompatibleTimeframe(resolution), from: from, to: to })
+    if (network === "xlm") {
+      const resp = await axios.post(`${BASE_URL}/${GET_STELLAR_TVCHART_DATA}`, {
+        acc: {
+          curA,
+          curB,
+          issuerB,
+          period: getIBCompatibleTimeframe(resolution),
+          from,
+          to,
+          countBack,
+        },
+      });
+
+      const result = (resp ? resp.data.data : []).map(bar => {
+        return {
+          time: bar[0] * 1000,
+          open: bar[1],
+          high: bar[2],
+          low: bar[3],
+          close: bar[4],
+          volume: bar[5],
+        };
+      });
+
+      onHistoryCallback(result.slice(0, countBack), { noData: true });
+      return;
+    }
+
+    getTVChartData({ curA, curB, issuerB, period: getIBCompatibleTimeframe(resolution), from, to, countBack })
       .then(res => {
         const result = (res ? res.data.data : []).map(bar => {
           return {
@@ -74,11 +106,11 @@ const Datafeed = {
             volume: bar[5],
           };
         });
-    
+
         if (result.length > 0) {
-          onHistoryCallback(result, { noData: false });
+          onHistoryCallback(result, { noData: true });
         } else if (lookback < 3) {
-          onHistoryCallback(result, { noData: false });
+          onHistoryCallback(result, { noData: true });
           lookback++;
         } else {
           lookback = 0;
@@ -95,6 +127,6 @@ const Datafeed = {
   unsubscribeBars: subscriberUID => {
     // console.log('[unsubscribeBars]: Method call with subscribeUID:', subscriberUID);
   },
-};
+});
 
 export default Datafeed;
