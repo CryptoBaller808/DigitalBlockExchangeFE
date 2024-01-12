@@ -79,6 +79,10 @@ const Datafeed = (network = "xrp") => ({
         },
       });
 
+      if (!resp?.data?.data?.length) {
+        setTimeout(onHistoryCallback([], { noData: true }));
+      }
+
       const result = (resp ? resp.data.data : []).map(bar => {
         return {
           time: bar[0] * 1000,
@@ -90,7 +94,7 @@ const Datafeed = (network = "xrp") => ({
         };
       });
 
-      onHistoryCallback(result.slice(0, countBack), { noData: true });
+      onHistoryCallback(result);
       return;
     }
 
