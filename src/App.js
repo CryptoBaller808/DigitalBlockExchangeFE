@@ -80,6 +80,25 @@ function App() {
       });
     }
   };
+  // Function to get the saved mode from localStorage or use the default (light) mode
+  const getSavedMode = () => {
+    const savedMode = localStorage.getItem("mode");
+    return savedMode ? JSON.parse(savedMode) : false;
+  };
+  const [selectedToken, setSelectedToken] = useState({ lbl: "XRP Ledger", value: "xrp", icon: "./images/Invest1.png" });
+  const [_, setIsDarkMode] = useState(getSavedMode);
+  const tokenList = [
+    { lbl: "XRP Ledger", value: "xrp", icon: "./images/Invest1.png" },
+    { lbl: "XLM Network", value: "xlm", icon: "./images/XMLicon.png" },
+  ];
+  // Function to handle the checkbox change and toggle between dark and light mode
+  const handleCheckboxChange = () => {
+    setIsDarkMode(prevMode => {
+      const newMode = !prevMode;
+      localStorage.setItem("mode", JSON.stringify(newMode));
+      return newMode;
+    });
+  };
 
   // Effect to set the class on the body based on the current mode
   useEffect(() => {
@@ -110,7 +129,13 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <ToastContainer />
-        <Header openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
+        <Header
+          openSidebar={openSidebar}
+          setOpenSidebar={setOpenSidebar}
+          selectedToken={selectedToken}
+          setSelectedToken={setSelectedToken}
+          tokenList={tokenList}
+        />
         <Sidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
         <Routes>
           <Route path="/" element={<LandingPage />} exact />
