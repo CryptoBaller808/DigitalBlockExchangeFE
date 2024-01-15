@@ -19,7 +19,7 @@ export const getPrice = (data) => {
 
 			const submitData = {
 				method: "post",
-				url: `${testNetURL}/api/v1/tickers/24h`,
+				url: `${mainNetURL}/api/v1/tickers/24h`,
 				headers: {
 					"Content-Type": "application/json",
 					"Access-Control-Allow-Origin": "*",
@@ -41,7 +41,7 @@ export const getPrice = (data) => {
 
 			const submitData = {
 				method: "post",
-				url: `${testNetURL}/api/v1/tickers/24h`,
+				url: `${mainNetURL}/api/v1/tickers/24h`,
 				headers: {
 					"Content-Type": "application/json",
 					"Access-Control-Allow-Origin": "*",
@@ -66,7 +66,7 @@ export const getPrice = (data) => {
 
 			const submitData = {
 				method: "post",
-				url: `${testNetURL}/api/v1/tickers/24h`,
+				url: `${mainNetURL}/api/v1/tickers/24h`,
 				headers: {
 					"Content-Type": "application/json",
 					"Access-Control-Allow-Origin": "*",
@@ -96,7 +96,7 @@ export const getChartData = (data) => {
 		if (curA === "XRP") {
 			const submitData = {
 				method: "post",
-				url: `${testNetURL}/api/v1/ohlc?symbol=${curA}%2F${curB}%${issuerB}&period=1h&from=1658641378&to=1658644978`,
+				url: `${mainNetURL}/api/v1/ohlc?symbol=${curA}%2F${curB}%${issuerB}&period=1h&from=1658641378&to=1658644978`,
 				headers: {
 					"Content-Type": "application/json",
 					"Access-Control-Allow-Origin": "*",
@@ -111,7 +111,7 @@ export const getChartData = (data) => {
 		} else if (curB === "XRP") {
 			const submitData = {
 				method: "post",
-				url: `${testNetURL}/api/v1/ohlc?symbol=${curA}%${issuerA}%2F${curB}&period=1h&from=1658641378&to=1658644978`,
+				url: `${mainNetURL}/api/v1/ohlc?symbol=${curA}%${issuerA}%2F${curB}&period=1h&from=1658641378&to=1658644978`,
 				headers: {
 					"Content-Type": "application/json",
 					"Access-Control-Allow-Origin": "*",
@@ -126,7 +126,7 @@ export const getChartData = (data) => {
 		} else {
 			const submitData = {
 				method: "post",
-				url: `${testNetURL}/api/v1/ohlc?symbol=${curA}%${issuerA}%2F${curB}${issuerB}%&period=1h&from=1658641378&to=1658644978`,
+				url: `${mainNetURL}/api/v1/ohlc?symbol=${curA}%${issuerA}%2F${curB}${issuerB}%&period=1h&from=1658641378&to=1658644978`,
 				headers: {
 					"Content-Type": "application/json",
 					"Access-Control-Allow-Origin": "*",

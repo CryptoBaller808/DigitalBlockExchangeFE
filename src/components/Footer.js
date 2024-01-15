@@ -22,44 +22,44 @@ const Footer = () => {
         </div>
         <div className="right flex">
           {/*<div className="items flex flex-col">
-            <div className="tag">Useful Link</div>
-            <a href="/" className="lbl">
-              About Us
-            </a>
-            <a href="/" className="lbl">
-              Help Center
-            </a>
-            <a href="/" className="lbl">
-              White Paper
-            </a>
+          <div className="tag">Useful Link</div>
+          <a href="/" className="lbl">
+            About Us
+          </a>
+          <a href="/" className="lbl">
+            Help Center
+          </a>
+          <a href="/" className="lbl">
+            White Paper
+          </a>
 
-            {/*<a href="/" className="lbl">
-              Tokenomics
-            </a>
-          </div>*/}
+          {/*<a href="/" className="lbl">
+            Tokenomics
+          </a>
+        </div>*/}
           {/* <div className="items flex flex-col">
-            <div className="tag">Legal</div>
-            <a href="/" className="lbl">
-              Privacy Policy
-            </a>
-            <a href="/" className="lbl">
-              Terms of Service{" "}
-            </a>
-          </div> */}
+          <div className="tag">Legal</div>
+          <a href="/" className="lbl">
+            Privacy Policy
+          </a>
+          <a href="/" className="lbl">
+            Terms of Service{" "}
+          </a>
+        </div> */}
           {/*<div className="items flex flex-col">
-            <div className="tag">Trading</div>
-            <a href="/" className="lbl">
-              Fees
-            </a>
-          </div>*/}
-          <div className="items flex flex-col gap-3">
+          <div className="tag">Trading</div>
+          <a href="/" className="lbl">
+            Fees
+          </a>
+        </div>*/}
+          <div className="items flex flex-col gap-4">
             <div className="tag">Contact Us</div>
             {/* <a href="/" className="lbl">
-              Submit a request
-            </a>
-            <a href="/" className="lbl">
-              Locate a Lost Deposit
-            </a>*/}
+            Submit a request
+          </a>
+          <a href="/" className="lbl">
+            Locate a Lost Deposit
+          </a>*/}
             <Link to="/listing-application" className="lbl">
               Listing Application
             </Link>
