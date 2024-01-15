@@ -63,6 +63,7 @@ import * as historyOfferAction from "./redux/historyOffers/action";
 import { connectWallet, logoutUser } from "./redux/actions";
 import { setNetwork } from "./redux/network/action";
 // import ThemeSwitch from "./components/theme-switch";
+import XLMSwap from "./Pages/xlm-swap";
 
 function App() {
   const [openSidebar, setOpenSidebar] = useState(false);
