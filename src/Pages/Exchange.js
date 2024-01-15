@@ -14,7 +14,7 @@ import BookOffersTable from "../components/bookOfferTable/BookOffersTable";
 import Chart from "../components/charts";
 
 const Exchange = ({ isDarkMode }) => {
-  const [tokenTabSelected, setTokenTabSelected] = useState("XLM");
+  const [tokenTabSelected, setTokenTabSelected] = useState("XRP");
 
   //from our client code
   const [currencyData, setCurrencyData] = useState(null);

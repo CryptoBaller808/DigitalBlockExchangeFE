@@ -12,21 +12,30 @@ const overrides = {
 const Chart = ({ currencyData, isDarkMode }) => {
   const [tvWidget, setTvWIdget] = useState({});
   const [selectedAsset, setSelectedAsset] = useState(currencyData?.info?.title);
-  if (!selectedAsset) {
-    setSelectedAsset("XLM/USD/GDXZAO4JZ7YIBZKOJHOFWTZWMVVRYS3YSG64K5ZUFGSMGOCTZCJKVF2S");
-  }
+  const [symbol, setSymbol] = useState("");
   const network = useSelector(state => state.networkReducers.token);
+
+  if (!selectedAsset) {
+    setSelectedAsset("XRP/USD/rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B");
+    setSymbol("XRP/USD/rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B");
+  }
 
   useEffect(() => {
     console.log("charts: currencyData update: ", currencyData);
-    setSelectedAsset(`${currencyData?.info?.title}/${currencyData?.info?.issuerB}`);
+    if (currencyData?.info?.title === "XRP/SOLO") {
+      setSelectedAsset(`XRP/534F4C4F00000000000000000000000000000000/${currencyData?.info?.issuerB}`);
+    } else {
+      setSelectedAsset(`${currencyData?.info?.title}/${currencyData?.info?.issuerB}`);
+    }
+
+    setSymbol(`${currencyData?.info?.title}/${currencyData?.info?.issuerB}`);
   }, [currencyData]);
 
   //Initiate tvWidget
   useEffect(() => {
     setTvWIdget(
       new TradingView.widget({
-        symbol: !selectedAsset ? "XRP/USD/rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B" : `${selectedAsset}`, // default symbol
+        symbol: !selectedAsset ? "XRP/USD/rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B" : `${symbol}`, // default symbol
         interval: "1D", // default interval
         fullscreen: false, // displays the chart in the fullscreen mode
         container: "tv_chart_container",
@@ -48,9 +57,9 @@ const Chart = ({ currencyData, isDarkMode }) => {
       }),
     );
 
-    // return () => {
-    //   //tvWidget?.remove();
-    // };
+    return () => {
+      //tvWidget?.remove();
+    };
   }, [isDarkMode]);
 
   // handle asset change
@@ -58,7 +67,7 @@ const Chart = ({ currencyData, isDarkMode }) => {
     if (!selectedAsset) return;
     tvWidget?.onChartReady?.(() => {
       if (isDarkMode) {
-        tvWidget?.applyOverrides?.({
+        tvWidget?.applyOverrides({
           "paneProperties.background": "#1f1f1f",
           "paneProperties.backgroundType": "solid",
           "paneProperties.vertGridProperties.color": "hotpink",

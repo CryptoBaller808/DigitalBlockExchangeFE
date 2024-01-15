@@ -23,7 +23,9 @@ const BookOffersTable = ({ tokenTabSelected, currencyData, dropVal, setDropVal }
   // const [dropVal, setDropVal] = useState(0);
 
   const currentCurrency = currencyData?.info?.curA;
-  const baseCurrency = currencyData?.info?.curB;
+
+  const baseCurrency = currencyData?.info?.curB === "SOLO" ? "534F4C4F00000000000000000000000000000000" : currencyData?.info?.curB;
+
   const currentIssuer = currencyData?.info?.issuerA;
   const baseIssuer = currencyData?.info?.issuerB;
 
@@ -162,8 +164,8 @@ const BookOffersTable = ({ tokenTabSelected, currencyData, dropVal, setDropVal }
         <div className="table-block flex flex-col w-full">
           <div className="tbl-row flex">
             {/* {columns.map((obj)=>)} */}
-            <div className="row-item">Price({currentCurrency})</div>
-            <div className="row-item">Amount({baseCurrency})</div>
+            <div className="row-item">Price(${currentCurrency})</div>
+            <div className="row-item">Amount(${baseCurrency === "534F4C4F00000000000000000000000000000000" ? "SOLO" : baseCurrency})</div>
             <div className="row-item flex items-center justify-end">Vol</div>
           </div>
 

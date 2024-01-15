@@ -18,7 +18,7 @@ const DECIMALVAL = 7;
 let timeout = null;
 
 const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal }) => {
-  const [tokenTabSelected, setTokenTabSelected] = useState("XLM");
+  const [tokenTabSelected, setTokenTabSelected] = useState("XRP");
   const [currencyData, setCurrencyData] = useState([]);
   const [rowData, setRowData] = useState(null);
   const [loadingData, setLoadingData] = useState(true);
@@ -95,6 +95,7 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
   useEffect(() => {
     setLoadingData(true);
     getAllCurrencyData().then(val => {
+      console.log("currency data", val);
       setCurrencyData(val);
     });
     setLoadingData(false);
@@ -136,7 +137,7 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
       if (currencyData2?.info) {
         const acc = {
           curA: currencyData2?.info?.curA,
-          curB: currencyData2?.info?.curB,
+          curB: currencyData2?.info?.curB === "SOLO" ? "534F4C4F00000000000000000000000000000000" : currencyData2?.info?.curB,
           issuerB: currencyData2?.info?.issuerB,
         };
         await getTradesData(acc)
@@ -192,6 +193,11 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
     [currencyData],
   );
 
+  const fixed4 = number => {
+    return number?.toFixed(4);
+  };
+  // console.log("currencyData", currencyData);
+  // console.log("dataSource", dataSource);
   return (
     <div className="left flex flex-col  h-full ">
       {/* Left price bar start */}

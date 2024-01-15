@@ -13,12 +13,17 @@ const GraphHeadComponent = ({ currencyData2 }) => {
   const currentCurrency = tempCurrency?.length && tempCurrency[0];
   const baseCurrency = tempCurrency?.length && tempCurrency[1];
   const network = useSelector(state => state.networkReducers.token);
+  console.log("network====>", network);
 
   useEffect(() => {
     async function fetchData() {
       if (currencyData2?.info) {
         let tickersInput = {
-          symbols: [`${currencyData2.info.curA}/${currencyData2.info.curB}+${currencyData2.info.issuerB}`],
+          symbols: [
+            `${currencyData2.info.curA}/${
+              currencyData2.info.curB === "SOLO" ? "534F4C4F00000000000000000000000000000000" : currencyData2.info.curB
+            }+${currencyData2.info.issuerB}`,
+          ],
         };
         getTickersData({ acc: tickersInput, network })
           .then(res => {
@@ -34,7 +39,7 @@ const GraphHeadComponent = ({ currencyData2 }) => {
           .catch(err => console.log("FROM SERVER CHART HEAD ERR", err));
         const acc = {
           curA: currencyData2?.info?.curA,
-          curB: currencyData2?.info?.curB,
+          curB: currencyData2?.info?.curB === "SOLO" ? "534F4C4F00000000000000000000000000000000" : currencyData2?.info?.curB,
           issuerB: currencyData2?.info?.issuerB,
         };
         // await getTradesData(acc)
@@ -63,7 +68,7 @@ const GraphHeadComponent = ({ currencyData2 }) => {
                 "text-red-500": stat < 0,
                 "text-green-500": stat >= 0,
               })}>
-              {parseFloat(price).toFixed(5)}
+              {isNaN(price) ? "--" : parseFloat(price).toFixed(5)}
             </div>
           </div>
           <div className="item flex items-center justify-center flex-col">
@@ -73,7 +78,7 @@ const GraphHeadComponent = ({ currencyData2 }) => {
                 "text-red-500": stat < 0,
                 "text-green-500": stat >= 0,
               })}>
-              {stat?.toFixed(3)}%
+              {stat}%
             </div>
           </div>
           <div className="item flex items-center  justify-center flex-col">
