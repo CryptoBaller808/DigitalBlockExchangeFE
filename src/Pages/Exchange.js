@@ -14,7 +14,9 @@ import BookOffersTable from "../components/bookOfferTable/BookOffersTable";
 import Chart from "../components/charts";
 
 const Exchange = ({ isDarkMode }) => {
-  const [tokenTabSelected, setTokenTabSelected] = useState("XRP");
+  const network = useSelector(state => state.networkReducers.token);
+
+  const [tokenTabSelected, setTokenTabSelected] = useState(network ? network.toUpperCase() : "XRP");
 
   //from our client code
   const [currencyData, setCurrencyData] = useState(null);

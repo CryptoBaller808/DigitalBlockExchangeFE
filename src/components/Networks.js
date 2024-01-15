@@ -72,7 +72,7 @@ const NetworkSelector = ({ network }) => {
     </div>
   );
 
-  const content = useMemo(() => <div className="w-[230px]">{options.map(renderItem)}</div>, [options]);
+  const content = useMemo(() => <div className="w-[230px]">{options.map(renderItem)}</div>, [options, renderItem]);
 
   const selected = useMemo(() => mapping[network], [network]);
 

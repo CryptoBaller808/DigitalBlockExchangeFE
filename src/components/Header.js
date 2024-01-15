@@ -10,7 +10,7 @@ import { setModalOpen } from "../redux/actions";
 import DisconnectModal from "./Modal/DisconnectModal";
 import TokenListDropDown from "./TokenListDropDown";
 
-const Header = ({ openSidebar, setOpenSidebar, tokenList, selectedToken, setSelectedToken }) => {
+const Header = ({ openSidebar, setOpenSidebar, setSelectedToken }) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("");
@@ -70,6 +70,7 @@ const Header = ({ openSidebar, setOpenSidebar, tokenList, selectedToken, setSele
               e.stopPropagation();
             }}>
             {/* <NetworksSelection network={network} /> */}
+
             <MenuIcon />
           </div>
         </div>
@@ -97,7 +98,7 @@ const Header = ({ openSidebar, setOpenSidebar, tokenList, selectedToken, setSele
             <h1 style={{ color: "white" }}>{user?.firstname ? user?.firstname : "No name"}</h1>
           )} */}
           <div className="token-selection flex items-center">
-            <TokenListDropDown dropDownList={tokenList} selectedValue={selectedToken} setSelectedValue={setSelectedToken} />
+            <TokenListDropDown network={network} setSelectedValue={setSelectedToken} />
           </div>
           {isWalletConnected ? (
             balance?.success ? (

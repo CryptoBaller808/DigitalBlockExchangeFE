@@ -18,7 +18,8 @@ const DECIMALVAL = 7;
 let timeout = null;
 
 const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal }) => {
-  const [tokenTabSelected, setTokenTabSelected] = useState("XRP");
+  const network = useSelector(state => state.networkReducers.token);
+  const [tokenTabSelected, setTokenTabSelected] = useState(network ? network.toUpperCase() : "XRP");
   const [currencyData, setCurrencyData] = useState([]);
   const [rowData, setRowData] = useState(null);
   const [loadingData, setLoadingData] = useState(true);
