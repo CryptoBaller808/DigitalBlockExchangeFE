@@ -57,6 +57,12 @@ import Resale from "./Pages/Resale";
 // import ThemeSwitch from "./components/theme-switch";
 import { useSocket } from "./context/socket";
 import * as balanceAction from "./redux/xummBalance/action";
+import * as QRCodeAction from "./redux/xummQRCode/action";
+import * as accountOfferAction from "./redux/accountOffers/action";
+import * as historyOfferAction from "./redux/historyOffers/action";
+import { connectWallet, logoutUser } from "./redux/actions";
+import { setNetwork } from "./redux/network/action";
+// import ThemeSwitch from "./components/theme-switch";
 
 function App() {
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -64,7 +70,6 @@ function App() {
   const { isDarkMode } = useSelector(state => state.themeReducer);
   const balanceData = useSelector(state => state.signInData?.balance);
   const userToken = useMemo(() => balanceData?.userToken ?? "", [balanceData]);
-
   const socket = useSocket();
 
   const gettokenlocalstorage = async () => {
@@ -79,25 +84,6 @@ function App() {
         payload: { ...data, ...res2?.data },
       });
     }
-  };
-  // Function to get the saved mode from localStorage or use the default (light) mode
-  const getSavedMode = () => {
-    const savedMode = localStorage.getItem("mode");
-    return savedMode ? JSON.parse(savedMode) : false;
-  };
-  const [selectedToken, setSelectedToken] = useState({ lbl: "XRP Ledger", value: "xrp", icon: "./images/Invest1.png" });
-  const [_, setIsDarkMode] = useState(getSavedMode);
-  const tokenList = [
-    { lbl: "XRP Ledger", value: "xrp", icon: "./images/Invest1.png" },
-    { lbl: "XLM Network", value: "xlm", icon: "./images/XMLicon.png" },
-  ];
-  // Function to handle the checkbox change and toggle between dark and light mode
-  const handleCheckboxChange = () => {
-    setIsDarkMode(prevMode => {
-      const newMode = !prevMode;
-      localStorage.setItem("mode", JSON.stringify(newMode));
-      return newMode;
-    });
   };
 
   // Effect to set the class on the body based on the current mode
@@ -125,17 +111,37 @@ function App() {
     walletSync();
   }, [dispatch, walletSync]);
 
+  const disconnectWallet = useCallback(() => {
+    dispatch(balanceAction.setBalanceEmpty());
+    dispatch(QRCodeAction.setQRCodeDisconnect());
+    dispatch(connectWallet(false));
+    //clear acc offers content
+
+    dispatch(accountOfferAction.setAccountOffersProcessing(true));
+    dispatch(accountOfferAction.setAccountOffers([]));
+    dispatch(accountOfferAction.setAccountOffersProcessing(false));
+    //clear history content
+    dispatch(historyOfferAction.setHistoryOffersProcessing());
+    dispatch(historyOfferAction.setHistoryOffers([]));
+    dispatch(historyOfferAction.setStopHistoryOffersProcessing());
+    localStorage.removeItem("nft_login");
+    dispatch(logoutUser());
+  }, [dispatch]);
+
+  const handleMenuClick = useCallback(
+    selected => {
+      disconnectWallet();
+      dispatch(setNetwork(selected.value));
+      setOpenSidebar(false);
+    },
+    [disconnectWallet, dispatch],
+  );
+
   return (
     <div className="App">
       <BrowserRouter>
         <ToastContainer />
-        <Header
-          openSidebar={openSidebar}
-          setOpenSidebar={setOpenSidebar}
-          selectedToken={selectedToken}
-          setSelectedToken={setSelectedToken}
-          tokenList={tokenList}
-        />
+        <Header openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} setSelectedToken={handleMenuClick} />
         <Sidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
         <Routes>
           <Route path="/" element={<LandingPage />} exact />
