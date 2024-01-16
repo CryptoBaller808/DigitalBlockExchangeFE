@@ -1,0 +1,22 @@
+name: Build test
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      NODE_ENV: production
+      DISABLE_ESLINT_PLUGIN: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm i -f
+      - run: npm run build
