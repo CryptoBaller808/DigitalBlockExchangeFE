@@ -12,8 +12,10 @@ import ExchangeModalIcon from "../../Images/exchange-color.png";
 import { LoadingIndicatorIcon } from "../../assets/svg";
 import { Modal } from "antd";
 import { toast } from "react-toastify";
+import './index.css';
 
 let timeout = null;
+const shouldAskForSecretKey = process.env.REACT_APP_PROMPT_FOR_TESTING_KEY === "true";
 
 const DEFAULT_SWAP_VALS = { currency: "", issuer: "", id: -1, value: "" };
 const DEFAULT_SWAP_BALS = { currency: "", balance: "0.00000" };
@@ -38,6 +40,7 @@ const XLMSwap = () => {
   const [finalExchangeRate, setFinalExchangeRate] = useState("");
   const [currencies, setCurrencies] = useState();
   const [allowSwap, setAllowSwap] = useState(false);
+  const [isKeyModalVisible, setIsKeyModalVisible] = useState(false);
 
   // fetch currencies
   useEffect(() => {
@@ -155,7 +158,17 @@ const XLMSwap = () => {
     }
   }, [swapTo, swapFrom]);
 
-  const handleConfirm = () => {
+  const handleConfirmSwap = () => {
+    if (shouldAskForSecretKey) setIsKeyModalVisible(true);
+    else sendDataToBackend();
+  };
+
+  const handleConfirmTestingModal = secretKey => {
+    sendDataToBackend(secretKey);
+    setIsKeyModalVisible(false);
+  };
+
+  const sendDataToBackend = (secretKey = null) => {
     setShow(false);
     setIsTransaction(true);
 
@@ -170,6 +183,8 @@ const XLMSwap = () => {
       userToken: balance?.userToken,
       destAmount: finalExchangeRate,
     };
+
+    if (secretKey) txnInfo.secretKey = secretKey;
 
     socket.emit("xlm-swap-request", txnInfo);
 
@@ -230,11 +245,11 @@ const XLMSwap = () => {
           </div>
         </div>
 
-        <button className="btn button py-2 w-100 mt-2" onClick={handleConfirm}>
+        <button className="btn button py-2 w-100 mt-2" onClick={handleConfirmSwap}>
           Submit
         </button>
       </Modal>
-
+      <ModalForSecretKey onConfirm={handleConfirmTestingModal} setShow={setIsKeyModalVisible} show={isKeyModalVisible} />
       <div className="wrap wrapWidth flex aic flex-col">
         {!!error && (
           <Alert variant="danger" onClose={setError.bind(this, "")} dismissible>
@@ -388,6 +403,27 @@ const XLMSwap = () => {
         <WalletConnect network={network} open={open} setOpen={setOpen} />
       </CustomModal>
     </div>
+  );
+};
+
+const ModalForSecretKey = ({ onConfirm, show, setShow }) => {
+  const [privateKey, setPrivateKey] = useState("");
+
+  const handleOnConfirm = () => {
+    if (privateKey) onConfirm(privateKey);
+  };
+
+  return (
+    <Modal footer={""} title="Enter your private key" destroyOnClose={true} open={show} onCancel={setShow.bind(this, false)}>
+      <div className="d-flex flex-column justify-content-center align-items-center privateKeyModalSwap">
+        <input type="password" className="fs-3" value={privateKey} onChange={e => setPrivateKey(e.target.value.trim())} />
+        <p className="d-flex mb-2 justify-content-center">This is a test environment. You won't see this modal in production.</p>
+      </div>
+
+      <button className="btn button py-2 w-100 mt-2" onClick={handleOnConfirm}>
+        Submit
+      </button>
+    </Modal>
   );
 };
 

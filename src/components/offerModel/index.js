@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import _ from "loadsh";
 import "./style.css";
 import { Modal } from "antd";
@@ -25,6 +25,8 @@ const SOCKET_REQUEST = {
   xrp: "xumm-payment-request",
 };
 
+const shouldAskForSecretKey = process.env.REACT_APP_PROMPT_FOR_TESTING_KEY === "true";
+
 const OfferModel = ({
   show,
   hide,
@@ -39,8 +41,9 @@ const OfferModel = ({
   sellIssuer,
   orderType,
   setOrderStatus,
-  clearForms
+  clearForms,
 }) => {
+  const [isKeyModalVisible, setIsKeyModalVisible] = useState(false);
   const dispatch = useDispatch();
   const accountInfo = useSelector(state => state?.signInData?.balance);
   const userToken = accountInfo?.userToken;
@@ -48,9 +51,19 @@ const OfferModel = ({
   const socket = useSocket();
   const network = useSelector(state => state.networkReducers.token);
 
-  const handleConfirm = () => {
+  const handleOnConfirm = secretKey => {
+    sendDataToBackend(secretKey);
+    setIsKeyModalVisible(false);
+  };
+
+  const handlePaymentConfirm = () => {
+    if (shouldAskForSecretKey) setIsKeyModalVisible(true);
+    else sendDataToBackend();
+  };
+
+  const sendDataToBackend = (secretKey = null) => {
     toast.success(TOAST_MESSAGE[network]);
-    clearForms()
+    clearForms();
 
     if (offerType === "buy") {
       const buyOfferInfo = {
@@ -67,6 +80,8 @@ const OfferModel = ({
         currPrice: price,
       };
 
+      if (secretKey) buyOfferInfo.secretKey = secretKey;
+
       socket.emit(SOCKET_REQUEST[network], buyOfferInfo);
     } else {
       const sellOfferInfo = {
@@ -82,6 +97,9 @@ const OfferModel = ({
         offerType: orderType,
         currPrice: price,
       };
+
+      if (secretKey) sellOfferInfo.secretKey = secretKey;
+
       socket.emit(SOCKET_REQUEST[network], sellOfferInfo);
     }
 
@@ -201,38 +219,62 @@ const OfferModel = ({
   };
 
   return (
-    <Modal title={<span className="text-2xl">Create Offer</span>} open={show} footer={null} closable onCancel={hide}>
-      <div className="m-4">
-        <div className="d-flex flex-column">
-          <div className="d-flex justify-content-between mb-2">
-            <label className="fs-3 text-muted">Order Type: </label>
-            <label className="fs-3">{orderType}</label>
-          </div>
+    <>
+      <Modal title={<span className="text-2xl">Create Offer</span>} open={show} footer={null} closable onCancel={hide}>
+        <div className="m-4">
+          <div className="d-flex flex-column">
+            <div className="d-flex justify-content-between mb-2">
+              <label className="fs-3 text-muted">Order Type: </label>
+              <label className="fs-3">{orderType}</label>
+            </div>
 
-          <div className="d-flex justify-content-between mb-2">
-            <label className="fs-3 text-muted">Amount: </label>
-            <label className="fs-3">{amount}</label>
-          </div>
+            <div className="d-flex justify-content-between mb-2">
+              <label className="fs-3 text-muted">Amount: </label>
+              <label className="fs-3">{amount}</label>
+            </div>
 
-          <div className="d-flex justify-content-between mb-2">
-            <label className="fs-3 text-muted">Price: </label>
-            <label className="fs-3">{price}</label>
-          </div>
+            <div className="d-flex justify-content-between mb-2">
+              <label className="fs-3 text-muted">Price: </label>
+              <label className="fs-3">{price}</label>
+            </div>
 
-          <div className="d-flex justify-content-between mb-2">
-            <label className="fs-3 text-muted">Total: </label>
-            <label className="fs-3">{total.toFixed(6)}</label>
-          </div>
+            <div className="d-flex justify-content-between mb-2">
+              <label className="fs-3 text-muted">Total: </label>
+              <label className="fs-3">{total.toFixed(6)}</label>
+            </div>
 
-          <div className="d-flex justify-content-between">
-            <label className="fs-3 text-muted">Currency: </label>
-            <label className="fs-3">{buyCurrency}</label>
+            <div className="d-flex justify-content-between">
+              <label className="fs-3 text-muted">Currency: </label>
+              <label className="fs-3">{buyCurrency}</label>
+            </div>
           </div>
+          <button className="confirmBtn" onClick={handlePaymentConfirm}>
+            Confirm
+          </button>
         </div>
-        <button className="confirmBtn" onClick={handleConfirm}>
-          Confirm
-        </button>
+      </Modal>
+      <ModalForSecretKey open={isKeyModalVisible} onConfirm={handleOnConfirm} onCancel={() => setIsKeyModalVisible(false)} />
+    </>
+  );
+};
+
+const ModalForSecretKey = ({ open, onConfirm, onCancel }) => {
+  const [privateKey, setPrivateKey] = useState("");
+
+  const handleOnConfirm = () => {
+    if (privateKey) onConfirm(privateKey);
+  };
+
+  return (
+    <Modal title={<span className="text-2xl">Enter your private key</span>} open={open} footer={null} closable onCancel={onCancel}>
+      <div className="privateKey">
+        <input type="password" className="fs-3" value={privateKey} onChange={e => setPrivateKey(e.target.value.trim())} />
+        <p>This is a test environment. You won't see this modal in production.</p>
       </div>
+
+      <button className="confirmBtn" onClick={handleOnConfirm} disabled={!privateKey}>
+        Confirm
+      </button>
     </Modal>
   );
 };
