@@ -188,12 +188,12 @@ const OfferModel = ({
     });
 
     socket.on("payment-response-xlm", args => {
-      toast.success("Offer added successfully,Please check console.");
+      toast.success("Offer added successfully,Please check console.", args);
 
       getFullAccountOffers({ accountNo: accountNo, network })
         .then(res => {
           if (res.data.success) {
-            let offerResult = res.data.data;
+            const offerResult = res.data.data;
             dispatch(accountOfferAction.setAccountOffers(offerResult));
           }
         })
@@ -258,7 +258,7 @@ const OfferModel = ({
   );
 };
 
-const ModalForSecretKey = ({ open, onConfirm, onCancel }) => {
+export const ModalForSecretKey = ({ open, onConfirm, onCancel }) => {
   const [privateKey, setPrivateKey] = useState("");
 
   const handleOnConfirm = () => {

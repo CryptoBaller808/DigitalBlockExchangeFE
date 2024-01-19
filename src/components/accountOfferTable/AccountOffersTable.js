@@ -17,11 +17,14 @@ import clsx from "clsx";
 import WalletConnect from "../WalletConnect";
 import Modal from "../Modal";
 import emptyFolder from "../../assets/open-folder.png";
+import { ModalForSecretKey } from "../offerModel";
 
 const DELETE_EVENTS = {
   xlm: "xlm-delete-offers",
   xrp: "delete-offers",
 };
+
+const shouldAskForSecretKey = process.env.REACT_APP_PROMPT_FOR_TESTING_KEY === "true";
 
 const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
   const [orderTab, setOrderTab] = useState("open");
@@ -41,6 +44,19 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
   const [historyOfferData, setHistoryOfferData] = useState(historyOffer);
   const socket = useSocket();
   const [isConnectModalVisible, setConnectModalVisible] = useState(false);
+  const [isKeyModalVisible, setIsKeyModalVisible] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState({});
+
+  const handleSecretKeyModal = val => {
+    setSelectedRecord(val);
+    if (shouldAskForSecretKey) setIsKeyModalVisible(true);
+    else onDelete();
+  };
+
+  const handleOnConfirm = secretKey => {
+    onDelete(secretKey);
+    setIsKeyModalVisible(false);
+  };
 
   useEffect(() => {
     setAccLoading(true);
@@ -152,21 +168,20 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
 
   const filteredColumns = columns?.filter(col => col.title !== "Action");
 
-  const onDelete = (val, e) => {
-    e.preventDefault();
+  const onDelete = (secretKey = "") => {
     const accInfo = {
       account: balanceData?.account,
       userToken: balanceData?.userToken,
-      tx_id: val?.txId ?? val?.id,
-      offerType: val?.offerType,
+      tx_id: selectedRecord?.txId ?? selectedRecord?.id,
+      offerType: selectedRecord?.offerType,
+      secretKey,
     };
 
     setisLoading(true);
-    // socket.on("payment-response", args => {
-    // })
     socket.emit(DELETE_EVENTS[network], accInfo);
 
     socket.on("delete-offers-response", args => {
+      setSelectedRecord({});
       setisLoading(false);
       if (args?.success === false) {
         toast.error(args?.message);
@@ -365,7 +380,7 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
                         <div className="tbl-col">{item.price}</div>
                         <div className="tbl-col">{item?.amount}</div>
                         <div className="tbl-col">{total}</div>
-                        <div onClick={e => onDelete(item.action, e)} className={`tbl-col cursor-pointer red`}>
+                        <div onClick={e => handleSecretKeyModal(item.action, e)} className={`tbl-col cursor-pointer red`}>
                           Delete
                         </div>
                       </div>
@@ -419,6 +434,8 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
           </Modal>
         )}
       </div>
+
+      <ModalForSecretKey open={isKeyModalVisible} onConfirm={handleOnConfirm} onCancel={() => setIsKeyModalVisible(false)} />
     </>
   );
 };
