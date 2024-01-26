@@ -32,7 +32,7 @@ const BuySell = () => {
                 <img src="./images/apple-pay1.png" className="pm-logo" />
               </div>
             </div>
-            <div className="btn button">Buy/Sell</div>
+            <Link to="https://xumm.app/detect/xapp:banxa.onofframp" target="_blank" className="btn button">Buy/Sell</Link>
           </div>
           <div className="card flex flex-col aic">
             <img src="./topper.png" className="img" />
@@ -47,7 +47,7 @@ const BuySell = () => {
                 <img src="./images/MastercardLogo1.png" className="pm-logo" />
               </div>
             </div>
-            <div className="btn button">Buy</div>
+            <Link to="https://xumm.app/detect/xapp:uphold.topper" target="_blank" className="btn button">Buy</Link>
           </div>
         </div>
       </div>
