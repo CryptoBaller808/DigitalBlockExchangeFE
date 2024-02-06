@@ -45,10 +45,10 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
   const socket = useSocket();
   const [isConnectModalVisible, setConnectModalVisible] = useState(false);
   const [isKeyModalVisible, setIsKeyModalVisible] = useState(false);
-  const [selectedRecord, setSelectedRecord] = useState({});
+  const [selectedRecord, setSelectedRecord] = useState(null);
 
   const handleSecretKeyModal = val => {
-    setSelectedRecord(val);
+    setSelectedRecord({ txId: val?.id, offerType: val.offerType });
     if (shouldAskForSecretKey) setIsKeyModalVisible(true);
     else onDelete();
   };
@@ -169,6 +169,8 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
   const filteredColumns = columns?.filter(col => col.title !== "Action");
 
   const onDelete = (secretKey = "") => {
+    if (!selectedRecord) return;
+
     const accInfo = {
       account: balanceData?.account,
       userToken: balanceData?.userToken,
@@ -181,7 +183,7 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
     socket.emit(DELETE_EVENTS[network], accInfo);
 
     socket.on("delete-offers-response", args => {
-      setSelectedRecord({});
+      setSelectedRecord(null);
       setisLoading(false);
       if (args?.success === false) {
         toast.error(args?.message);
@@ -380,7 +382,11 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
                         <div className="tbl-col">{item.price}</div>
                         <div className="tbl-col">{item?.amount}</div>
                         <div className="tbl-col">{total}</div>
-                        <div onClick={e => handleSecretKeyModal(item.action, e)} className={`tbl-col cursor-pointer red`}>
+                        <div
+                          onClick={e => {
+                            handleSecretKeyModal(item.action, e);
+                          }}
+                          className={`tbl-col cursor-pointer red`}>
                           Delete
                         </div>
                       </div>
