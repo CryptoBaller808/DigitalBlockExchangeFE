@@ -65,6 +65,8 @@ import { setNetwork } from "./redux/network/action";
 // import ThemeSwitch from "./components/theme-switch";
 import XLMSwap from "./Pages/xlm-swap";
 
+let timeout = null;
+
 function App() {
   const [openSidebar, setOpenSidebar] = useState(false);
   const dispatch = useDispatch();
@@ -110,7 +112,11 @@ function App() {
   }, [dispatch, socket, userToken]);
 
   useEffect(() => {
-    walletSync();
+    timeout = setTimeout(() => walletSync(), 5000);
+
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
   }, [dispatch, walletSync]);
 
   const disconnectWallet = useCallback(() => {
