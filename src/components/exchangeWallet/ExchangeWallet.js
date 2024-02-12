@@ -457,14 +457,9 @@ const ExchangeWallet = ({ currencyData }) => {
                 <div className="number flex aic jc">{limitVal.sellAmount > 0 ? limitVal.sellAmount : 0}%</div>
               </div>
               <div className="token-val py-4">
-                {" "}
-                {Number(limitVal.sellAmount) > Number(userCurrencyBalance) ? (
-                  <h4 className="redcolormilja margintTopiffs">Not enough funds</h4>
-                ) : (
-                  <h4 className="greycolormilja margintTopiffs ">
-                    Value:- {totalSellPriceLimit.toFixed(6)} {baseCurrency}
-                  </h4>
-                )}
+                <h4 className="greycolormilja margintTopiffs ">
+                  Value:- {totalSellPriceLimit.toFixed(6)} {baseCurrency}
+                </h4>
               </div>
               <div className="action flex aic jc">
                 {/* If wallet isn't connected then connect wallet button otherwise buy/sell */}
@@ -501,6 +496,7 @@ const ExchangeWallet = ({ currencyData }) => {
                     onChange={handleMarketVal}
                     className="txt flex cleanbtn w-full"
                     placeholder="Market"
+                    disabled
                   />
                   <div className="tag flex">{baseCurrency}</div>
                 </div>
@@ -538,14 +534,9 @@ const ExchangeWallet = ({ currencyData }) => {
                 <div className="number flex aic jc">{marketVal.sellAmount > 0 ? marketVal.sellAmount : 0}%</div>
               </div>
               <div className="token-val py-4">
-                {" "}
-                {Number(marketVal.sellAmount) > Number(userCurrencyBalance) ? (
-                  <h4 className="redcolormilja margintTopiffs">Not enough funds</h4>
-                ) : (
-                  <h4 className="greycolormilja margintTopiffs ">
-                    Value:- {totalSellPrice.toFixed(6)} {baseCurrency}
-                  </h4>
-                )}
+                <h4 className="greycolormilja margintTopiffs ">
+                  Value:- {totalSellPrice.toFixed(6)} {baseCurrency}
+                </h4>
               </div>
               <div className="action flex aic jc">
                 {/* Connect wallet or sell button  */}

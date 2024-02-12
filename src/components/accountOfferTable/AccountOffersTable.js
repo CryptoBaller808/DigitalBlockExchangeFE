@@ -414,8 +414,8 @@ const AccountOffersTable = ({ currencyData2, dropVal, setDropVal }) => {
                       <div className="tbl-col">{item.offerType}</div>
                       <div className={`tbl-col ${item.side === "Buy" ? "green" : "red"}`}>{item.side}</div>
 
-                      <div className="tbl-col">{item.amount}</div>
                       <div className="tbl-col">{item.price}</div>
+                      <div className="tbl-col">{item.amount}</div>
                       <div className="tbl-col">{item.total}</div>
                     </div>
                   ))

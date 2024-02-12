@@ -78,7 +78,7 @@ const GraphHeadComponent = ({ currencyData2 }) => {
                 "text-red-500": stat < 0,
                 "text-green-500": stat >= 0,
               })}>
-              {stat}%
+              {isNaN(stat)?"0.00":parseFloat(stat).toFixed(3)}%
             </div>
           </div>
           <div className="item flex items-center  justify-center flex-col">
