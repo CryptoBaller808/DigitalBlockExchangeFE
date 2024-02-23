@@ -1,24 +1,9 @@
-.subscribed-block {
-  height: 300px;
-  width: 100%;
+.Mainaccount {
+  display: flex;
+  justify-content: center;
+  align-items: "center";
+  padding: 80px 0px;
   background: linear-gradient(265.73deg, #acd949 9.82%, #9fd340 40.96%, #39b54a 80.16%);
-}
-
-.subscribed-block .bg-layer {
-  height: 100%;
-  width: 100%;
-  padding: 60px 0px;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center !important;
-
-  .Mainaccount {
-    display: flex;
-    justify-content: center;
-    align-items: "center";
-    padding: 80px 0px;
-    background: linear-gradient(265.73deg, #acd949 9.82%, #9fd340 40.96%, #39b54a 80.16%);
-  }
 }
 
 .accounttext {
@@ -389,5 +374,20 @@
     right: 0;
     width: 80vw;
     height: 25vh;
+  }
+
+  .subscribed-block {
+    height: 300px;
+    width: 100%;
+    background: linear-gradient(265.73deg, #acd949 9.82%, #9fd340 40.96%, #39b54a 80.16%);
+  }
+
+  .subscribed-block .bg-layer {
+    height: 100%;
+    width: 100%;
+    padding: 60px 0px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center !important;
   }
 }

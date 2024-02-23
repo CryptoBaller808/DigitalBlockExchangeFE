@@ -1,18 +1,15 @@
 import React from "react";
-import Banxa from '../Images/banxa.png';
-import Topper from '../Images/topper.png';
+import Banxa from "../Images/banxa.png";
+import Topper from "../Images/topper.png";
 import { Link } from "react-router-dom";
 
 const BuySell = () => {
-
-  // handle on click buy 
-  const handleOnBuy = (option) => {
+  // handle on click buy
+  const handleOnBuy = option => {
     if (option === "banxa") {
-
     } else if (option === "topper") {
-
     }
-  }
+  };
   return (
     <div className="buy-sell flex flex-col">
       <div className="buy-sell-hero-sec"></div>

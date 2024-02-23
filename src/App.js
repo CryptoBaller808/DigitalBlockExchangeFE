@@ -105,11 +105,13 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <ToastContainer />
-        <Header openSidebar={openSidebar}
+        <Header
+          openSidebar={openSidebar}
           setOpenSidebar={setOpenSidebar}
           selectedToken={selectedToken}
           setSelectedToken={setSelectedToken}
-          tokenList={tokenList} />
+          tokenList={tokenList}
+        />
         <Sidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
         <Routes>
           <Route path="/" element={<LandingPage />} exact />

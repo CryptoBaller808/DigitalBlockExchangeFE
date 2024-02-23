@@ -6,7 +6,7 @@ import getExchangeRate from "../../helper/api/exchangeRate";
 import Loader from "../../components/Loader";
 import { getTradesData } from "../../helper";
 import { useSelector, useDispatch } from "react-redux";
-import { useSocket } from '../../context/socket';
+import { useSocket } from "../../context/socket";
 //redux
 import * as tradesAction from "../../redux/tradesData/action";
 import moment from "moment";
