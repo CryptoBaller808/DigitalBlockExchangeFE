@@ -1,8 +1,4 @@
-import {
-  ACCOUNT_OFFERS_PROCESSING,
-  SET_ACCOUNT_OFFERS,
-  STOP_SET_ACCOUNT_OFFERS_PROCESSING,
-} from "./type";
+import { ACCOUNT_OFFERS_PROCESSING, SET_ACCOUNT_OFFERS } from "./type";
 
 const defaultReducer = {
   accountOffer: [],
@@ -15,7 +11,7 @@ const accountOffersReducer = (state = defaultReducer, action) => {
     case ACCOUNT_OFFERS_PROCESSING: {
       return {
         ...state,
-        processing: true,
+        processing: payload,
       };
     }
 
@@ -23,13 +19,6 @@ const accountOffersReducer = (state = defaultReducer, action) => {
       return {
         ...state,
         accountOffer: payload,
-        processing: false,
-      };
-    }
-
-    case STOP_SET_ACCOUNT_OFFERS_PROCESSING: {
-      return {
-        ...state,
         processing: false,
       };
     }

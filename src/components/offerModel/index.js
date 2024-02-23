@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import _ from "loadsh";
 import "./style.css";
 import { Modal } from "antd";
@@ -12,8 +12,20 @@ import * as historyOfferAction from "../../redux/historyOffers/action";
 import { getBookOffers, getAccountOffers, getUserCurrencies } from "../../helper/ws";
 import { getFullAccountOffers, getOrderHistory } from "../../helper";
 import { toast } from "react-toastify";
-import { useSocket } from '../../context/socket';
+import { useSocket } from "../../context/socket";
 import Loader from "../Loader";
+
+const TOAST_MESSAGE = {
+  xlm: "Open LOBSTR App to approve transaction.",
+  xrp: "Open Xumm App to approve transaction.",
+};
+
+const SOCKET_REQUEST = {
+  xlm: "xlm-payment-request",
+  xrp: "xumm-payment-request",
+};
+
+const shouldAskForSecretKey = process.env.REACT_APP_PROMPT_FOR_TESTING_KEY === "true";
 
 const OfferModel = ({
   show,
@@ -29,56 +41,66 @@ const OfferModel = ({
   sellIssuer,
   orderType,
   setOrderStatus,
+  clearForms,
 }) => {
+  const [isKeyModalVisible, setIsKeyModalVisible] = useState(false);
   const dispatch = useDispatch();
-
   const accountInfo = useSelector(state => state?.signInData?.balance);
-
   const userToken = accountInfo?.userToken;
-
   const paymentResponse = useSelector(state => state.paymentResponseReducer?.paymentResponse?.success);
-
   const socket = useSocket();
+  const network = useSelector(state => state.networkReducers.token);
 
-  const handleConfirm = () => {
-    toast.success("Open Xumm App to approve transaction");
-    hide();
+  const handleOnConfirm = secretKey => {
+    sendDataToBackend(secretKey);
+    setIsKeyModalVisible(false);
+  };
 
-    const buyOfferInfo = {
-      account: accountNo,
-      buyValue: total.toFixed(5),
-      buyCurrency,
-      buyIssuer,
-      sellValue: amount,
-      sellCurrency,
-      sellIssuer,
-      userToken,
-      side: "Buy",
-      offerType: orderType,
-      currPrice: price,
-    };
+  const handlePaymentConfirm = () => {
+    if (shouldAskForSecretKey) setIsKeyModalVisible(true);
+    else sendDataToBackend();
+  };
 
-    const sellOfferInfo = {
-      account: accountNo,
-      buyValue: amount,
-      buyCurrency: sellCurrency,
-      buyIssuer: sellIssuer,
-      sellValue: total.toFixed(5),
-      sellCurrency: buyCurrency,
-      sellIssuer: buyIssuer,
-      userToken,
-      side: "Sell",
-      offerType: orderType,
-      currPrice: price,
-    };
-
-    console.log("buy offer",buyOfferInfo)
-    console.log("buy offer",sellOfferInfo)
+  const sendDataToBackend = (secretKey = null) => {
+    toast.success(TOAST_MESSAGE[network]);
+    clearForms();
 
     if (offerType === "buy") {
-      socket.emit("xumm-payment-request", buyOfferInfo);
+      const buyOfferInfo = {
+        account: accountNo,
+        buyValue: total.toFixed(5),
+        buyCurrency,
+        buyIssuer,
+        sellValue: amount,
+        sellCurrency,
+        sellIssuer,
+        userToken,
+        side: "Buy",
+        offerType: orderType,
+        currPrice: price,
+      };
+
+      if (secretKey) buyOfferInfo.secretKey = secretKey;
+
+      socket.emit(SOCKET_REQUEST[network], buyOfferInfo);
     } else {
-      socket.emit("xumm-payment-request", sellOfferInfo);
+      const sellOfferInfo = {
+        account: accountNo,
+        buyValue: amount,
+        buyCurrency: sellCurrency,
+        buyIssuer: sellIssuer,
+        sellValue: total.toFixed(5),
+        sellCurrency: buyCurrency,
+        sellIssuer: buyIssuer,
+        userToken,
+        side: "Sell",
+        offerType: orderType,
+        currPrice: price,
+      };
+
+      if (secretKey) sellOfferInfo.secretKey = secretKey;
+
+      socket.emit(SOCKET_REQUEST[network], sellOfferInfo);
     }
 
     const submitBookOfferData = {
@@ -110,7 +132,7 @@ const OfferModel = ({
           .catch(err => console.log("err", err));
         //update Account offer data
 
-        getFullAccountOffers(accountNo)
+        getFullAccountOffers({ accountNo: accountNo, network })
           .then(res => {
             // console.log("AccountOffers", res);
             if (res.data.success) {
@@ -121,7 +143,7 @@ const OfferModel = ({
           .catch(err => console.log("err", err));
         //account history offers
 
-        getOrderHistory(accountNo)
+        getOrderHistory({ accountNo, network })
           .then(res => {
             console.log("getOrderHistory res----------->", res);
 
@@ -164,41 +186,95 @@ const OfferModel = ({
         setOrderStatus(false);
       }
     });
+
+    socket.on("payment-response-xlm", args => {
+      toast.success("Offer added successfully,Please check console.", args);
+
+      getFullAccountOffers({ accountNo: accountNo, network })
+        .then(res => {
+          if (res.data.success) {
+            const offerResult = res.data.data;
+            dispatch(accountOfferAction.setAccountOffers(offerResult));
+          }
+        })
+        .catch(err => console.log("err", err));
+
+      getOrderHistory({ accountNo, network })
+        .then(res => {
+          if (res.data.success) {
+            dispatch(historyOfferAction.setHistoryOffersProcessing());
+            dispatch(historyOfferAction.setHistoryOffers(res.data.data));
+            dispatch(historyOfferAction.setStopHistoryOffersProcessing());
+          }
+        })
+        .catch(err => console.log("err", err));
+
+      hide();
+    });
+
+    socket.on("transaction-error", args => {
+      toast.error(args);
+      hide();
+    });
   };
 
   return (
-    <Modal title="Create Offer" visible={show} footer={null} closable onCancel={hide}>
-      <div className="m-4">
-        <div className="d-flex flex-column">
-          <div className="d-flex justify-content-between mb-2">
-            <label className="fs-3 text-muted">Order Type: </label>
-            <label className="fs-3">{orderType}</label>
-          </div>
+    <>
+      <Modal title={<span className="text-2xl">Create Offer</span>} open={show} footer={null} closable onCancel={hide}>
+        <div className="m-4">
+          <div className="d-flex flex-column">
+            <div className="d-flex justify-content-between mb-2">
+              <label className="fs-3 text-muted">Order Type: </label>
+              <label className="fs-3">{orderType}</label>
+            </div>
 
-          <div className="d-flex justify-content-between mb-2">
-            <label className="fs-3 text-muted">Amount: </label>
-            <label className="fs-3">{amount}</label>
-          </div>
+            <div className="d-flex justify-content-between mb-2">
+              <label className="fs-3 text-muted">Amount: </label>
+              <label className="fs-3">{amount}</label>
+            </div>
 
-          <div className="d-flex justify-content-between mb-2">
-            <label className="fs-3 text-muted">Price: </label>
-            <label className="fs-3">{price}</label>
-          </div>
+            <div className="d-flex justify-content-between mb-2">
+              <label className="fs-3 text-muted">Price: </label>
+              <label className="fs-3">{price}</label>
+            </div>
 
-          <div className="d-flex justify-content-between mb-2">
-            <label className="fs-3 text-muted">Total: </label>
-            <label className="fs-3">{total.toFixed(6)}</label>
-          </div>
+            <div className="d-flex justify-content-between mb-2">
+              <label className="fs-3 text-muted">Total: </label>
+              <label className="fs-3">{total.toFixed(6)}</label>
+            </div>
 
-          <div className="d-flex justify-content-between">
-            <label className="fs-3 text-muted">Currency: </label>
-            <label className="fs-3">{buyCurrency}</label>
+            <div className="d-flex justify-content-between">
+              <label className="fs-3 text-muted">Currency: </label>
+              <label className="fs-3">{buyCurrency}</label>
+            </div>
           </div>
+          <button className="confirmBtn" onClick={handlePaymentConfirm}>
+            Confirm
+          </button>
         </div>
-        <button className="confirmBtn" onClick={handleConfirm}>
-          Confirm
-        </button>
+      </Modal>
+      <ModalForSecretKey open={isKeyModalVisible} onConfirm={handleOnConfirm} onCancel={() => setIsKeyModalVisible(false)} />
+    </>
+  );
+};
+
+export const ModalForSecretKey = ({ open, onConfirm, onCancel }) => {
+  const [privateKey, setPrivateKey] = useState("");
+
+  const handleOnConfirm = () => {
+    if (privateKey) onConfirm(privateKey);
+  };
+
+  return (
+    <Modal title={<span className="text-2xl">Enter your private key</span>} open={open} footer={null} closable onCancel={onCancel}>
+      <div className="privateKey">
+        <input type="password" className="fs-3" value={privateKey} onChange={e => setPrivateKey(e.target.value.trim())} />
+        <p>This is a test environment. You won't see this modal in production.</p>
       </div>
+
+      <button className="confirmBtn" onClick={handleOnConfirm} disabled={!privateKey}>
+        Confirm
+      </button>
     </Modal>
   );
 };

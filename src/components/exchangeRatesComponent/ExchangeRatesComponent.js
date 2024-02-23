@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { SearchIcon, ExchangeIcon, SunIcon, MenuIcon2 } from "../../Icons";
+import React, { useState, useEffect, useCallback } from "react";
+import { SearchIcon, ExchangeIcon, SortIcon } from "../../Icons";
 //new updateimport getExchangeRate from "../../helper/api/exchangeRate";
 import currency from "../../helper/currencies";
 import getExchangeRate from "../../helper/api/exchangeRate";
@@ -10,17 +10,24 @@ import { useSocket } from "../../context/socket";
 //redux
 import * as tradesAction from "../../redux/tradesData/action";
 import moment from "moment";
-const dateFormat = "YYYY/MM/DD";
+import clsx from "clsx";
+import Fuse from "fuse.js";
+// const dateFormat = "YYYY/MM/DD";
+const DECIMALVAL = 7;
+
+let timeout = null;
 
 const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal }) => {
-  const [tokenTabSelected, setTokenTabSelected] = useState("XRP");
+  const network = useSelector(state => state.networkReducers.token);
+  const [tokenTabSelected, setTokenTabSelected] = useState(network ? network.toUpperCase() : "XRP");
   const [currencyData, setCurrencyData] = useState([]);
   const [rowData, setRowData] = useState(null);
   const [loadingData, setLoadingData] = useState(true);
-  const [tokenList, setTokenList] = useState([]);
   const [currencyDataLoaded, setCurrencyDataLoaded] = useState(false);
+  const [searching, setSearching] = useState(false);
+  const [searchedPairs, setSearchedPairs] = useState([]);
+
   const dispatch = useDispatch();
-  const [decimalVal, setDecimalVal] = useState(7);
 
   const tradesData = useSelector(state => state.trades?.trades);
   const tradesDataProcessing = useSelector(state => state.trades?.processing);
@@ -31,53 +38,58 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
 
   //get all currency data list
   const getAllCurrencyData = async () => {
-    const selectedCurrency = currency.find(obj => obj.currency === tokenTabSelected);
-    const currencyDataPromise = currency
-      .filter(val => selectedCurrency.currency !== val.currency)
-      .map(obj => {
-        const exchangeData = {
-          curA: tokenTabSelected,
-          issuerA: selectedCurrency.issuer,
-          curB: obj.currency,
-          issuerB: obj.issuer,
-        };
-        return getExchangeRate(exchangeData);
-      });
-    const price = await Promise.all(currencyDataPromise);
-    let titleData = currency
-      .filter(val => selectedCurrency.currency !== val.currency)
-      .map((obj, indx) => {
-        const data = {
-          id: indx,
-          title: `${tokenTabSelected}/${obj.currency}`,
-          stat: "-22.45",
-          curA: tokenTabSelected,
-          issuerA: selectedCurrency.issuer,
-          curB: obj.currency,
-          issuerB: obj.issuer,
-        };
-        return data;
-      });
+    try {
+      const filteredCurrencies = currency.filter(val => tokenTabSelected !== val.currency);
 
-    price.map((price, indx) => {
-      titleData[indx].price = price;
-    });
+      if (tokenTabSelected === "XLM") {
+        const prices = await getExchangeRate({ mainToken: tokenTabSelected });
+        return prices;
+      } else {
+        const selectedCurrency = currency.find(obj => obj.currency === tokenTabSelected);
 
-    return titleData;
+        const currencyDataPromise = filteredCurrencies.map(obj => {
+          const exchangeData = {
+            curA: tokenTabSelected,
+            issuerA: selectedCurrency.issuer,
+            curB: obj.currency,
+            issuerB: obj.issuer,
+          };
+          return getExchangeRate(exchangeData);
+        });
+        const prices = await Promise.all(currencyDataPromise);
+
+        let titleData = filteredCurrencies.map((obj, indx) => {
+          const data = {
+            id: indx,
+            title: `${tokenTabSelected}/${obj.currency}`,
+            stat: "-22.45",
+            curA: tokenTabSelected,
+            issuerA: selectedCurrency.issuer,
+            curB: obj.currency,
+            issuerB: obj.issuer,
+          };
+          return data;
+        });
+
+        prices.map((price, indx) => {
+          titleData[indx].price = price;
+        });
+
+        return titleData;
+      }
+    } catch (error) {
+      console.log("errorrrr", error);
+      return [];
+    }
   };
 
   //set all currency data as select the currency
-
   useEffect(() => {
     if (currencyData.length) {
       setRowData(currencyData[0]);
       getData(currencyData[0]);
       setLoadingData(false);
       setCurrencyDataLoaded(true);
-    } else {
-      getAllCurrencyData().then(val => {
-        setCurrencyData(val);
-      });
     }
   }, [currencyData]);
 
@@ -90,10 +102,13 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
     setLoadingData(false);
   }, [tokenTabSelected]);
 
-  const handleRow = data => {
-    setRowData(data);
-    getData(data);
-  };
+  const handleRow = useCallback(
+    data => {
+      setRowData(data);
+      getData(data);
+    },
+    [getData],
+  );
 
   //FOR TRADES DATA
   useEffect(() => {
@@ -104,15 +119,17 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
     setTradeList(tradesData);
   }, [tradesData]);
 
-  const dataSource = tradesData.map((obj, indx) => {
-    const price = parseFloat(obj.price).toFixed(decimalVal);
+  const dataSource = (Array.isArray(tradesData) ? tradesData : []).map((obj, indx) => {
+    const price = parseFloat(obj.price).toFixed(DECIMALVAL);
     const date = obj.time;
-    const volume = price * parseFloat(obj.amount).toFixed(decimalVal);
+    const volume = price * parseFloat(obj.amount).toFixed(DECIMALVAL);
+
     return {
       id: indx + 1,
-      time: moment(date).format("YYYY/MM/DD HH:mm"),
+      time: formatRelativeDate(date),
       price: price,
-      vol: volume.toFixed(decimalVal),
+      vol: volume.toFixed(DECIMALVAL),
+      color: obj?.color,
     };
   });
 
@@ -144,7 +161,7 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
       }
     }
     fetchData();
-  }, [currencyData2]);
+  }, [currencyData2, tokenTabSelected]);
 
   //TRADES DATA LOADER
   useEffect(() => {
@@ -156,74 +173,100 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
       }, 2000);
     }
   }, [tradesDataProcessing]);
+
+  const onTokenSelect = useCallback(selected => {
+    setTokenTabSelected(selected);
+  }, []);
+
+  const onSearch = useCallback(
+    e => {
+      const query = e?.target?.value;
+      setSearching(!!query);
+      if (timeout) clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        const fuse = new Fuse(currencyData, {
+          keys: ["title"],
+          threshold: 0.1,
+        }).search(query);
+        setSearchedPairs(fuse.map(item => item.item));
+      }, 1000);
+    },
+    [currencyData],
+  );
+
   const fixed4 = number => {
     return number?.toFixed(4);
   };
   return (
-    <div className="left flex flex-col">
+    <div className="left flex flex-col  h-full ">
       {/* Left price bar start */}
       <div className="le-top flex flex-col">
         <div className="search-box flex items-center justify-between">
           <div className="icon">
             <SearchIcon />
           </div>
-          <input type="text" className="txt cleanbtn w-full" placeholder="Search" />
+          <input type="text" className="txt cleanbtn w-full" placeholder="Search" onChange={onSearch} />
         </div>
         <div className="token_tabs flex">
-          {/* <div className={`item ${tokenTabSelected === "DBX" ? "active" : ""}`} onClick={e => setTokenTabSelected("DBX")}>
-            DBX
-          </div> */}
-          <div
-            className={`item ${tokenTabSelected === "XRP" ? "active" : ""}`}
-            onClick={e => {
-              setTokenTabSelected("XRP");
-            }}>
+          <div className={clsx("item", { active: tokenTabSelected === "XRP" })} onClick={onTokenSelect.bind(this, "XRP")}>
             XRP
           </div>
-          <div className={`item ${tokenTabSelected === "XLM" ? "active" : ""}`} onClick={e => setTokenTabSelected("XLM")}>
+          <div className={clsx("item", { active: tokenTabSelected === "XLM" })} onClick={onTokenSelect.bind(this, "XLM")}>
             XLM
           </div>
-          {/* <div className={`item ${tokenTabSelected === "DBX" ? "active" : ""}`} onClick={e => setTokenTabSelected("DBX")}>
-            DBX
-          </div>
-          */}
-          {/* <div className={`item ${tokenTabSelected === "USDC" ? "active" : ""}`} onClick={e => setTokenTabSelected("USDC")}>
-            USDC
-          </div>
-          <div className={`item ${tokenTabSelected === "ALTS" ? "active" : ""}`} onClick={e => setTokenTabSelected("ALTS")}>
-            ALTS
-          </div> */}
         </div>
+
         <div className="token-table flex">
           <div className="table-block flex flex-col w-full">
-            <div className="tbl-row flex">
-              <div className="row-item ps-2">Pair</div>
-              <div className="row-item text-center">Price</div>
-              {/* <div className="row-item flex items-center justify-end">
+            {/* <Table
+              className="text-xs p-0"
+              columns={[
+                { dataIndex: "1", key: "1", title: "Pair" },
+                { dataIndex: "2", key: "2", title: "Price" },
+                {
+                  dataIndex: "3",
+                  key: "3",
+                  title: (
+                    <span>
+                      24h Chg <ExchangeIcon />
+                    </span>
+                  ),
+                },
+              ]}
+            /> */}
+            <div className="tbl-row flex text-xs ">
+              <div className="row-item flex items-center">
+                Pair <SortIcon />
+              </div>
+              <div className="row-item text-center flex items-center">Price</div>
+              <div className="row-item flex items-center">
                 24h Chg
-                <spna className="ml-[2px]">
-                  <ExchangeIcon />
-                </spna>
-              </div> */}
+                <ExchangeIcon />
+              </div>
             </div>
             {loadingData ? (
               <Loader />
             ) : (
-              currencyData.map((item, i) => {
-                let price = parseFloat(item?.price).toFixed(3);
-                return (
-                  <div className="tbl-row flex" key={i} onClick={() => handleRow(item)}>
-                    <div className="row-item flex items-center ps-2">
-                      <span className="name1">{item.title}</span>
-                      {/* /<span className="name2">{tokenTabSelected}</span> */}
-                    </div>
-                    <div className="row-item text-center"> {price === "NaN" ? 0 : price}</div>
-                    {/* <div className={`row-item flex items-center justify-end ${item.stat < 0 ? "red" : "green"}`}>
-                    {parseFloat(item.stat).toFixed(3)}
-                  </div> */}
+              (searching ? searchedPairs : currencyData).map((item, i) => (
+                <div
+                  className={clsx("tbl-row flex rounded-sm", {
+                    "bg-grey-50": item.title === rowData?.title,
+                  })}
+                  key={i}
+                  onClick={handleRow.bind(this, item)}>
+                  <div className="row-item flex items-center ps-2">
+                    <span className="name1">{item.title}</span>
                   </div>
-                );
-              })
+                  <div className="row-item text-center">{isNaN(item.price) ? "-" : parseFloat(item.price).toFixed(3)}</div>
+                  <div
+                    className={clsx("row-item flex items-center justify-end", {
+                      red: item.stat < 0,
+                      green: item.stat >= 0,
+                    })}>
+                    {isNaN(item.stat) ? "-" : parseFloat(item.stat).toFixed(3) + "%"}
+                  </div>
+                </div>
+              ))
             )}
           </div>
         </div>
@@ -246,10 +289,16 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
               dataSource.map((item, i) => {
                 return (
                   <div className="tbl-row flex" key={i}>
-                    <div className="row-item flex items-center">{parseFloat(item.price).toFixed(4)}</div>
+                    <div
+                      className={clsx("row-item flex items-center", {
+                        red: item.color === "red",
+                        green: item.color === "green",
+                      })}>
+                      {parseFloat(item.price).toFixed(4)}
+                    </div>
                     <div className="row-item">{parseFloat(item.vol).toFixed(4)}</div>
                     {/* ${item.type === "red" ? "red" : "green"} */}
-                    <div className={`row-item flex items-center justify-end `}>{item.time?.substring(11, 16)}</div>
+                    <div className={`row-item flex items-center justify-end `}>{item.time}</div>
                   </div>
                 );
               })
@@ -265,3 +314,20 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
 };
 
 export default ExchangeRatesComponent;
+
+function formatRelativeDate(inputDate) {
+  const parsedDate = moment(inputDate);
+  const durationInMinutes = moment().diff(parsedDate, "minutes");
+  const durationInHours = moment().diff(parsedDate, "hours");
+  const durationInDays = moment().diff(parsedDate, "days");
+
+  if (durationInMinutes < 60) {
+    return `${durationInMinutes}m ago`;
+  } else if (durationInHours < 24) {
+    return `${durationInHours}h ago`;
+  } else if (durationInDays === 1) {
+    return "1d ago";
+  } else {
+    return `${durationInDays}d ago`;
+  }
+}

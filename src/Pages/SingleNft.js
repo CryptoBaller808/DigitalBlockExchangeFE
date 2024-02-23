@@ -194,7 +194,7 @@ const SingleNft = ({ }) => {
             <div className="row flex flex-col">
               <div className="r-lbl flex flex-col">
                 <div className="lbl-1">
-                  Image, Video, Audio or 3D Model <spna className="star">*</spna>
+                  Image, Video, Audio or 3D Model <span className="star">*</span>
                 </div>
                 <div className="lbl-2">File types supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB, GLTF. Max size: 100 MB</div>
               </div>
@@ -228,7 +228,7 @@ const SingleNft = ({ }) => {
               <div className="r-lbl flex flex-col">
                 <div className="lbl-1">
                   Name
-                  <spna className="star">*</spna>
+                  <span className="star">*</span>
                 </div>
               </div>
               <input
@@ -245,7 +245,7 @@ const SingleNft = ({ }) => {
               <div className="r-lbl flex flex-col">
                 <div className="lbl-1">
                   Description
-                  <spna className="star"></spna>
+                  <span className="star"></span>
                 </div>
                 <div className="lbl-2">The description will be underneath the image on the item's detail page.</div>
               </div>

@@ -14,7 +14,9 @@ import BookOffersTable from "../components/bookOfferTable/BookOffersTable";
 import Chart from "../components/charts";
 
 const Exchange = ({ isDarkMode }) => {
-  const [tokenTabSelected, setTokenTabSelected] = useState("XRP");
+  const network = useSelector(state => state.networkReducers.token);
+
+  const [tokenTabSelected, setTokenTabSelected] = useState(network ? network.toUpperCase() : "XRP");
 
   //from our client code
   const [currencyData, setCurrencyData] = useState(null);
@@ -117,11 +119,11 @@ const Exchange = ({ isDarkMode }) => {
 
           <div className="font-normal text-black text-center text-base">
             Digital Block Exchanges uses the charting solution provided by{" "}
-            <a href="https://www.tradingview.com/" target="_blank" className=" underline text-black">
+            <a href="https://www.tradingview.com/" rel="noreferrer" target="_blank" className=" underline text-black">
               TradingView
             </a>
             , a platform for traders and investors with versatile analytical tools. It lets you track particular symbols,{" "}
-            <a href="https://www.tradingview.com/symbols/XRPUSD/" target="_blank" className=" underline text-black">
+            <a href="https://www.tradingview.com/symbols/XRPUSD/" rel="noreferrer" target="_blank" className=" underline text-black">
               e.g. XRP USD,
             </a>{" "}
             as well as dive into a more advanced market analysis with sophisticated data like crypto market cap.

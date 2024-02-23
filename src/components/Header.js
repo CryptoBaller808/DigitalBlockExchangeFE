@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
-import { DropDownIcon, MenuIcon } from "../Icons";
+import React, { useState } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { MenuIcon } from "../Icons";
 import LogoHorizontal from "../assets/DBX-new.png";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Modal from "./Modal";
@@ -10,9 +10,8 @@ import { setModalOpen } from "../redux/actions";
 import DisconnectModal from "./Modal/DisconnectModal";
 import TokenListDropDown from "./TokenListDropDown";
 
-const Header = ({ openSidebar, setOpenSidebar, tokenList, selectedToken, setSelectedToken }) => {
+const Header = ({ openSidebar, setOpenSidebar, setSelectedToken }) => {
   const dispatch = useDispatch();
-  const location = useLocation();
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("");
   const [modalShow, setModalShow] = useState(false);
@@ -20,18 +19,16 @@ const Header = ({ openSidebar, setOpenSidebar, tokenList, selectedToken, setSele
   const isWalletConnected = useSelector(state => state.authReducer.isWalletConnected);
   const balance = useSelector(state => state.signInData?.balance);
 
-  const [BalanceData, setBalanceData] = useState(balance);
   //prepring user id string
   const accountStr = balance?.account;
   let dottedStr = accountStr?.substr(0, 5) + "..." + accountStr?.substr(accountStr?.length - 4);
-  useEffect(() => {
-    if (balance == null) {
-      setBalanceData(balance);
-    }
-  }, []);
+
+  const network = useSelector(state => state.networkReducers.token);
+
   const onHide = () => {
     setModalShow(false);
   };
+
   const handelDisconnect = () => {
     // dispatch(balanceAction.setBalanceEmpty());
     setModalShow(true);
@@ -69,12 +66,15 @@ const Header = ({ openSidebar, setOpenSidebar, tokenList, selectedToken, setSele
           <Link to="/">
             <img src={LogoHorizontal} className="logo-img" />
           </Link>
+
           <div
             className="menu-icon"
             onClick={e => {
               setOpenSidebar(!openSidebar);
               e.stopPropagation();
             }}>
+            {/* <NetworksSelection network={network} /> */}
+
             <MenuIcon />
           </div>
         </div>
@@ -102,7 +102,7 @@ const Header = ({ openSidebar, setOpenSidebar, tokenList, selectedToken, setSele
             <h1 style={{ color: "white" }}>{user?.firstname ? user?.firstname : "No name"}</h1>
           )} */}
           <div className="token-selection flex items-center">
-            <TokenListDropDown dropDownList={tokenList} selectedValue={selectedToken} setSelectedValue={setSelectedToken} />
+            <TokenListDropDown network={network} setSelectedValue={setSelectedToken} />
           </div>
           {isWalletConnected ? (
             balance?.success ? (
@@ -142,7 +142,7 @@ const Header = ({ openSidebar, setOpenSidebar, tokenList, selectedToken, setSele
 
       {open && (
         <Modal open={open} onClose={() => setOpen(false)}>
-          <WalletConnect open={open} setOpen={setOpen} />
+          <WalletConnect network={network} open={open} setOpen={setOpen} />
         </Modal>
       )}
       {modalShow && <DisconnectModal show={handelDisconnect} onHide={onHide} />}

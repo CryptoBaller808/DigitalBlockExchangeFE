@@ -6,3 +6,14 @@ export const GET_CHART_DATA = "xumm/get-chart";
 export const GET_TVCHART_DATA = "xumm/get-chart-data";
 export const GET_TICKERS = "xumm/get-tickers";
 export const GET_TRADES = "xumm/get-trades-data";
+export const GET_SWAP_LIST = `${process.env.REACT_APP_API_URL}/users/Accounts/getAssetLists`;
+
+export const GET_STELLAR_TVCHART_DATA = "xlm/get-chart-data";
+export const GET_STELLAR_LIVE_PRICES = "xlm/get-live-prices";
+export const GET_STELLAR_TRADES_DATA = "xlm/get-trades-data";
+export const GET_STELLAR_ORDER_BOOK = "xlm/getorderbooks";
+export const GET_STELLAR_ACC_OFFERS = "xlm/get-account-offers";
+export const GET_STELLAR_HIS_OFFERS = "xlm/get-offer-history";
+export const GET_STELLAR_TICKERS = "xlm/get-tickers";
+export const GET_STELLAR_SWAP_LIST = "xlm/getAssetLists";
+export const GET_STELLAR_EXCHANGE_RATE = "xlm/getExchangeRates";

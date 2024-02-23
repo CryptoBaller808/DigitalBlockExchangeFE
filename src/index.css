@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.ant-popover-arrow {
+  display: none !important;
+}
+
 /* @font-face {
     font-family:Helvetica;
     font-weight: normal;

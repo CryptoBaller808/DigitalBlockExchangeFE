@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import _ from "loadsh";
 import Loader from "../Loader";
 
@@ -7,7 +7,7 @@ import { MenuIcon2 } from "../../Icons";
 import { useSelector, useDispatch } from "react-redux";
 import { getBookOffers } from "../../helper/ws";
 import * as bookOfferAction from "../../redux/bookOffers/action";
-import { useSocket } from '../../context/socket';
+import { useSocket } from "../../context/socket";
 
 const BookOffersTable = ({ tokenTabSelected, currencyData, dropVal, setDropVal }) => {
   const [selectedCombined, setSelectedCombined] = useState({ value: 7, label: "7 Decimals", user: "decimal7" });
@@ -27,7 +27,6 @@ const BookOffersTable = ({ tokenTabSelected, currencyData, dropVal, setDropVal }
   const baseCurrency = currencyData?.info?.curB === "SOLO" ? "534F4C4F00000000000000000000000000000000" : currencyData?.info?.curB;
 
   const currentIssuer = currencyData?.info?.issuerA;
-
   const baseIssuer = currencyData?.info?.issuerB;
 
   const [decimalVal, setDecimalVal] = useState(7);
@@ -73,21 +72,20 @@ const BookOffersTable = ({ tokenTabSelected, currencyData, dropVal, setDropVal }
   }, [bookOffer]);
   // console.log("dropVal", dropVal);
 
-  const dataSource = bookOfferData.map((obj, indx) => {
-    // console.log("obj.quality", obj.quality);
-    const price = currentCurrency === "XRP" ? dropVal * Number(obj.quality) : Number(obj.quality);
+  const dataSource = useMemo(() => {
+    return bookOfferData.map((obj, indx) => {
+      const price = currentCurrency === "XRP" ? dropVal * Number(obj.quality) : Number(obj.price);
+      const amount = currentCurrency === "XRP" ? Number(obj?.TakerPays?.value) : Number(obj?.amount);
+      const volume = price * amount.toFixed(decimalVal);
 
-    const amount = Number(obj?.TakerPays?.value);
-
-    const volume = price * amount.toFixed(decimalVal);
-
-    return {
-      id: indx + 1,
-      amount: amount.toFixed(decimalVal),
-      price: price?.toFixed(decimalVal),
-      vol: volume.toFixed(decimalVal),
-    };
-  });
+      return {
+        id: indx + 1,
+        amount: amount.toFixed(decimalVal),
+        price: price?.toFixed(decimalVal),
+        vol: volume.toFixed(decimalVal),
+      };
+    });
+  }, [bookOfferData, currentCurrency, decimalVal, dropVal]);
 
   const submitBookOfferData = {
     currentCurrency,
@@ -95,6 +93,7 @@ const BookOffersTable = ({ tokenTabSelected, currencyData, dropVal, setDropVal }
     currentIssuer,
     baseIssuer,
   };
+
   useEffect(() => {
     getBookOffers(submitBookOfferData, userAccount)
       .then(res => {
@@ -117,7 +116,7 @@ const BookOffersTable = ({ tokenTabSelected, currencyData, dropVal, setDropVal }
           dispatch(bookOfferAction.setStopBookOffersProcessing());
         }
       })
-      .catch(err => console.log("err", err));
+      .catch(err => console.log("book error", err));
   }, [currencyData, isWalletConnected]);
 
   useEffect(() => {

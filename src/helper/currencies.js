@@ -116,13 +116,18 @@ const currency = [
     currency: "SOLO",
     issuer: "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
   },
+
+  {
+    currency: "CORE",
+    issuer: "rcoreNywaoz2ZCQ8Lg2EbSLnGuRBmun6D",
+  },
   {
     currency: "XRdoge",
     issuer: "rLqUC2eCPohYvJCEBJ77eCCqVL2uEiczjA",
   },
   {
-    currency: "CORE",
-    issuer: "rcoreNywaoz2ZCQ8Lg2EbSLnGuRBmun6D",
+    currency: "CNY",
+    issuer: "rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y",
   },
   {
     currency: "USD",
@@ -164,10 +169,7 @@ const currency = [
     currency: "ELS",
     issuer: "rHXuEaRYnnJHbDeuBH5w8yPh5uwNVh5zAg",
   },
-  {
-    currency: "CNY",
-    issuer: "rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y",
-  },
+
   {
     currency: "BTC",
     issuer: "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",

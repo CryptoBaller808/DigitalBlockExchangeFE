@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./style.css";
 
 import { useSelector } from "react-redux";
@@ -10,20 +10,31 @@ import OfferModel from "../offerModel";
 import Modal from "../Modal";
 import { Slider } from "antd";
 import WalletConnect from "../WalletConnect";
+import clsx from "clsx";
 
 const ExchangeWallet = ({ currencyData }) => {
+  const price = currencyData?.info?.price;
+  const baseCurrent = currencyData?.info.curA ?? "XRP";
+  const title = currencyData?.info?.title;
+  const issuerB = currencyData?.info?.issuerB;
+  const issuerA = currencyData?.info?.issuerA;
+  const curA = currencyData?.info?.curA;
+  const curB = currencyData?.info?.curB;
+
   const [connectTokenTab, setConnectTokenTab] = useState("Limit");
   //from new update
   const [paymentModel, setPaymentModel] = useState(false);
   const [offerType, setOfferType] = useState("");
   const [open, setOpen] = useState(false);
-  const [orderType, setOrderType] = useState("");
+  const [orderType, setOrderType] = useState("Limit");
   const [orderStatus, setOrderStatus] = useState(false);
-  const [amount, setAmount] = useState();
-  const [totalPrice, setTotalPrice] = useState();
-  const [limitPrice, setLimitPrice] = useState();
-  const price = currencyData?.info?.price;
-
+  const [amount, setAmount] = useState("");
+  const [totalPrice, setTotalPrice] = useState("");
+  const [limitPrice, setLimitPrice] = useState("");
+  const isWalletConnected = useSelector(state => state.authReducer.isWalletConnected);
+  const accountInfo = useSelector(state => state.signInData?.balance);
+  const network = useSelector(state => state.networkReducers.token);
+  const location = useLocation();
   const dispatch = useDispatch();
 
   const [marketVal, setMarketVal] = useState({
@@ -37,6 +48,27 @@ const ExchangeWallet = ({ currencyData }) => {
     buyPrice: price,
     sellPrice: price,
   });
+
+  const clearForms = useCallback(() => {
+    setLimitVal(pre => ({ ...pre, buyAmount: "", sellAmount: "" }));
+    setMarketVal({ buyAmount: "", sellAmount: "" });
+  }, []);
+
+  const userCurrencies = accountInfo?.currencies?.filter(val => {
+    if (baseCurrent === "XLM") return val.asset_code === curB;
+
+    return val.account === issuerB && val.currency === curB;
+  });
+  const userCurrencyBalance = userCurrencies?.length && userCurrencies[0].balance;
+  const balance = accountInfo?.balance;
+  const accountStr = accountInfo?.account;
+  const tempCurrency = title && title.split("/");
+  const currentCurrency = tempCurrency?.length && tempCurrency[0];
+  const baseCurrency = tempCurrency?.length && tempCurrency[1];
+  const totalBuyPrice = marketVal.buyAmount * price;
+  const totalSellPrice = marketVal.sellAmount * price;
+  const totalBuyPriceLimit = limitVal.buyAmount * limitVal.buyPrice;
+  const totalSellPriceLimit = limitVal.sellAmount * limitVal.sellPrice;
 
   useEffect(() => {
     setLimitVal({
@@ -60,34 +92,6 @@ const ExchangeWallet = ({ currencyData }) => {
       setLimitPrice(0);
     }
   }, [orderStatus]);
-  const location = useLocation();
-  const isWalletConnected = useSelector(state => state.authReducer.isWalletConnected);
-
-  const accountInfo = useSelector(state => state.signInData?.balance);
-  const userCurrencies = accountInfo?.currencies?.filter(
-    val => val.account === currencyData?.info?.issuerB && val.currency === currencyData?.info?.curB,
-  );
-
-  const userCurrencyBalance = userCurrencies?.length && userCurrencies[0].balance;
-
-  const paymentQR = useSelector(state => state.paymentQRCodeReducer?.paymentQRcode);
-
-  const balance = accountInfo?.balance;
-  const title = currencyData?.info?.title;
-
-  const tempCurrency = title && title.split("/");
-
-  const currentCurrency = tempCurrency?.length && tempCurrency[0];
-
-  const baseCurrency = tempCurrency?.length && tempCurrency[1];
-
-  const totalBuyPrice = marketVal.buyAmount * price;
-
-  const totalSellPrice = marketVal.sellAmount * price;
-
-  const totalBuyPriceLimit = limitVal.buyAmount * limitVal.buyPrice;
-
-  const totalSellPriceLimit = limitVal.sellAmount * limitVal.sellPrice;
 
   const handleClickOpen = () => {
     if (location.pathname === "/exchange") {
@@ -188,27 +192,43 @@ const ExchangeWallet = ({ currencyData }) => {
     });
   };
 
+  useEffect(() => {
+    clearForms();
+  }, [connectTokenTab, clearForms]);
+
   return (
-    <div className="connection-sec flex flex-col w-full">
+    <div className="connection-sec flex flex-col w-full ">
       <div className="connects-tabs flex">
-        <div className={`tabs-item ${connectTokenTab == "Limit" ? "active" : ""}`} onClick={e => setConnectTokenTab("Limit")}>
+        <div
+          className={clsx("tabs-item", {
+            active: connectTokenTab === "Limit",
+          })}
+          onClick={setConnectTokenTab.bind(this, "Limit")}>
           Limit
         </div>
-        <div className={`tabs-item ${connectTokenTab == "Market" ? "active" : ""}`} onClick={e => setConnectTokenTab("Market")}>
+        <div
+          className={clsx("tabs-item", {
+            active: connectTokenTab === "Market",
+          })}
+          onClick={setConnectTokenTab.bind(this, "Market")}>
           Market
         </div>
-        <div className={`tabs-item ${connectTokenTab == "Order" ? "active" : ""}`} onClick={e => setConnectTokenTab("Order")}>
+        <div
+          className={clsx("tabs-item", {
+            active: connectTokenTab === "Order",
+          })}
+          onClick={setConnectTokenTab.bind(this, "Order")}>
           Trigger Order
         </div>
       </div>
-      <div className="content">
+      <div className="content ">
         <div className="buy-side flex flex-col">
           {connectTokenTab === "Limit" ? (
             <>
               <div className="hdr flex items-center w-full justify-between">
                 <div className="le">Buy {baseCurrency}</div>
                 <div className="ri">
-                  {currentCurrency} Available:-- {balance}
+                  {currentCurrency} Available: {currentCurrency === "XLM" ? accountStr : balance}
                 </div>
               </div>
               <div className="input-data flex flex-col">
@@ -280,7 +300,7 @@ const ExchangeWallet = ({ currencyData }) => {
               <div className="hdr flex items-center w-full justify-between">
                 <div className="le">Buy {baseCurrency}</div>
                 <div className="ri">
-                  {currentCurrency} Available:-- {balance}
+                  {currentCurrency} Available: {currentCurrency === "XLM" ? accountStr : balance}
                 </div>
               </div>
               <div className="input-data flex flex-col">
@@ -345,7 +365,7 @@ const ExchangeWallet = ({ currencyData }) => {
               <div className="hdr flex items-center w-full justify-between">
                 <div className="le">Buy {baseCurrency}</div>
                 <div className="ri">
-                  {currentCurrency} Available: {balance}
+                  {currentCurrency} Available: {currentCurrency === "XLM" ? accountStr : balance}
                 </div>
               </div>
               <div className="input-data flex flex-col">
@@ -386,6 +406,7 @@ const ExchangeWallet = ({ currencyData }) => {
             </>
           ) : null}
         </div>
+
         <div className="sell-side flex flex-col">
           {connectTokenTab === "Limit" ? (
             <>
@@ -436,14 +457,9 @@ const ExchangeWallet = ({ currencyData }) => {
                 <div className="number flex aic jc">{limitVal.sellAmount > 0 ? limitVal.sellAmount : 0}%</div>
               </div>
               <div className="token-val py-4">
-                {" "}
-                {Number(limitVal.sellAmount) > Number(userCurrencyBalance) ? (
-                  <h4 className="redcolormilja margintTopiffs">Not enough funds</h4>
-                ) : (
-                  <h4 className="greycolormilja margintTopiffs ">
-                    Value:- {totalSellPriceLimit.toFixed(6)} {baseCurrency}
-                  </h4>
-                )}
+                <h4 className="greycolormilja margintTopiffs ">
+                  Value:- {totalSellPriceLimit.toFixed(6)} {baseCurrency}
+                </h4>
               </div>
               <div className="action flex aic jc">
                 {/* If wallet isn't connected then connect wallet button otherwise buy/sell */}
@@ -480,6 +496,7 @@ const ExchangeWallet = ({ currencyData }) => {
                     onChange={handleMarketVal}
                     className="txt flex cleanbtn w-full"
                     placeholder="Market"
+                    disabled
                   />
                   <div className="tag flex">{baseCurrency}</div>
                 </div>
@@ -517,14 +534,9 @@ const ExchangeWallet = ({ currencyData }) => {
                 <div className="number flex aic jc">{marketVal.sellAmount > 0 ? marketVal.sellAmount : 0}%</div>
               </div>
               <div className="token-val py-4">
-                {" "}
-                {Number(marketVal.sellAmount) > Number(userCurrencyBalance) ? (
-                  <h4 className="redcolormilja margintTopiffs">Not enough funds</h4>
-                ) : (
-                  <h4 className="greycolormilja margintTopiffs ">
-                    Value:- {totalSellPrice.toFixed(6)} {baseCurrency}
-                  </h4>
-                )}
+                <h4 className="greycolormilja margintTopiffs ">
+                  Value:- {totalSellPrice.toFixed(6)} {baseCurrency}
+                </h4>
               </div>
               <div className="action flex aic jc">
                 {/* Connect wallet or sell button  */}
@@ -590,26 +602,28 @@ const ExchangeWallet = ({ currencyData }) => {
           ) : null}
         </div>
       </div>
+
       {open && (
         <Modal open={open} onClose={() => setOpen(false)}>
-          <WalletConnect open={open} setOpen={setOpen} />
+          <WalletConnect network={network} open={open} setOpen={setOpen} />
         </Modal>
       )}
       {paymentModel && (
         <OfferModel
           show={paymentModel}
-          hide={() => setPaymentModel(false)}
+          hide={setPaymentModel.bind(this, false)}
           amount={amount}
           price={orderType === "Limit" ? limitPrice : price}
           total={totalPrice}
           sellCurrency={currentCurrency}
           buyCurrency={baseCurrency}
-          accountNo={accountInfo?.account}
-          buyIssuer={currencyData?.info?.issuerB}
-          sellIssuer={currencyData?.info?.issuerA}
+          accountNo={network === "xrp" ? accountInfo?.account : accountInfo?.userToken}
+          buyIssuer={issuerB}
+          sellIssuer={issuerA}
           offerType={offerType}
           orderType={orderType}
           setOrderStatus={setOrderStatus}
+          clearForms={clearForms}
         />
       )}
     </div>
