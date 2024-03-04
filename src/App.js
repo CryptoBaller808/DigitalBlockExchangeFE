@@ -64,6 +64,7 @@ import { connectWallet, logoutUser } from "./redux/actions";
 import { setNetwork } from "./redux/network/action";
 // import ThemeSwitch from "./components/theme-switch";
 import XLMSwap from "./Pages/xlm-swap";
+import ThemeSwitch from "./components/theme-switch";
 
 let timeout = null;
 
@@ -177,9 +178,9 @@ function App() {
         <Footer />
       </BrowserRouter>
 
-      {/* <div className="color-toggle">
+      <div className="color-toggle">
         <ThemeSwitch />
-      </div> */}
+      </div>
     </div>
   );
 }
