@@ -1,18 +1,17 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import CustomModal from "../../components/Modal";
 import WalletConnect from "../../components/WalletConnect";
 import { ExchangeArrowIcon } from "../../Icons";
-import { Alert, Button } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 import { useSocket } from "../../context/socket";
 import { useSelector } from "react-redux";
 import { getExchangeRates, getSwapAssets } from "../../helper/api/swap";
 import SwapTransModal from "../../components/loader/SwapTransModal";
-import ReactModal from "react-modal";
 import ExchangeModalIcon from "../../Images/exchange-color.png";
 import { LoadingIndicatorIcon } from "../../assets/svg";
 import { Modal } from "antd";
 import { toast } from "react-toastify";
-import './index.css';
+import "./index.css";
 
 let timeout = null;
 const shouldAskForSecretKey = process.env.REACT_APP_PROMPT_FOR_TESTING_KEY === "true";
@@ -298,7 +297,7 @@ const XLMSwap = () => {
                     value={swapFrom.value}
                     onChange={onFromAmountChange}
                     pattern="\d*"
-                    maxLength="5"
+                    maxLength="10"
                   />
                 </div>
 
