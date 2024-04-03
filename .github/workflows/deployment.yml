@@ -32,10 +32,29 @@ jobs:
         run: gcloud auth configure-docker --quiet
 
       - name: Build Docker Image
-        run: docker build . -t $IMAGE_NAME
+        run: |
+          docker build . -t $IMAGE_NAME \
+            --build-arg REACT_APP_API_URL=${{ vars.REACT_APP_API_URL }} \
+            --build-arg REACT_APP_XRPL_EXPLORER=${{ vars.REACT_APP_XRPL_EXPLORER }}
 
       - name: Push Docker Image
         run: docker push $IMAGE_NAME
 
       - name: Deploy Docker Image
-        run: gcloud run deploy ${{ vars.GCP_APP_NAME }} --image $IMAGE_NAME --region us-west1 --platform managed --allow-unauthenticated --cpu 1 --min-instances 0 --max-instances 2 --memory 512Mi --port 8080 --no-use-http2 --set-env-vars NODE_ENV=production --service-account ${{ vars.GCP_ACCOUNT_NAME }}@${{ vars.GCP_PROJECT_ID }}.iam.gserviceaccount.com
+        run: |
+          gcloud run deploy ${{ vars.GCP_APP_NAME }} \
+            --image $IMAGE_NAME \
+            --region us-west1 \
+            --platform managed \
+            --allow-unauthenticated \
+            --cpu 1 \
+            --min-instances 0 \
+            --max-instances 2 \
+            --memory 512Mi \
+            --port 8080 \
+            --no-use-http2 \
+            --set-env-vars NODE_ENV=production \
+            --set-env-vars ENV_TYPE=production \
+            --set-env-vars REACT_APP_API_URL=${{ vars.REACT_APP_API_URL }} \
+            --set-env-vars REACT_APP_XRPL_EXPLORER=${{ vars.REACT_APP_XRPL_EXPLORER }} \
+            --service-account ${{ vars.GCP_ACCOUNT_NAME }}@${{ vars.GCP_PROJECT_ID }}.iam.gserviceaccount.com
