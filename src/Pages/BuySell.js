@@ -1,18 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Banxa from "../Images/banxa.png";
 import Topper from "../Images/topper.png";
 import { Link } from "react-router-dom";
+import { getBanners } from "../api/executers/Banner";
+import initializeAnalytics from "../helper/analytics/analytics";
 
 const BuySell = () => {
+  const [banner, setbanner] = useState(null);
   // handle on click buy
   const handleOnBuy = option => {
     if (option === "banxa") {
     } else if (option === "topper") {
     }
   };
+
+  const handleGetBanner = async type => {
+    try {
+      const resp = await getBanners(type);
+      if (resp.success) {
+        setbanner(resp.data.url);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetBanner("buy");
+  }, []);
+
+  useEffect(() => {
+    initializeAnalytics(); // Initialize Google Analytics
+  }, []);
   return (
     <div className="buy-sell flex flex-col">
-      <div className="buy-sell-hero-sec"></div>
+      {/* <div className="buy-sell-hero-sec"></div> */}
+      <div>
+        <img src={banner} alt="" className="h-[430px] w-full"/>
+      </div>
       <div className="wrap wrapWidth flex aic flex-col">
         <div className="buy-sell-card-block">
           <div className="card flex flex-col aic">
@@ -27,7 +52,9 @@ const BuySell = () => {
                 <img src="./images/apple-pay1.png" className="pm-logo" />
               </div>
             </div>
-            <Link to="https://xumm.app/detect/xapp:banxa.onofframp" target="_blank" className="btn button">Buy/Sell</Link>
+            <Link to="https://xumm.app/detect/xapp:banxa.onofframp" target="_blank" className="btn button">
+              Buy/Sell
+            </Link>
           </div>
           <div className="card flex flex-col aic">
             <img src="./topper.png" className="img" />
@@ -40,7 +67,9 @@ const BuySell = () => {
                 <img src="./images/MastercardLogo1.png" className="pm-logo" />
               </div>
             </div>
-            <Link to="https://xumm.app/detect/xapp:uphold.topper" target="_blank" className="btn button">Buy</Link>
+            <Link to="https://xumm.app/detect/xapp:uphold.topper" target="_blank" className="btn button">
+              Buy
+            </Link>
           </div>
         </div>
       </div>

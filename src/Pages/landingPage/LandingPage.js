@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ConductComponent from "../../components/conductComponent/ConductComponent";
 import CryptoComponent from "../../components/crypto-component/CryptoComponent";
 import HourComponent from "../../components/hourComponent/HourComponent";
@@ -8,7 +8,11 @@ import "./style.css";
 import Analytics from "../../components/analyticsComponent/analytics";
 import Tables from "../../components/tableComponent/table1";
 import Analytic2 from "../../components/analytic2/Analytic2";
+import initializeAnalytics from "../../helper/analytics/analytics";
 function LandingPage() {
+  useEffect(() => {
+    initializeAnalytics(); // Initialize Google Analytics
+  }, []);
   return (
     <div>
       <CryptoComponent />
