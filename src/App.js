@@ -65,8 +65,7 @@ import { setNetwork } from "./redux/network/action";
 // import ThemeSwitch from "./components/theme-switch";
 import XLMSwap from "./Pages/xlm-swap";
 import ThemeSwitch from "./components/theme-switch";
-import initializeAnalytics from "./helper/analytics/analytics";
-import useGoogleAnalytics from "./helper/analytics/fetchAnalytics";
+import initializeAnalytics from "./helper/analytics/analytics"; 
 
 let timeout = null;
 
@@ -77,8 +76,7 @@ function App() {
   const balanceData = useSelector(state => state.signInData?.balance);
   const userToken = useMemo(() => balanceData?.userToken ?? "", [balanceData]);
   const socket = useSocket();
-  const network = useSelector(state => state.networkReducers.token);
- const { signIn, fetchAnalyticsData}=useGoogleAnalytics()
+  const network = useSelector(state => state.networkReducers.token); 
   const gettokenlocalstorage = async () => {
     let data = JSON.parse(localStorage.getItem("nft_login"));
     if (!data) return;
@@ -149,8 +147,7 @@ function App() {
   );
    
   useEffect(() => {
-    initializeAnalytics(); // Initialize Google Analytics 
-    fetchAnalyticsData()
+    initializeAnalytics(); // Initialize Google Analytics  
   }, []);
   
   return (

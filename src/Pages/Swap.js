@@ -57,7 +57,11 @@ const Swap = () => {
   useEffect(() => {
     const fetchCurrency = async () => {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/users/Accounts/getAssetLists`);
-      setCurrencies(response.data.data);
+      if (response.data.success) {
+        const filtered = response.data.data.filter((item) => item.is_swap)
+        setCurrencies(filtered);
+      }
+
     };
     fetchCurrency();
   }, []);
@@ -391,7 +395,7 @@ const Swap = () => {
                           currencies.map(c => {
                             return (
                               <option value={c.id} issuer={c.asset_issuer} key={c.id}>
-                                {c.asset_code}
+                                {c.asset_code?.toUpperCase()}
                               </option>
                             );
                           })}
@@ -450,7 +454,7 @@ const Swap = () => {
                           currencies.map(c => {
                             return (
                               <option value={c.id} issuer={c.asset_issuer} key={c.id}>
-                                {c.asset_code}
+                                {c.asset_code?.toUpperCase()}
                               </option>
                             );
                           })}
