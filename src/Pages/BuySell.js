@@ -36,7 +36,10 @@ const BuySell = () => {
   }, []); 
   return (
     <div className="buy-sell flex flex-col">
-      <div className="buy-sell-hero-sec"></div>
+      {/* <div className="buy-sell-hero-sec"></div> */}
+      <div>
+        <img src={banner} alt="" className="h-[430px] w-full"/>
+      </div>
       <div className="wrap wrapWidth flex aic flex-col">
         <div className="buy-sell-card-block">
           <div className="card flex flex-col aic">
