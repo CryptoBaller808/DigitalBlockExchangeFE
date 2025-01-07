@@ -57,7 +57,11 @@ const Swap = () => {
   useEffect(() => {
     const fetchCurrency = async () => {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/users/Accounts/getAssetLists`);
-      setCurrencies(response.data.data);
+      if (response.data.success) {
+        const filtered = response.data.data.filter((item) => (item.is_swap && item.ledger==="xrp"))
+        setCurrencies(filtered);
+      }
+
     };
     fetchCurrency();
   }, []);
@@ -173,7 +177,7 @@ const Swap = () => {
   // handle setSwapFrom
   const handleSetSwapFrom = e => {
     let value = e.target.value;
-    console.log(value);
+    console.log('valuevaluevaluevalue',value);
     let currentObject = currencies.map(c => {
       if (c.id === parseInt(value)) {
         setSwapFrom(swapFrom => ({ ...swapFrom, currency: c.asset_code, issuer: c.asset_issuer, id: c.id }));
@@ -371,18 +375,7 @@ const Swap = () => {
                       <TokenIcon />
                     </div>*/}
                     <div className="about-token flex flex-col w-full mb-4">
-                      <div className="lbl mb-2">Swap From :</div>
-                      {/* <Select
-                        defaultValue={'XRP'}
-                        onChange={(e) => setSwapFrom({ ...swapFrom, currency: e.asset_code, issuer: e.asset_issuer })}
-                        getOptionLabel={option => option.asset_code}
-                        getOptionValue={(option) => option.id}
-                        options={currencies}
-                        placeholder="Select Currency"
-                        className="w-full"
-                        disabled={!currencies ? true : false}
-                        ref={swapFromRef}
-                      /> */}
+                      <div className="lbl mb-2">Swap From :</div> 
                       <select className="form-control" value={swapFrom.id} onChange={handleSetSwapFrom}>
                         <option value="-1" selected>
                           Select
@@ -442,7 +435,7 @@ const Swap = () => {
                         className="w-full"
                         disabled={!currencies ? true : false}
                       /> */}
-                      <select className="form-control" value={swapTo.id} onChange={handleSetSwapTo} ref={swapToRef}>
+                      <select className="form-control" value={swapTo.id} onChange={handleSetSwapTo}  >
                         <option value="-1" selected>
                           Select
                         </option>

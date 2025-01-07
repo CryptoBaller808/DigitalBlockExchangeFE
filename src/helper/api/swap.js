@@ -3,7 +3,7 @@ import { GET_STELLAR_EXCHANGE_RATE, GET_STELLAR_SWAP_LIST, GET_SWAP_LIST } from 
 
 export const getSwapAssets = ({ network }) => {
   const API_URL = network === "xlm" ? GET_STELLAR_SWAP_LIST : GET_SWAP_LIST;
-
+console.log('API_URL',API_URL);
   return new Promise((resolve, reject) => {
     ApiCall(API_URL, "get")
       .then(res => {

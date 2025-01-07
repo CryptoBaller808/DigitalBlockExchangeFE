@@ -13,6 +13,7 @@ import { LoadingIndicatorIcon } from "../../assets/svg";
 import { Modal } from "antd";
 import { toast } from "react-toastify";
 import './index.css';
+import axios from "axios";
 
 let timeout = null;
 const shouldAskForSecretKey = process.env.REACT_APP_PROMPT_FOR_TESTING_KEY === "true";
@@ -45,8 +46,13 @@ const XLMSwap = () => {
   // fetch currencies
   useEffect(() => {
     const fetchCurrency = async () => {
-      const response = await getSwapAssets({ network: "xlm" });
-      setCurrencies(response.data.data);
+      // const response = await getSwapAssets({ network: "xlm" });
+      // setCurrencies(response.data.data);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/users/Accounts/getAssetLists`);
+        if (response.data.success) {
+          const filtered = response.data.data.filter((item) => (item.is_swap && item.ledger==="xlm")) 
+          setCurrencies(filtered);
+        }
     };
     fetchCurrency();
   }, []);
@@ -79,7 +85,7 @@ const XLMSwap = () => {
   const handleSetSwapFrom = useCallback(
     e => {
       const value = e.target.value;
-
+      console.log(value);
       const selectedCurrency = currencies.find(cur => String(cur.id) === String(value));
       setSwapFrom(pre => ({
         ...pre,

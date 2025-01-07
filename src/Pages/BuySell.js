@@ -2,6 +2,9 @@ import React from "react";
 import Banxa from "../Images/banxa.png";
 import Topper from "../Images/topper.png";
 import { Link } from "react-router-dom";
+import { getBanners } from "../api/executers/Banner";
+import initializeAnalytics from "../helper/analytics/analytics";
+import handleGoogleAnalytics from "../helper/analytics/analytics";
 
 const BuySell = () => {
   // handle on click buy
@@ -10,6 +13,26 @@ const BuySell = () => {
     } else if (option === "topper") {
     }
   };
+
+  const handleGetBanner = async type => {
+    try {
+      const resp = await getBanners(type);
+      if (resp.success) {
+        setbanner(resp.data.url);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetBanner("buy");
+  }, []);
+
+  useEffect(() => {
+    initializeAnalytics(); // Initialize Google Analytics
+    handleGoogleAnalytics("G-Y7JFCH1TE5")
+  }, []); 
   return (
     <div className="buy-sell flex flex-col">
       <div className="buy-sell-hero-sec"></div>
