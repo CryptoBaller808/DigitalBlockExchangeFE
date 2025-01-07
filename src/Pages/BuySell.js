@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Banxa from "../Images/banxa.png";
 import Topper from "../Images/topper.png";
 import { Link } from "react-router-dom";
@@ -7,6 +7,7 @@ import initializeAnalytics from "../helper/analytics/analytics";
 import handleGoogleAnalytics from "../helper/analytics/analytics";
 
 const BuySell = () => {
+  const [banner, setbanner] = useState(null)
   // handle on click buy
   const handleOnBuy = option => {
     if (option === "banxa") {
