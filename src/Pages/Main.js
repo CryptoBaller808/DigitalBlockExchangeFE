@@ -36,6 +36,7 @@ import NftDetail from "../components/NftDetail";
 import Filters from "../components/Filters";
 import axios from "axios";
 import Card from "../components/Card";
+import { getBanners } from "../api/executers/Banner";
 
 const Main = ({ mintHandler }) => {
   const [tab, setTab] = useState("home");
@@ -53,7 +54,7 @@ const Main = ({ mintHandler }) => {
   const [searchitems, setsearchitems] = useState("");
   const [showsearchitems, setshowsearchitems] = useState(false);
   const [searchloader, setsearchloader] = useState(false);
-
+  const [banner, setbanner] = useState(null)
   const searchbackend = async () => {
     try {
       const res = await axios.post(`${process.env.REACT_APP_API_URL}/sale/search`, {
@@ -126,9 +127,24 @@ const Main = ({ mintHandler }) => {
     { lbl: "Collectibles", ico: "./images/NFT Collectibles 1.svg", id: 6 },
     { lbl: "Others", ico: "./images/NFT Others 1.svg", id: 7 },
   ]);
+
+   const handleGetBanner = async type => {
+    try {
+      const resp = await getBanners(type);
+      if (resp.success) {
+        setbanner(resp.data.url);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetBanner("nft");
+  }, []);
   return (
     <div className="home-p flex flex-col">
-      {tab == "home" ? (
+      {/* {tab == "home" ? (
         <div className="home-sec flex jc">
           <video className="mainVideo" autoPlay loop muted>
             <source src="../../images/header-nft-final-client-new.mp4" type="video/mp4" />
@@ -137,7 +153,16 @@ const Main = ({ mintHandler }) => {
         </div>
       ) : (
         <></>
-      )}
+      )} */}
+      <div>
+        {
+          banner && banner.endsWith("mp4") ? (
+            <video src={banner}  autoPlay className="w-full" />
+          ) : (
+            <img src={banner} alt="Banner" className="h-[430px] w-full" />
+          )
+        }
+      </div>
       <div className="container flex">
         <div className="wrapWidth wrap flex flex-col">
           <Filters setsearch={setsearch} />
