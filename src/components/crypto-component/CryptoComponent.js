@@ -20,6 +20,7 @@ function CryptoComponent() {
 
   useEffect(() => {
     handleGetBanner("home");
+    
   }, [handleGetBanner]);
 
   return (
