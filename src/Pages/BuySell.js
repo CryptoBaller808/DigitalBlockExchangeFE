@@ -40,7 +40,10 @@ const BuySell = () => {
       <div>
         {
           banner && banner.endsWith("mp4") ? (
-            <video src={banner}  autoPlay className="w-full" />
+            <video src={banner}
+              autoPlay
+              loop
+              muted className="w-full" />
           ) : (
             <img src={banner} alt="Banner" className="h-[430px] w-full" />
           )

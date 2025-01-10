@@ -128,7 +128,7 @@ const Main = ({ mintHandler }) => {
     { lbl: "Others", ico: "./images/NFT Others 1.svg", id: 7 },
   ]);
 
-   const handleGetBanner = async type => {
+  const handleGetBanner = async type => {
     try {
       const resp = await getBanners(type);
       if (resp.success) {
@@ -157,7 +157,10 @@ const Main = ({ mintHandler }) => {
       <div>
         {
           banner && banner.endsWith("mp4") ? (
-            <video src={banner}  autoPlay className="w-full" />
+            <video src={banner}
+              autoPlay
+              loop
+              muted className="w-full" />
           ) : (
             <img src={banner} alt="Banner" className="h-[430px] w-full" />
           )
@@ -207,8 +210,8 @@ const Main = ({ mintHandler }) => {
                 ? searchloader
                   ? "Loading"
                   : searchitems?.length < 1
-                  ? "No item found"
-                  : searchitems.map((item, index) => <Card item={item} />)
+                    ? "No item found"
+                    : searchitems.map((item, index) => <Card item={item} />)
                 : ""}
               {activecategory == "" && !showsearchitems && (
                 <>
