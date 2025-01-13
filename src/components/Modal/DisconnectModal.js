@@ -7,11 +7,15 @@ import * as QRCodeAction from "../../redux/xummQRCode/action";
 import * as accountOfferAction from "../../redux/accountOffers/action";
 import * as historyOfferAction from "../../redux/historyOffers/action";
 import { useNavigate } from "react-router-dom";
+import { addWalletData } from "../../api/executers/wallet";
 
 const DisconnectModal = props => {
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const disconnectWallet = () => {
+   
+    handleWalletData(props.walletData)
     dispatch(balanceAction.setBalanceEmpty());
     dispatch(QRCodeAction.setQRCodeDisconnect());
     dispatch(connectWallet(false));
@@ -30,6 +34,20 @@ const DisconnectModal = props => {
     props.onHide();
   };
 
+  const handleWalletData = async (data) => {
+    let payload = {
+      wallet_address: data, 
+    }
+    try {
+      const resp = await addWalletData(payload)
+      if(resp){
+        console.log("wallat disconnected");
+      }
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
   return (
     <Modal {...props} size="md" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>

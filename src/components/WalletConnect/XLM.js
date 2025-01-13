@@ -6,6 +6,7 @@ import { useSocket } from "../../context/socket";
 import * as balanceAction from "../../redux/xummBalance/action";
 import { toast } from "react-toastify";
 import { CrossIcon } from "../../Icons";
+import { addWalletData } from "../../api/executers/wallet";
 
 const StellarWalletConnect = ({ setOpen }) => {
   const [uri, setUri] = useState(null);
@@ -14,27 +15,33 @@ const StellarWalletConnect = ({ setOpen }) => {
 
   const connectXlmWallet = async () => {
     socket.emit("xlm-qr-code");
-
+    socket.off("qr-app-response");
+    socket.off("connect-error");
+    socket.off("account-response");
+    socket.off("wallet_disconnect");
     socket.on("qr-app-response", args => {
       setUri(args);
     });
 
     socket.on("connect-error", args => {
+      console.log("connect-error", args);
       toast.error("Error in connect wallet.");
       setOpen(false);
     });
 
     socket.on("account-response", args => {
       dispatch(balanceAction.setBalance(args));
-      toast.success("Wallet connected successfully.");
+      toast.success("Wallet connected successfully."); 
       if (args) {
         dispatch(connectWallet(true));
+        handleWalletData(args)
         setOpen(false);
       }
     });
 
-    socket.on("wallet_disconnect", () => {
-      dispatch(balanceAction.setBalance(null));
+
+    socket.on("wallet_disconnect", (args) => {
+      dispatch(balanceAction.setBalance(null)); 
       dispatch(connectWallet(false));
       toast.warning("Wallet disconnected.");
     });
@@ -51,12 +58,30 @@ const StellarWalletConnect = ({ setOpen }) => {
     connectXlmWallet();
   }, []);
 
+
+  const handleWalletData = async (args) => {
+    let payload = {
+      wallet_address: args?.account,
+      access_token: args?.userToken,
+      provider: "lobstr" 
+    }
+    try {
+      const resp = await addWalletData(payload)
+      if(resp){
+        console.log("wallat connected");
+      }
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div className="p-8 bg-white">
-       <div onClick={close} className="absolute right-2 top-2">
+      <div onClick={close} className="absolute right-2 top-2">
         <CrossIcon />
       </div>
-      <span className="font-bold mb-2 text-lg">Connect using LOBSTR</span>  
+      <span className="font-bold mb-2 text-lg">Connect using LOBSTR</span>
 
       <div className="desc mt-2 mb-1">Scan QR code to connect</div>
       {uri ? (
