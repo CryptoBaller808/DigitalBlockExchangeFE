@@ -141,7 +141,7 @@ const Main = ({ mintHandler }) => {
 
   useEffect(() => {
     handleGetBanner("nft");
-  }, []);
+  }, [handleGetBanner]);
   return (
     <div className="home-p flex flex-col">
       {/* {tab == "home" ? (
@@ -154,17 +154,24 @@ const Main = ({ mintHandler }) => {
       ) : (
         <></>
       )} */}
-      <div>
-        {
-          banner && banner.endsWith("mp4") ? (
-            <video src={banner}
-              autoPlay
-              loop
-              muted className="w-full" />
+      <div> 
+        {banner ? (
+            banner.endsWith("mp4") ? (
+              <div>
+                <video
+                  src={banner}
+                  autoPlay
+                  loop
+                  muted
+                  className="w-full"
+                /> 
+              </div>
+            ) : (
+              <img src={banner} alt="Banner" className="h-[430px] w-full" />
+            )
           ) : (
-            <img src={banner} alt="Banner" className="h-[430px] w-full" />
-          )
-        }
+            <div>Loading...</div> // Show loading state while banner is being fetched
+          )}
       </div>
       <div className="container flex">
         <div className="wrapWidth wrap flex flex-col">

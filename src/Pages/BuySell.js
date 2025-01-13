@@ -28,7 +28,7 @@ const BuySell = () => {
 
   useEffect(() => {
     handleGetBanner("buy");
-  }, []);
+  }, [handleGetBanner]);
 
   useEffect(() => {
     initializeAnalytics(); // Initialize Google Analytics
@@ -38,16 +38,23 @@ const BuySell = () => {
     <div className="buy-sell flex flex-col">
       {/* <div className="buy-sell-hero-sec"></div> */}
       <div>
-        {
-          banner && banner.endsWith("mp4") ? (
-            <video src={banner}
-              autoPlay
-              loop
-              muted className="w-full" />
+      {banner ? (
+            banner.endsWith("mp4") ? (
+              <div>
+                <video
+                  src={banner}
+                  autoPlay
+                  loop
+                  muted
+                  className="w-full"
+                /> 
+              </div>
+            ) : (
+              <img src={banner} alt="Banner" className="h-[430px] w-full" />
+            )
           ) : (
-            <img src={banner} alt="Banner" className="h-[430px] w-full" />
-          )
-        }
+            <div>Loading...</div> // Show loading state while banner is being fetched
+          )}
       </div>
       <div className="wrap wrapWidth flex aic flex-col">
         <div className="buy-sell-card-block">
