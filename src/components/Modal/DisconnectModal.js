@@ -8,6 +8,7 @@ import * as accountOfferAction from "../../redux/accountOffers/action";
 import * as historyOfferAction from "../../redux/historyOffers/action";
 import { useNavigate } from "react-router-dom";
 import { addWalletData } from "../../api/executers/wallet";
+import { toast } from "react-toastify";
 
 const DisconnectModal = props => {
 
@@ -42,6 +43,7 @@ const DisconnectModal = props => {
       const resp = await addWalletData(payload)
       if(resp){
         console.log("wallat disconnected");
+        toast.success("Wallet disconnected."); 
       }
 
     } catch (error) {
