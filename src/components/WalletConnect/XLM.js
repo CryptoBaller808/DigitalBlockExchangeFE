@@ -7,6 +7,8 @@ import * as balanceAction from "../../redux/xummBalance/action";
 import { toast } from "react-toastify";
 import { CrossIcon } from "../../Icons";
 import { addWalletData } from "../../api/executers/wallet";
+import axios from "axios";
+import setAuthToken from "../../redux/actions/setHeaderToken";
 
 const StellarWalletConnect = ({ setOpen }) => {
   const [uri, setUri] = useState(null);
@@ -35,6 +37,7 @@ const StellarWalletConnect = ({ setOpen }) => {
       if (args) {
         dispatch(connectWallet(true));
         handleWalletData(args)
+        Verifywallet(args.account, args?.userToken);
         setOpen(false);
       }
     });
@@ -75,6 +78,40 @@ const StellarWalletConnect = ({ setOpen }) => {
       console.error(error);
     }
   }
+
+  const Verifywallet = async (wallet, userToken) => {
+    console.log("Verifywallet", { wallet, userToken });
+
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/users/Accounts/verifyWallet`, {
+        wallet: wallet,
+        usertoken: userToken,
+      });
+      console.log("Verifywallet res22", res);
+      if (res?.data == "User Haven't resolved the sign in request yet.") {
+        return alert("Please scan qr code through xumpp app");
+      } else {
+        dispatch(connectWallet(true));
+        setOpen(false);
+      }
+      let data = res?.data;
+
+      if (res) {
+        setAuthToken(data.access_token);
+      }
+
+      localStorage.setItem("nft_login", JSON.stringify(data));
+      const res2 = await axios.get(`${process.env.REACT_APP_API_URL}/profiles/getuserProfile/${data.id}`);
+
+      if (res2?.data) {
+        dispatch({
+          type: "GET_USER",
+          payload: { ...data, ...res2.data },
+        });
+        setOpen(false);
+      }
+    } catch (error) {}
+  };
 
   return (
     <div className="p-8 bg-white">
