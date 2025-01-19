@@ -37,7 +37,7 @@ const StellarWalletConnect = ({ setOpen }) => {
       if (args) {
         dispatch(connectWallet(true));
         handleWalletData(args)
-        Verifywallet(args.account, args?.userToken);
+        Verifywallet(args?.userToken);
         setOpen(false);
       }
     });
@@ -86,6 +86,7 @@ const StellarWalletConnect = ({ setOpen }) => {
       const res = await axios.post(`${process.env.REACT_APP_API_URL}/users/Accounts/verifyWallet`, {
         wallet: wallet,
         usertoken: userToken,
+        provider: "LOBSTR"
       });
       console.log("Verifywallet res22", res);
       if (res?.data == "User Haven't resolved the sign in request yet.") {
