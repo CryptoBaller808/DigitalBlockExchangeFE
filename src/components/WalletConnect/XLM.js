@@ -36,7 +36,7 @@ const StellarWalletConnect = ({ setOpen }) => {
       toast.success("Wallet connected successfully."); 
       if (args) {
         dispatch(connectWallet(true));
-        handleWalletData(args)
+        // handleWalletData(args)
         Verifywallet(args?.userToken);
         setOpen(false);
       }
@@ -62,7 +62,7 @@ const StellarWalletConnect = ({ setOpen }) => {
   }, []);
 
 
-  const handleWalletData = async (args) => {
+  const handleWalletData = async (args) => { 
     let payload = {
       wallet_address: args?.account,
       access_token: args?.userToken,
@@ -71,7 +71,7 @@ const StellarWalletConnect = ({ setOpen }) => {
     try {
       const resp = await addWalletData(payload)
       if(resp){
-        console.log("wallat connected");
+        console.log("wallet connected");
       }
 
     } catch (error) {

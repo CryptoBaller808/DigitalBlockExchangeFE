@@ -16,7 +16,7 @@ const DisconnectModal = props => {
   const dispatch = useDispatch();
   const disconnectWallet = () => {
    
-    handleWalletData(props.walletData)
+    // handleWalletData(props.walletData)
     dispatch(balanceAction.setBalanceEmpty());
     dispatch(QRCodeAction.setQRCodeDisconnect());
     dispatch(connectWallet(false));
