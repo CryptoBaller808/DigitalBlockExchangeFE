@@ -255,7 +255,8 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
                   })}
                   key={i}
                   onClick={handleRow.bind(this, item)}>
-                  <div className="row-item flex items-center ps-2">
+                  <div className="row-item flex items-center gap-1 ps-2">
+                    {item?.icon_url &&  <img src={item?.icon_url} alt="" className="w-5 h-5"/>} 
                     <span className="name1">{item.title}</span>
                   </div>
                   {/* <div className="row-item text-center">{isNaN(item.price) ? "-" : parseFloat(item.price).toFixed(3)}</div> */}
