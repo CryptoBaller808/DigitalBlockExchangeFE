@@ -12,6 +12,9 @@ import * as tradesAction from "../../redux/tradesData/action";
 import moment from "moment";
 import clsx from "clsx";
 import Fuse from "fuse.js";
+import XRPLogo from "../../Images/XRPLLogo.png"
+import XLMLogo from "../../Images/xlm-logo.png"
+
 // const dateFormat = "YYYY/MM/DD";
 const DECIMALVAL = 7;
 
@@ -255,8 +258,9 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
                   })}
                   key={i}
                   onClick={handleRow.bind(this, item)}>
-                  <div className="row-item flex items-center gap-1 ps-2">
-                    {item?.icon_url &&  <img src={item?.icon_url} alt="" className="w-5 h-5"/>} 
+                  <div className="row-item flex items-center gap-3 ps-1 relative">
+                    {item?.icon_url &&  <img src={tokenTabSelected==="XRP" ? XRPLogo : XLMLogo} alt="" className="w-4 h-4 "/>}  
+                    {item?.icon_url &&  <img src={item?.icon_url} alt="" className="w-4 h-4 absolute top-0 left-4"/>} 
                     <span className="name1">{item.title}</span>
                   </div>
                   {/* <div className="row-item text-center">{isNaN(item.price) ? "-" : parseFloat(item.price).toFixed(3)}</div> */}
@@ -266,7 +270,7 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
                     className={clsx("row-item flex items-center justify-end", {
                       red: item.stat < 0,
                       green: item.stat >= 0,
-                    })}>
+                    })}>  
                     {isNaN(item.stat) ? "-" : parseFloat(item.stat).toFixed(3) + "%"}
                   </div>
                 </div>
