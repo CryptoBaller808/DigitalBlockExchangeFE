@@ -57,8 +57,12 @@ const OfferModel = ({
   };
 
   const handlePaymentConfirm = () => {
-    if (shouldAskForSecretKey) setIsKeyModalVisible(true);
-    else sendDataToBackend();
+    if (shouldAskForSecretKey) {
+      setIsKeyModalVisible(true)
+    }
+    else {
+      sendDataToBackend();
+    }
   };
 
   const sendDataToBackend = (secretKey = null) => {
@@ -67,10 +71,10 @@ const OfferModel = ({
 
     if (offerType === "buy") {
       const buyOfferInfo = {
-        account: accountNo,
-        buyValue: total.toFixed(5),
+        account: userToken,
+        buyValue: total,
         buyCurrency,
-        buyIssuer,
+        buyIssuer:userToken,
         sellValue: amount,
         sellCurrency,
         sellIssuer,
@@ -79,24 +83,25 @@ const OfferModel = ({
         offerType: orderType,
         currPrice: price,
       };
-
+      console.log('buyOfferInfo',buyOfferInfo);
       if (secretKey) buyOfferInfo.secretKey = secretKey;
 
       socket.emit(SOCKET_REQUEST[network], buyOfferInfo);
     } else {
       const sellOfferInfo = {
-        account: accountNo,
+        account: userToken,
         buyValue: amount,
         buyCurrency: sellCurrency,
         buyIssuer: sellIssuer,
-        sellValue: total.toFixed(5),
+        sellValue: total,
         sellCurrency: buyCurrency,
-        sellIssuer: buyIssuer,
+        sellIssuer: userToken,
         userToken,
         side: "Sell",
         offerType: orderType,
         currPrice: price,
       };
+      console.log('sellOfferInfo',sellOfferInfo);
 
       if (secretKey) sellOfferInfo.secretKey = secretKey;
 
@@ -110,10 +115,11 @@ const OfferModel = ({
       baseIssuer: buyIssuer,
     };
 
+
     socket.on("payment-response", args => {
       hide();
       //empty amount
-
+      console.log('payment-response', args);
       dispatch(PaymentResponseAction.setPaymentResponse(args));
 
       if (args.success) {
@@ -131,7 +137,31 @@ const OfferModel = ({
           })
           .catch(err => console.log("err", err));
         //update Account offer data
+        socket.on("payment-response-xlm", args => {
+          toast.success("Offer added successfully,Please check console.", args);
+          console.log('payment-response-xlm', args);
 
+          getFullAccountOffers({ accountNo: accountNo, network })
+            .then(res => {
+              if (res.data.success) {
+                const offerResult = res.data.data;
+                dispatch(accountOfferAction.setAccountOffers(offerResult));
+              }
+            })
+            .catch(err => console.log("err", err));
+
+          getOrderHistory({ accountNo, network })
+            .then(res => {
+              if (res.data.success) {
+                dispatch(historyOfferAction.setHistoryOffersProcessing());
+                dispatch(historyOfferAction.setHistoryOffers(res.data.data));
+                dispatch(historyOfferAction.setStopHistoryOffersProcessing());
+              }
+            })
+            .catch(err => console.log("err", err));
+
+          hide();
+        });
         getFullAccountOffers({ accountNo: accountNo, network })
           .then(res => {
             // console.log("AccountOffers", res);
@@ -158,13 +188,37 @@ const OfferModel = ({
           })
           .catch(err => console.log("err", err));
         const getAccountBalance = { accountNo, userToken };
+        socket.on("payment-response-xlm", args => {
+          toast.success("Offer added successfully,Please check console.", args);
+          console.log('payment-response-xlm', args);
 
-        socket.emit("get-account-balance", getAccountBalance);
+          getFullAccountOffers({ accountNo: accountNo, network })
+            .then(res => {
+              if (res.data.success) {
+                const offerResult = res.data.data;
+                dispatch(accountOfferAction.setAccountOffers(offerResult));
+              }
+            })
+            .catch(err => console.log("err", err));
+
+          getOrderHistory({ accountNo, network })
+            .then(res => {
+              if (res.data.success) {
+                dispatch(historyOfferAction.setHistoryOffersProcessing());
+                dispatch(historyOfferAction.setHistoryOffers(res.data.data));
+                dispatch(historyOfferAction.setStopHistoryOffersProcessing());
+              }
+            })
+            .catch(err => console.log("err", err));
+
+          hide();
+        });
         toast.success(args.message);
         //order success ->set order status
         setOrderStatus(true);
         socket.on("account-response", args => {
           dispatch(balanceAction.setBalance(args));
+          console.log('account-response', args);
 
           getUserCurrencies(accountNo)
             .then(res => {
@@ -189,6 +243,7 @@ const OfferModel = ({
 
     socket.on("payment-response-xlm", args => {
       toast.success("Offer added successfully,Please check console.", args);
+      console.log('payment-response-xlm', args);
 
       getFullAccountOffers({ accountNo: accountNo, network })
         .then(res => {
@@ -213,6 +268,7 @@ const OfferModel = ({
     });
 
     socket.on("transaction-error", args => {
+      console.log('transaction-error',args);
       toast.error(args);
       hide();
     });
@@ -262,6 +318,7 @@ export const ModalForSecretKey = ({ open, onConfirm, onCancel }) => {
   const [privateKey, setPrivateKey] = useState("");
 
   const handleOnConfirm = () => {
+    console.log('privateKey', privateKey);
     if (privateKey) onConfirm(privateKey);
   };
 

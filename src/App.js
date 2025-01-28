@@ -54,7 +54,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import Resale from "./Pages/Resale";
-// import ThemeSwitch from "./components/theme-switch";
+// import ThemeSwitch from "./components/theme-switch"; 
 import { useSocket } from "./context/socket";
 import * as balanceAction from "./redux/xummBalance/action";
 import * as QRCodeAction from "./redux/xummQRCode/action";
@@ -65,11 +65,14 @@ import { setNetwork } from "./redux/network/action";
 // import ThemeSwitch from "./components/theme-switch";
 import XLMSwap from "./Pages/xlm-swap";
 import ThemeSwitch from "./components/theme-switch";
+// import initializeAnalytics from "./helper/analytics/analytics";  
+import handleGoogleAnalytics from "./helper/analytics/analytics";
 
 let timeout = null;
 
 function App() {
   const [openSidebar, setOpenSidebar] = useState(false);
+  // const { analyticsData, isLoading, error } = useGoogleAnalytics();
   const dispatch = useDispatch();
   const { isDarkMode } = useSelector(state => state.themeReducer);
   const balanceData = useSelector(state => state.signInData?.balance);
@@ -145,7 +148,12 @@ function App() {
     },
     [disconnectWallet, dispatch],
   );
-
+   
+  useEffect(() => {
+    // initializeAnalytics(); // Initialize Google Analytics   
+    handleGoogleAnalytics("G-Y7JFCH1TE5")
+  }, []);
+  
   return (
     <div className="App">
       <BrowserRouter>

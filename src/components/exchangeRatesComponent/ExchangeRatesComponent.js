@@ -12,6 +12,9 @@ import * as tradesAction from "../../redux/tradesData/action";
 import moment from "moment";
 import clsx from "clsx";
 import Fuse from "fuse.js";
+import XRPLogo from "../../Images/XRPLLogo.png"
+import XLMLogo from "../../Images/xlm-logo.png"
+
 // const dateFormat = "YYYY/MM/DD";
 const DECIMALVAL = 7;
 
@@ -39,7 +42,7 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
   //get all currency data list
   const getAllCurrencyData = async () => {
     try {
-      const filteredCurrencies = currency.filter(val => tokenTabSelected !== val.currency);
+      const filteredCurrencies = currency.filter(val => tokenTabSelected == val.currency);
 
       if (tokenTabSelected === "XLM") {
         const prices = await getExchangeRate({ mainToken: tokenTabSelected });
@@ -58,27 +61,28 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
         });
         const prices = await Promise.all(currencyDataPromise);
 
-        let titleData = filteredCurrencies.map((obj, indx) => {
-          const data = {
-            id: indx,
-            title: `${tokenTabSelected}/${obj.currency}`,
-            stat: "-22.45",
-            curA: tokenTabSelected,
-            issuerA: selectedCurrency.issuer,
-            curB: obj.currency,
-            issuerB: obj.issuer,
-          };
-          return data;
-        });
+        // let titleData = filteredCurrencies.map((obj, indx) => { 
+        //   const data = {
+        //     id: indx,
+        //     title: `${tokenTabSelected}/${obj.currency}`,
+        //     stat: "-22.45",
+        //     curA: tokenTabSelected,
+        //     issuerA: selectedCurrency.issuer,
+        //     curB: obj.currency,
+        //     issuerB: obj.issuer,
+        //   };
+        //   return data;
+        // });
 
-        prices.map((price, indx) => {
-          titleData[indx].price = price;
-        });
+        // prices.map((price, indx) => {
+        //   titleData[indx].price = price;
+        // }); 
+        // return titleData;
 
-        return titleData;
+        return prices[0];
       }
     } catch (error) {
-      console.log("errorrrr", error);
+      console.error("errorrrr", error);
       return [];
     }
   };
@@ -96,7 +100,7 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
   useEffect(() => {
     setLoadingData(true);
     getAllCurrencyData().then(val => {
-      console.log("currency data", val);
+      // console.log("currency data", val);
       setCurrencyData(val);
     });
     setLoadingData(false);
@@ -157,7 +161,7 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
               dispatch(tradesAction.setStopTradesProcessing());
             }
           })
-          .catch(err => console.log("CHART DATA", err));
+          .catch(err => console.error("CHART DATA", err));
       }
     }
     fetchData();
@@ -254,15 +258,19 @@ const ExchangeRatesComponent = ({ getData, currencyData2, dropVal, setDropVal })
                   })}
                   key={i}
                   onClick={handleRow.bind(this, item)}>
-                  <div className="row-item flex items-center ps-2">
+                  <div className="row-item flex items-center gap-3 ps-1 relative">
+                    {item?.icon_url &&  <img src={tokenTabSelected==="XRP" ? XRPLogo : XLMLogo} alt="" className="w-4 h-4 "/>}  
+                    {item?.icon_url &&  <img src={item?.icon_url} alt="" className="w-4 h-4 absolute top-0 left-4"/>} 
                     <span className="name1">{item.title}</span>
                   </div>
-                  <div className="row-item text-center">{isNaN(item.price) ? "-" : parseFloat(item.price).toFixed(3)}</div>
+                  {/* <div className="row-item text-center">{isNaN(item.price) ? "-" : parseFloat(item.price).toFixed(3)}</div> */}
+                  <div className="row-item text-center">{isNaN(item.price) ? "-" : parseFloat(item.price)}</div>
+
                   <div
                     className={clsx("row-item flex items-center justify-end", {
                       red: item.stat < 0,
                       green: item.stat >= 0,
-                    })}>
+                    })}>  
                     {isNaN(item.stat) ? "-" : parseFloat(item.stat).toFixed(3) + "%"}
                   </div>
                 </div>

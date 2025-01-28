@@ -1,18 +1,61 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Banxa from "../Images/banxa.png";
 import Topper from "../Images/topper.png";
 import { Link } from "react-router-dom";
+import { getBanners } from "../api/executers/Banner";
+import initializeAnalytics from "../helper/analytics/analytics";
+import handleGoogleAnalytics from "../helper/analytics/analytics";
 
 const BuySell = () => {
+  const [banner, setbanner] = useState(null)
   // handle on click buy
   const handleOnBuy = option => {
     if (option === "banxa") {
     } else if (option === "topper") {
     }
   };
+
+  const handleGetBanner = async type => {
+    try {
+      const resp = await getBanners(type);
+      if (resp.success) {
+        setbanner(resp.data.url);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetBanner("buy");
+  }, [handleGetBanner]);
+
+  useEffect(() => {
+    initializeAnalytics(); // Initialize Google Analytics
+    handleGoogleAnalytics("G-Y7JFCH1TE5")
+  }, []);
   return (
     <div className="buy-sell flex flex-col">
-      <div className="buy-sell-hero-sec"></div>
+      {/* <div className="buy-sell-hero-sec"></div> */}
+      <div>
+      {banner ? (
+            banner.endsWith("mp4") ? (
+              <div>
+                <video
+                  src={banner}
+                  autoPlay
+                  loop
+                  muted
+                  className="w-full"
+                /> 
+              </div>
+            ) : (
+              <img src={banner} alt="Banner" className="h-[430px] w-full" />
+            )
+          ) : (
+            <div>Loading...</div> // Show loading state while banner is being fetched
+          )}
+      </div>
       <div className="wrap wrapWidth flex aic flex-col">
         <div className="buy-sell-card-block">
           <div className="card flex flex-col aic">

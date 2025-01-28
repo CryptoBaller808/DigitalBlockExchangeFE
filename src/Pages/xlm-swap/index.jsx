@@ -1,18 +1,20 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import CustomModal from "../../components/Modal";
 import WalletConnect from "../../components/WalletConnect";
 import { ExchangeArrowIcon } from "../../Icons";
-import { Alert, Button } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 import { useSocket } from "../../context/socket";
 import { useSelector } from "react-redux";
 import { getExchangeRates, getSwapAssets } from "../../helper/api/swap";
 import SwapTransModal from "../../components/loader/SwapTransModal";
-import ReactModal from "react-modal";
 import ExchangeModalIcon from "../../Images/exchange-color.png";
 import { LoadingIndicatorIcon } from "../../assets/svg";
 import { Modal } from "antd";
-import { toast } from "react-toastify";
+import Select from "react-select";
+
 import './index.css';
+import { toast } from "react-toastify";
+import axios from "axios";
 
 let timeout = null;
 const shouldAskForSecretKey = process.env.REACT_APP_PROMPT_FOR_TESTING_KEY === "true";
@@ -45,8 +47,13 @@ const XLMSwap = () => {
   // fetch currencies
   useEffect(() => {
     const fetchCurrency = async () => {
-      const response = await getSwapAssets({ network: "xlm" });
-      setCurrencies(response.data.data);
+      // const response = await getSwapAssets({ network: "xlm" });
+      // setCurrencies(response.data.data);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/users/Accounts/getAssetLists`);
+      if (response.data.success) {
+        const filtered = response.data.data.filter((item) => (item.is_swap && item.ledger === "xlm"))
+        setCurrencies(filtered);
+      }
     };
     fetchCurrency();
   }, []);
@@ -62,7 +69,8 @@ const XLMSwap = () => {
   // handleSetSwap
   const handleSetSwapTo = useCallback(
     e => {
-      const value = e.target.value;
+      // const value = e.target.value;
+      const value = e.value;
 
       const selectedCurrency = currencies.find(cur => String(cur.id) === String(value));
       setSwapTo(pre => ({
@@ -78,8 +86,9 @@ const XLMSwap = () => {
   // handle setSwapFrom
   const handleSetSwapFrom = useCallback(
     e => {
-      const value = e.target.value;
-
+      // const value = e.target.value; 
+      const value = e.value;
+      console.log(value);
       const selectedCurrency = currencies.find(cur => String(cur.id) === String(value));
       setSwapFrom(pre => ({
         ...pre,
@@ -152,7 +161,7 @@ const XLMSwap = () => {
           }
 
           setLocalExchangeRate(rate);
-        } catch (error) {}
+        } catch (error) { }
         setLoading(false);
       }, 1000);
     }
@@ -202,6 +211,15 @@ const XLMSwap = () => {
     });
   };
 
+  const options = currencies?.map((c) => ({
+    value: c.id,
+    label: (
+      <div className="flex items-center gap-2">
+        {c.icon_url && <img src={c.icon_url} alt={c.asset_code} className="w-4 h-4" />}
+        {c.asset_code}
+      </div>
+    ),
+  }));
   return (
     <div className="swap-page flex">
       {isTransaction && (
@@ -274,7 +292,7 @@ const XLMSwap = () => {
                   <div className="token-info flex w-full">
                     <div className="about-token flex flex-col w-full mb-4">
                       <div className="lbl mb-2">Swap From :</div>
-                      <select className="form-control" value={swapFrom.id} onChange={handleSetSwapFrom}>
+                      {/* <select className="form-control" value={swapFrom.id} onChange={handleSetSwapFrom}>
                         <option value="-1" selected>
                           Select
                         </option>
@@ -286,7 +304,24 @@ const XLMSwap = () => {
                               </option>
                             );
                           })}
-                      </select>
+                      </select> */}
+                      <Select
+                        placeholder="Select"
+                        styles={{
+                          borderRadius: "9px",
+                        }}
+                        className="rounded-md"
+                        classNames={{
+                          control: () => "rounded rounded-lg !px-2 !py-1 border border-gray-300 focus:border-primary",
+                          placeholder: () => "text-black",
+                          menu: () => "bg-white border border-gray-300 rounded-2xl",
+                          option: ({ isFocused, isSelected }) =>
+                            `  ${isFocused ? "bg-gray-200" : ""} ${isSelected ? "bg-primary text-white" : ""}`,
+                        }}
+                        options={options}
+                        value={options?.find((option) => option.value === swapFrom.id)}
+                        onChange={(selectedOption) => handleSetSwapFrom(selectedOption)}
+                      />
                     </div>
                   </div>
                 </div>
@@ -298,7 +333,7 @@ const XLMSwap = () => {
                     value={swapFrom.value}
                     onChange={onFromAmountChange}
                     pattern="\d*"
-                    maxLength="5"
+                    maxLength="10"
                   />
                 </div>
 
@@ -320,7 +355,7 @@ const XLMSwap = () => {
                   <div className="token-info flex w-full">
                     <div className="about-token flex flex-col w-full mb-4">
                       <div className="lbl mb-2">Swap To:</div>
-                      <select className="form-control" value={swapTo.id} onChange={handleSetSwapTo}>
+                      {/* <select className="form-control" value={swapTo.id} onChange={handleSetSwapTo}>
                         <option value="-1" selected>
                           Select
                         </option>
@@ -332,7 +367,24 @@ const XLMSwap = () => {
                               </option>
                             );
                           })}
-                      </select>
+                      </select> */}
+                      <Select
+                        placeholder="Select"
+                        styles={{
+                          borderRadius: "9px",
+                        }}
+                        className="rounded-md"
+                        classNames={{
+                          control: () => "rounded rounded-lg !px-2 !py-1 border border-gray-300 focus:border-primary",
+                          placeholder: () => "text-black",
+                          menu: () => "bg-white border border-gray-300 rounded-2xl",
+                          option: ({ isFocused, isSelected }) =>
+                            `  ${isFocused ? "bg-gray-200" : ""} ${isSelected ? "bg-primary text-white" : ""}`,
+                        }}
+                        options={options}
+                        value={options?.find((option) => option.value === swapTo.id)}
+                        onChange={(selectedOption) => handleSetSwapTo(selectedOption)}
+                      />
                     </div>
                   </div>
                 </div>

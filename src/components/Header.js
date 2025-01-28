@@ -15,6 +15,8 @@ const Header = ({ openSidebar, setOpenSidebar, setSelectedToken }) => {
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("");
   const [modalShow, setModalShow] = useState(false);
+  const [walletData, setWalletData] = useState(null);
+
 
   const isWalletConnected = useSelector(state => state.authReducer.isWalletConnected);
   const balance = useSelector(state => state.signInData?.balance);
@@ -30,6 +32,8 @@ const Header = ({ openSidebar, setOpenSidebar, setSelectedToken }) => {
   };
 
   const handelDisconnect = () => {
+    setWalletData(balance?.account)
+
     // dispatch(balanceAction.setBalanceEmpty());
     setModalShow(true);
   };
@@ -146,7 +150,7 @@ const Header = ({ openSidebar, setOpenSidebar, setSelectedToken }) => {
           <WalletConnect network={network} open={open} setOpen={setOpen} />
         </Modal>
       )}
-      {modalShow && <DisconnectModal show={handelDisconnect} onHide={onHide} />}
+      {modalShow && <DisconnectModal show={handelDisconnect} onHide={onHide} walletData={walletData}/>}
     </div>
   );
 };

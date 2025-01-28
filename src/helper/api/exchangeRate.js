@@ -10,29 +10,33 @@ const getExchangeRate = data => {
     const curB = data.curB;
     const issuerB = data.issuerB;
     if (data.mainToken === "XLM") {
-      const resp = await ApiCall(GET_STELLAR_LIVE_PRICES, "get");
+      const resp = await ApiCall(`${GET_STELLAR_LIVE_PRICES}?ledger=xlm`, "get");   
       if (resp.data && resp.data.success) {
         resolve(resp.data.data);
       } else {
         resolve([]);
       }
     } else {
-      if (curA === "XRP") {
-        let data = {
-          acc: {
-            symbols: [`${curA}/${curB === "SOLO" ? "534F4C4F00000000000000000000000000000000" : curB}+${issuerB}`],
-          },
-        };
-
-        console.log("ticker input data", data);
-
-        ApiCall(GET_TICKERS, "post", data)
-          .then(res => {
-            let data = res.data;
-            let result = Object.values(data?.data)[0];
-            resolve(result?.last_price);
-          })
-          .catch(reject);
+      if (curA === "XRP") {  
+        const resp = await ApiCall(`${GET_STELLAR_LIVE_PRICES}?ledger=xrp`, "get");   
+        if (resp.data && resp.data.success) {
+          resolve(resp.data.data);
+        } else {
+          resolve([]);
+        }
+        // let data = {
+        //   acc: {
+        //     symbols: [`${curA}/${curB === "SOLO" ? "534F4C4F00000000000000000000000000000000" : curB}+${issuerB}`],
+        //   },
+        // };
+ 
+        // ApiCall(GET_TICKERS, "post", data)
+        //   .then(res => {
+        //     let data = res.data;
+        //     let result = Object.values(data?.data)[0];
+        //     resolve(result?.last_price); 
+        //   })
+        //   .catch(reject);
         // axios
         //   .get(`${process.env.REACT_APP_XRP_PAIR_PRICE}${curA}:${curB}.${issuerB}`) // XRP:CSC.rCSCManTZ8ME9EoLrSHHYKW8PPwWMgkwr
         //   .then(res => {
