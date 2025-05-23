@@ -128,16 +128,16 @@ const Main = ({ mintHandler }) => {
     { lbl: "Others", ico: "./images/NFT Others 1.svg", id: 7 },
   ]);
 
-  const handleGetBanner = async type => {
-    try {
-      const resp = await getBanners(type);
-      if (resp.success) {
-        setbanner(resp.data.url);
-      }
-    } catch (error) {
-      console.error(error);
+const handleGetBanner = async (type) => {
+  try {
+    const bannerData = await getBanners(type);
+    if (bannerData?.imageUrl) {
+      setbanner(bannerData.imageUrl);
     }
-  };
+  } catch (error) {
+    console.error("Failed to load banner:", error);
+  }
+};
 
   useEffect(() => {
     handleGetBanner("nft");
